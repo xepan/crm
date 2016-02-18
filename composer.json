@@ -1,0 +1,28 @@
+{
+    "name": "xepan/crm",
+    "type": "library",
+    "description": "CRM Application for xEpan Platform",
+    "homepage": "https://github.com/xepan/crm",
+    "keywords": ["xEpan","SaaS","ERP","Customer Relation Management","CRM","Support System","Ticket System"],
+    "license": "MIT",
+    "minimum-stability" : "dev",
+    "authors": [
+        {
+            "name": "Xavoc Technocrats Pvt. Ltd.",
+            "email": "info@xavoc.com"
+        }
+    ],
+    "source": {
+        "url": "git@github.com:xepan/crm.git",
+        "type": "git",
+        "reference": "origin/master"
+    },
+    "require": {
+        "atk4/atk4": "master-dev",
+        "xepan/base" : "dev-master",
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-0": { "autocomplete": "lib" }
+    }
+}
