@@ -1,18 +1,25 @@
 <?php
-
 namespace xepan\crm;
 
 class page_supportticket extends \Page{
-	public $title='Support-Ticket';
-
 	function init(){
 		parent::init();
-
-		//$this->add('View_Info')->set('Hello');
-
+		
+		$st=$this->add('xepan\crm\Model_SupportTicket');
+		$crud=$this->add('xepan\base\CRUD',
+										['grid_options'=>
+										['defaultTemplate'=>['grid/supportticket']]]);
+		$crud->setModel($st);
+		$crud->grid->addQuickSearch(['name']);
 	}
-
-	function defaultTemplate(){
-		return['page/supportticket'];
-	}
+	// function setModel($model){
+	// 	$model->getField('name')->caption('SupportTicket');
+	// 	$m=parent::setModel($model);
+	// 	$this->removeColumn('epan');
+	// 	return $m;
+		
+	// }
+	// function defaultTemplate(){
+	// 	return[$this->grid_template];
+	// }
 }
