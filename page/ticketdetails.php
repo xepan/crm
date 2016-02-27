@@ -13,6 +13,6 @@ class page_ticketdetails extends \Page{
 	}
 
 	function defaultTemplate(){
-		return['page/ticketdetails'];
+		return['view/ticketdetails/ticketdetails'];
 	}
 }

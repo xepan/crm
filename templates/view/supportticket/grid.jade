@@ -34,11 +34,10 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                      | {$field_here}
                       img(alt='', src='{image}img/samples/scarlet-159.png{/}')
                       a.user-link(href='{url}index.php?page=xepan_crm_ticketdetails&ticket_id={$id}{/}') {first_name}Scarlett{/} {last_name}Ticket_id{/}
-                      span.user-subhead {post}Ticket_name{/}
-
+                      //- span.user-subhead {post}Ticket_name{/}
+                
                     td
                       | {created_at}2013/08/08{/}
                     td

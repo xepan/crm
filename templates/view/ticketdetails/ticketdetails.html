@@ -1,216 +1,123 @@
-<html>
-  <body>{$Content}
-    <div class="row">
-      <div class="col-lg-12">
-        <div id="Pagearea" class="pagearea"></div>
-        <link type="text/css" rel="stylesheet" media="print" href="https://assets1.freshdesk.com/assets/cdn/tkt_details_print-2d09c647dfd81260ecf6ea412588e2bb.css"/>
-        <textarea id="ticket_draft_default_reply" class="hide"><p/><div><p>Hi Rachel,<br><br>Ticket: https://jayambey.freshdesk.com/helpdesk/tickets/1<br></p></div></textarea>
-        <div id="sticky_header" data-button-text="more" data-class-for-btn-wrapper="ticket-btns" data-sticky-bottom="true" data-scroll-top="true" rel="sticky" style="" class="tkt-details-sticky btn-collapse">
-          <div class="sticky_right">
-            <div class="status_info"><strong rel="status_name">Open</strong>,<span rel="status_timestamp">Due <abbr>in 3 days</abbr></span></div>
-            <div id="adjacents" class="pagination-link">
-              <ul>
-                <li><a title="Next Ticket ( alt+right )" rel="next" data-placement="below" data-pjax="#body-container" data-keybinding="alt+right" data-highlight="true" href="javascript:void(0)" class="page-btn next_page disabled btn tooltip"><span class="arrow-next"></span></a></li>
-                <li><a title="Previous Ticket ( alt+left )" rel="previous" data-placement="below" data-pjax="#body-container" data-keybinding="alt+left" data-highlight="true" href="javascript:void(0)" class="page-btn prev_page disabled btn tooltip"><span class="arrow-previous"></span></a></li>
-              </ul>
-            </div>
-            <div id="activity_toggle" data-highlight="true" data-keybinding="}" data-placement="below" data-toggle="button" data-original-title="Show Activities ( } )" twipsy-content-set="true" class="activity_toggle btn clearfix tooltip">
-              <div class="text">Show Activities</div><span class="visible">Yes</span><span>No</span>
-            </div>
-            <div class="ticket-actions">
-              <ul class="collapse-content">
-                <li class="ticket-btns">
-                  <div id="new_watcher_page" data-load-unique="true" data-url="/helpdesk/tickets/1/subscriptions" rel="" style="display: none;" class="watchers_tooltip hide"><span class="arrow-top"></span><span class="watcher-close">×</span>
-                    <div class="watcher_label">
-                      <div>Ticket Watchers</div>
-                      <div class="watcher_text">Agents added as watchers receive email alerts when the ticket is updated</div>
-                    </div>
-                    <div id="addwatcher">
-                      <div class="select_agents"><span class="rounded-add-icon"></span>
-                        <div id="s2id_ids" class="select2-container select2-container-multi select2 watcher_input">
-                          <ul class="select2-choices">
-                            <li class="select2-search-field">
-                              <label for="s2id_autogen52" class="select2-offscreen"></label>
-                              <input id="s2id_autogen52" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off" placeholder="Add agents" style="width: 100%;" class="select2-input"/>
-                            </li>
-                          </ul>
-                          <div class="select2-drop select2-drop-multi select2-display-none">
-                            <ul class="select2-results">
-                              <li class="select2-no-results">No matches found</li>
-                            </ul>
-                          </div>
-                        </div>
-                        <select id="ids" name="ids[]" multiple="multiple" data-placeholder="Add agents" tabindex="-1" class="select2 watcher_input select2-offscreen">
-                          <option value="14000004271">Me</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="watcher_toggle" data-currentuserid="14000004271" data-watching="false" data-hotkey="w" data-placement="below" data-original-title="Watch ( w )" twipsy-content-set="true" class="btn monitor_div tooltip"><span id="monitor"><a onclick="; return false;" href="#" class="monitor"><img height="24px" width="24px" src="https://assets3.freshdesk.com/assets/misc/spacer.gif" alt="Spacer"/></a></span></div>
-                </li>
-                <li class="ticket-btns">
-                  <div class="btn-group"><a id="ReplyButton" data-replyto-handle="" data-highlight="true" data-keybinding="r" data-note-type="reply" rel="note-button" data-placement="below" data-original-title="Reply ( r )" twipsy-content-set="true" class="btn tooltip btn-collapse"><span class="reply-inner"></span>                Reply</a><a id="FwdButton" data-highlight="true" data-keybinding="f" data-note-type="fwd" rel="note-button" data-placement="below" href="#" data-original-title="Forward ( f )" twipsy-content-set="true" class="btn tooltip btn-collapse"><span class="forward-inner"></span>                Forward</a><a id="noteButton" data-highlight="true" data-keybinding="n" data-note-type="note" data-placement="below" rel="note-button" href="#" data-original-title="Add note ( n )" twipsy-content-set="true" class="btn tooltip btn-collapse"><span class="note-inner"></span>              Add note</a></div>
-                </li>
-                <li class="ticket-btns hide_on_collapse"><a id="close_ticket_btn" title="Shift + Close to skip notification mail" rel="close_ticket_btn" data-placement="below" data-href="/helpdesk/tickets/1/close" href="#" class="btn tooltip btn-collapse">Close</a></li>
-                <li class="ticket-btns hide_on_collapse"><a data-target="#merge_freshdialog" data-template-footer="false" data-placement="below" data-title="Merge Tickets" data-action="merge" rel="freshdialog" data-ticket-display-id="1" data-width="800" href="#merge_freshdialog" class="btn btn-collapse">Merge</a></li>
-                <div id="merge_freshdialog" class="hide"><span class="loading-block sloading loading-small loading-align">
-                    <div style="position: relative; width: 0px; z-index: 2000000000; left: 0px; top: 0px;" role="progressbar" class="spinner">
-                      <div style="position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-0-8;">
-                        <div style="position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(0deg) translate(4px, 0px); border-radius: 1px;"></div>
-                      </div>
-                      <div style="position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-1-8;">
-                        <div style="position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(45deg) translate(4px, 0px); border-radius: 1px;"></div>
-                      </div>
-                      <div style="position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-2-8;">
-                        <div style="position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(90deg) translate(4px, 0px); border-radius: 1px;"></div>
-                      </div>
-                      <div style="position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-3-8;">
-                        <div style="position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(135deg) translate(4px, 0px); border-radius: 1px;"></div>
-                      </div>
-                      <div style="position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-4-8;">
-                        <div style="position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(180deg) translate(4px, 0px); border-radius: 1px;"></div>
-                      </div>
-                      <div style="position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-5-8;">
-                        <div style="position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(225deg) translate(4px, 0px); border-radius: 1px;"></div>
-                      </div>
-                      <div style="position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-6-8;">
-                        <div style="position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(270deg) translate(4px, 0px); border-radius: 1px;"></div>
-                      </div>
-                      <div style="position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-7-8;">
-                        <div style="position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(315deg) translate(4px, 0px); border-radius: 1px;"></div>
-                      </div>
-                    </div></span></div>
-                <li class="ticket-btns hide_on_collapse">
-                  <div data-hotkey="s" data-placement="below" data-original-title="Execute Scenario ( s )" twipsy-content-set="true" class="tooltip keytitle"><a title="Execute Scenario" rel="freshdialog" data-template-footer="" data-target="#execute_scenario" data-keybinding="s" data-highlight="true" href="/helpdesk/tickets/14000004899/component?component=scenarios" class="btn btn-collapse">Scenarios</a></div>
-                </li>
-                <li class="collapse_on_default"><a rel="triggerAddTimer" data-keybinding="m" href="#">Add time</a></li>
-                <li class="collapse_on_default"><a href="/helpdesk/tickets/1/edit">Edit</a></li>
-                <li class="collapse_on_default"><a target="_blank" href="/helpdesk/tickets/1/print">Print</a></li>
-                <li class="collapse_on_default"><a rel="nofollow" data-method="put" data-keybinding="!" href="/helpdesk/tickets/1/spam" class="custom-tip-bottom spam spamicon"><img height="24px" width="24px" src="https://assets2.freshdesk.com/assets/misc/spacer.gif" alt="Spacer"/><span>Mark as spam</span></a></li>
-                <li class="collapse_on_default"><a rel="nofollow" data-method="delete" data-keybinding="#" href="/helpdesk/tickets/1">Delete</a></li>
-                <div class="ticket-btns">
-                  <div id="more-btn" class="btn-group"><a data-toggle="dropdown" class="btn dropdown-toggle">more<span class="caret"></span></a>
-                    <ul id="collapse-list" style="display: none;" role="menu" class="dropdown-menu">
-                      <li><a rel="triggerAddTimer" data-keybinding="m" href="#">Add time</a></li>
-                      <li><a href="/helpdesk/tickets/1/edit">Edit</a></li>
-                      <li><a target="_blank" href="/helpdesk/tickets/1/print">Print</a></li>
-                      <li><a rel="nofollow" data-method="put" data-keybinding="!" href="/helpdesk/tickets/1/spam" class="custom-tip-bottom spam spamicon"><img height="24px" width="24px" src="https://assets2.freshdesk.com/assets/misc/spacer.gif" alt="Spacer"/><span>Mark as spam</span></a></li>
-                      <li><a rel="nofollow" data-method="delete" data-keybinding="#" href="/helpdesk/tickets/1">Delete</a></li>
-                      <li class="show_on_collapse"><a id="close_ticket_btn" title="Shift + Close to skip notification mail" rel="close_ticket_btn" data-placement="below" data-href="/helpdesk/tickets/1/close" href="#">Close</a></li>
-                      <li class="show_on_collapse"><a data-target="#merge_freshdialog" data-template-footer="false" data-placement="below" data-title="Merge Tickets" data-action="merge" rel="freshdialog" data-ticket-display-id="1" data-width="800" href="#merge_freshdialog">Merge</a></li>
-                      <li class="show_on_collapse"><a title="Execute Scenario" rel="freshdialog" data-template-footer="" data-target="#execute_scenario" data-keybinding="s" data-highlight="true" href="/helpdesk/tickets/14000004899/component?component=scenarios">Scenarios</a></li>
-                    </ul>
+{$Content}
+<div class="col-lg-12">
+  <div class="main-box clearfix">
+    <header class="main-box-header clearfix">
+      <h2>Ticket Details</h2>
+    </header>
+    <div class="main-box-body clearfix">
+      <div class="conversation-wrapper">
+        <div class="conversation-content">
+          <div style="position: relative; overflow: hidden; width: auto; height: 352px;" class="slimScrollDiv">
+            <div style="overflow: hidden; width: auto; height: 352px;" class="conversation-inner">
+              <div class="conversation-item item-left clearfix">
+                <div class="conversation-user"><img alt="" src="img/samples/ryan.png"/></div>
+                <div class="conversation-body">
+                  <div class="name">Bhavani pvt ltd</div>
+                  <div class="time hidden-xs">September 21, 2013 18:28</div>
+                  <div class="text">
+                    I don't think they tried to market it to the billionaire, spelunking,
+                    base-jumping crowd.
                   </div>
                 </div>
-              </ul>
+              </div>
+              <div class="conversation-item item-right clearfix">
+                <div class="conversation-user"><img alt="" src="img/samples/kunis.png"/></div>
+                <div class="conversation-body">
+                  <div class="name">Xavoc </div>
+                  <div class="time hidden-xs">September 21, 2013 12:45</div>
+                  <div class="text">
+                    The path of the righteous man is beset on all sides by the iniquities of the
+                    selfish and the tyranny of evil men. Blessed is he who, in the name of charity and
+                    good will.
+                  </div>
+                </div>
+              </div>
+              <div class="conversation-item item-right clearfix">
+                <div class="conversation-user"><img alt="" src="img/samples/kunis.png"/></div>
+                <div class="conversation-body">
+                  <div class="name">Mila Kunis</div>
+                  <div class="time hidden-xs">September 21, 2013 12:45</div>
+                  <div class="text">
+                    The path of the righteous man is beset on all sides by the iniquities of the
+                    selfish and the tyranny of evil men. Blessed is he who, in the name of charity and
+                    good will.
+                  </div>
+                </div>
+              </div>
+              <div class="conversation-item item-left clearfix">
+                <div class="conversation-user"><img alt="" src="img/samples/ryan.png"/></div>
+                <div class="conversation-body">
+                  <div class="name">Ryan Gossling</div>
+                  <div class="time hidden-xs">September 21, 2013 18:28</div>
+                  <div class="text">
+                    I don't think they tried to market it to the billionaire, spelunking,
+                    base-jumping crowd.
+                  </div>
+                </div>
+              </div>
+              <div class="conversation-item item-right clearfix">
+                <div class="conversation-user"><img alt="" src="img/samples/kunis.png"/></div>
+                <div class="conversation-body">
+                  <div class="name">Mila Kunis</div>
+                  <div class="time hidden-xs">September 21, 2013 12:45</div>
+                  <div class="text">
+                    The path of the righteous man is beset on all sides by the iniquities of the
+                    selfish and the tyranny of evil men. Blessed is he who, in the name of charity and
+                    good will.
+                  </div>
+                </div>
+              </div>
+              <div class="conversation-item item-right clearfix">
+                <div class="conversation-user"><img alt="" src="img/samples/kunis.png"/></div>
+                <div class="conversation-body">
+                  <div class="name">Mila Kunis</div>
+                  <div class="time hidden-xs">September 21, 2013 12:45</div>
+                  <div class="text">
+                    The path of the righteous man is beset on all sides by the iniquities of the
+                    selfish and the tyranny of evil men. Blessed is he who, in the name of charity and
+                    good will.
+                  </div>
+                </div>
+              </div>
+              <div class="conversation-item item-left clearfix">
+                <div class="conversation-user"><img alt="" src="img/samples/ryan.png"/></div>
+                <div class="conversation-body">
+                  <div class="name">Ryan Gossling</div>
+                  <div class="time hidden-xs">September 21, 2013 18:28</div>
+                  <div class="text">
+                    I don't think they tried to market it to the billionaire, spelunking,
+                    base-jumping crowd.
+                  </div>
+                </div>
+              </div>
+              <div class="conversation-item item-right clearfix">
+                <div class="conversation-user"><img alt="" src="img/samples/kunis.png"/></div>
+                <div class="conversation-body">
+                  <div class="name">Mila Kunis</div>
+                  <div class="time hidden-xs">September 21, 2013 12:45</div>
+                  <div class="text">
+                    The path of the righteous man is beset on all sides by the iniquities of the
+                    selfish and the tyranny of evil men. Blessed is he who, in the name of charity and
+                    good will.
+                  </div>
+                </div>
+              </div>
             </div>
+            <div style="background: none repeat scroll 0% 0% rgb(0, 0, 0); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 158.648px;" class="slimScrollBar"></div>
+            <div style="width: 7px; height: 100%; position: absolute; top: 0px; border-radius: 7px; background: none repeat scroll 0% 0% rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px; display: none;" class="slimScrollRail"></div>
           </div>
-          <div class="sticky_left"></div>
+        </div>
+        <div class="conversation-new-message">
+          <form>
+            <div class="form-group">
+              <textarea placeholder="Enter your message..." rows="2" class="form-control"></textarea>
+            </div>
+            <div class="clearfix">
+              <button type="submit" class="btn btn-success pull-right">Send message</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <div id="email-navigation" class="email-nav-nano hidden-xs hidden-sm has-scrollbar">
-          <div style="right: -13px;" tabindex="0" class="email-nav-nano-content"><a href="email-compose.html" class="btn btn-success email-compose-btn"><i class="fa fa-pencil-square-o"></i> Compose email</a>
-            <ul id="email-nav-items" class="clearfix">
-              <li class="active"><a href="email-inbox.html"><i class="fa fa-inbox"></i>Inbox<span class="label label-primary pull-right">83</span></a></li>
-              <li><a href="#"><i class="fa fa-star"></i>Starred</a></li>
-              <li><a href="#"><i class="fa fa-pencil"></i>Drafts</a></li>
-              <li><a href="#"><i class="fa fa-envelope"></i>Sent<span class="label label-default pull-right">11</span></a></li>
-              <li><a href="#"><i class="fa fa-trash-o"></i>Trash<span class="label label-default pull-right">1,292</span></a></li>
-            </ul>
-            <div id="email-nav-labels-wrapper">
-              <div class="email-nav-headline">Labels</div>
-              <ul id="email-nav-labels" class="clearfix">
-                <li><a href="#"><i class="fa fa-circle emerald"></i>Important</a></li>
-                <li><a href="#"><i class="fa fa-circle red"></i>Home</a></li>
-                <li><a href="#"><i class="fa fa-circle green"></i>Work</a></li>
-                <li><a href="#"><i class="fa fa-circle yellow"></i>Personal</a></li>
-                <li><a href="#"><i class="fa fa-circle purple"></i>Documents</a></li>
-              </ul>
-            </div>
-          </div>
-          <div style="display: none;" class="nano-pane">
-            <div style="height: 549px; transform: translate(0px, 0px);" class="nano-slider"></div>
-          </div>
-        </div>
-        <div id="email-detail" style="height: 562px;" class="email-detail-nano has-scrollbar">
-          <div style="right: -13px;" tabindex="0" class="email-detail-nano-content">
-            <div id="email-detail-inner">
-              <div id="email-detail-subject" class="clearfix"><span class="subject">FW: Like your new movie</span><span class="label label-success">Work</span></div>
-              <div id="email-detail-sender" class="clearfix">
-                <div class="picture hidden-xs"><img src="img/samples/angelina-300.jpg" alt=""/></div>
-                <div class="users">
-                  <div class="from clearfix">
-                    <div class="name">Angelina Jolie</div>
-                    <div class="email hidden-xs"></div>
-                  </div>
-                  <div class="to">To: <span>Me, Brad Pitt</span></div>
-                </div>
-                <div class="tools">
-                  <div class="date">Sep 12 (6 days ago)</div>
-                  <div class="btns">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-success"><i class="fa fa-mail-reply"></i></button>
-                      <button data-toggle="dropdown" type="button" class="btn btn-success dropdown-toggle"><span class="caret"></span></button>
-                      <ul class="dropdown-menu">
-                        <li><a href="#"><i class="fa fa-mail-reply"></i> Reply</a></li>
-                        <li><a href="#"><i class="fa fa-mail-reply-all"></i> Reply all</a></li>
-                        <li><a href="#"><i class="fa fa-mail-forward"></i> Forward</a></li>
-                        <li><a href="#"><i class="fa fa-print"></i> Print</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div id="email-body">
-                <p>Hey Scarlett,</p>
-                <p>
-                  Well, the way they make shows is, they make one show. That show's called a pilot. Then they
-                  show that show to the people who make shows, and on the strength of that one show they decide
-                  if they're going to make more shows. <a href="#">Some pilots</a> get picked and become television
-                                                programs. Some don't, become nothing. She starred in one of the ones that became nothing.
-                </p>
-                <p>
-                  Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as
-                  the most popular gun in American crime. Do you believe that shit? It actually says that in
-                  the <a href="#">little book</a> that comes with it: the most popular gun in American crime.
-                                                Like they're actually proud of that shit.
-                </p>
-                <p><b>You don't get sick!</b><br/>Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses
-                                                differently than mine. You don't get sick, I do. That's also clear. But for some reason,
-                                                you and I react the exact same way to water. We swallow it too fast, we choke. We get some
-                                                in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on
-                                                the same curve, just on opposite ends.
-                </p>
-              </div>
-              <div id="email-detail-attachments">
-                <div id="email-attachments-header" class="clearfix">
-                  <div class="headline"><i class="fa fa-paperclip"></i><span>Attachments:</span><b>3</b> -</div>
-                  <div class="tools"><a href="#">Download all</a></div>
-                </div>
-                <div id="email-attachments-content">
-                  <ul class="clearfix">
-                    <li>
-                      <div class="img"><a href="#"><img src="img/samples/hdr/small/img_5.jpg" alt=""/></a></div><span class="name">nature.jpg</span><a href="#">Download</a>
-                    </li>
-                    <li>
-                      <div class="img"><a href="#"><img src="img/samples/hdr/small/img_8.jpg" alt=""/></a></div><span class="name">bratislava.jpg</span><a href="#">Download</a>
-                    </li>
-                    <li>
-                      <div class="img"><i class="fa fa-file"></i></div><span class="name">invoice.pdf</span><a href="#">Download</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="nano-pane">
-            <div style="height: 502px; transform: translate(0px, 60px);" class="nano-slider"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-</html>
+  </div>
+</div>
