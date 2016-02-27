@@ -1,0 +1,1119 @@
+{$Content}
+
+.wrapper-shadow
+  #SearchResultsBar.search_results_bar(style='display: none;')
+    ul.helpdesk_ticket_results.helpdesk_note_results.results
+      li
+        h4 Tickets
+    ul.customer_results.results
+      li
+        h4 Companies
+    ul.topic_results.results
+      li
+        h4 Forums
+    ul.solution_article_results.results
+      li
+        h4 Solutions
+    ul.user_results.results
+      li
+        h4 Contacts
+    ul.results_info.results
+  #inner
+    .leftcontent
+      #noticeajax.alert.notice(style='display: none;')
+        div
+          | 1 note was deleted
+        div
+        div
+      #Pagearea.pagearea
+        link(type='text/css', rel='stylesheet', media='print', href='https://assets1.freshdesk.com/assets/cdn/tkt_details_print-2d09c647dfd81260ecf6ea412588e2bb.css')
+        textarea#ticket_draft_default_reply.hide
+          | <p/><div><p>Hi Rachel,<br><br>Ticket: https://jayambey.freshdesk.com/helpdesk/tickets/1<br></p></div>
+        #sticky_header.tkt-details-sticky.btn-collapse(data-button-text='more', data-class-for-btn-wrapper='ticket-btns', data-sticky-bottom='true', data-scroll-top='true', rel='sticky', style='')
+          .sticky_right
+            .status_info
+              strong(rel='status_name') Open
+              | ,
+              span(rel='status_timestamp')
+                | Due 
+                abbr in 3 days
+            #adjacents.pagination-link
+              ul
+                li
+                  a.page-btn.next_page.disabled.btn.tooltip(title='Next Ticket ( alt+right )', rel='next', data-placement='below', data-pjax='#body-container', data-keybinding='alt+right', data-highlight='true', href='javascript:void(0)')
+                    span.arrow-next
+                li
+                  a.page-btn.prev_page.disabled.btn.tooltip(title='Previous Ticket ( alt+left )', rel='previous', data-placement='below', data-pjax='#body-container', data-keybinding='alt+left', data-highlight='true', href='javascript:void(0)')
+                    span.arrow-previous
+            #activity_toggle.activity_toggle.btn.clearfix.tooltip(data-highlight='true', data-keybinding='}', data-placement='below', data-toggle='button', data-original-title='Show Activities ( } )', twipsy-content-set='true')
+              .text Show Activities
+              span.visible Yes
+              span No
+            .ticket-actions
+              ul.collapse-content
+                li.ticket-btns
+                  #new_watcher_page.watchers_tooltip.hide(data-load-unique='true', data-url='/helpdesk/tickets/1/subscriptions', rel='', style='display: none;')
+                    span.arrow-top
+                    span.watcher-close ×
+                    .watcher_label
+                      div
+                        | Ticket Watchers
+                      .watcher_text
+                        | Agents added as watchers receive email alerts when the ticket is updated
+                    #addwatcher
+                      .select_agents
+                        span.rounded-add-icon
+                        #s2id_ids.select2-container.select2-container-multi.select2.watcher_input
+                          ul.select2-choices
+                            li.select2-search-field
+                              label.select2-offscreen(for='s2id_autogen52')
+                              input#s2id_autogen52.select2-input(type='text', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', placeholder='Add agents', style='width: 100%;')
+                          .select2-drop.select2-drop-multi.select2-display-none
+                            ul.select2-results
+                              li.select2-no-results No matches found
+                        select#ids.select2.watcher_input.select2-offscreen(name='ids[]', multiple='multiple', data-placeholder='Add agents', tabindex='-1')
+                          option(value='14000004271') Me
+                  #watcher_toggle.btn.monitor_div.tooltip(data-currentuserid='14000004271', data-watching='false', data-hotkey='w', data-placement='below', data-original-title='Watch ( w )', twipsy-content-set='true')
+                    span#monitor
+                      a.monitor(onclick='; return false;', href='#')
+                        img(height='24px', width='24px', src='https://assets3.freshdesk.com/assets/misc/spacer.gif', alt='Spacer')
+                li.ticket-btns
+                  .btn-group
+                    a#ReplyButton.btn.tooltip.btn-collapse(data-replyto-handle='', data-highlight='true', data-keybinding='r', data-note-type='reply', rel='note-button', data-placement='below', data-original-title='Reply ( r )', twipsy-content-set='true')
+                      span.reply-inner
+                      | 				    		Reply
+                    a#FwdButton.btn.tooltip.btn-collapse(data-highlight='true', data-keybinding='f', data-note-type='fwd', rel='note-button', data-placement='below', href='#', data-original-title='Forward ( f )', twipsy-content-set='true')
+                      span.forward-inner
+                      | 				    		Forward
+                    a#noteButton.btn.tooltip.btn-collapse(data-highlight='true', data-keybinding='n', data-note-type='note', data-placement='below', rel='note-button', href='#', data-original-title='Add note ( n )', twipsy-content-set='true')
+                      span.note-inner
+                      | 							Add note
+                li.ticket-btns.hide_on_collapse
+                  a#close_ticket_btn.btn.tooltip.btn-collapse(title='Shift + Close to skip notification mail', rel='close_ticket_btn', data-placement='below', data-href='/helpdesk/tickets/1/close', href='#') Close
+                li.ticket-btns.hide_on_collapse
+                  a.btn.btn-collapse(data-target='#merge_freshdialog', data-template-footer='false', data-placement='below', data-title='Merge Tickets', data-action='merge', rel='freshdialog', data-ticket-display-id='1', data-width='800', href='#merge_freshdialog')
+                    | Merge
+                #merge_freshdialog.hide
+                  span.loading-block.sloading.loading-small.loading-align
+                    .spinner(style='position: relative; width: 0px; z-index: 2000000000; left: 0px; top: 0px;', role='progressbar')
+                      div(style='position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-0-8;')
+                        div(style='position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(0deg) translate(4px, 0px); border-radius: 1px;')
+                      div(style='position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-1-8;')
+                        div(style='position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(45deg) translate(4px, 0px); border-radius: 1px;')
+                      div(style='position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-2-8;')
+                        div(style='position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(90deg) translate(4px, 0px); border-radius: 1px;')
+                      div(style='position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-3-8;')
+                        div(style='position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(135deg) translate(4px, 0px); border-radius: 1px;')
+                      div(style='position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-4-8;')
+                        div(style='position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(180deg) translate(4px, 0px); border-radius: 1px;')
+                      div(style='position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-5-8;')
+                        div(style='position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(225deg) translate(4px, 0px); border-radius: 1px;')
+                      div(style='position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-6-8;')
+                        div(style='position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(270deg) translate(4px, 0px); border-radius: 1px;')
+                      div(style='position: absolute; top: -1px; opacity: 0.25; animation: 0.625s linear 0s normal none infinite running opacity-44-25-7-8;')
+                        div(style='position: absolute; width: 5px; height: 2px; background: none repeat scroll 0% 0% rgb(0, 0, 0); box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.1); transform-origin: left center 0px; transform: rotate(315deg) translate(4px, 0px); border-radius: 1px;')
+                li.ticket-btns.hide_on_collapse
+                  .tooltip.keytitle(data-hotkey='s', data-placement='below', data-original-title='Execute Scenario ( s )', twipsy-content-set='true')
+                    a.btn.btn-collapse(title='Execute Scenario', rel='freshdialog', data-template-footer='', data-target='#execute_scenario', data-keybinding='s', data-highlight='true', href='/helpdesk/tickets/14000004899/component?component=scenarios') Scenarios
+                li.collapse_on_default
+                  a(rel='triggerAddTimer', data-keybinding='m', href='#') Add time
+                li.collapse_on_default
+                  a(href='/helpdesk/tickets/1/edit') Edit
+                li.collapse_on_default
+                  a(target='_blank', href='/helpdesk/tickets/1/print') Print
+                li.collapse_on_default
+                  a.custom-tip-bottom.spam.spamicon(rel='nofollow', data-method='put', data-keybinding='!', href='/helpdesk/tickets/1/spam')
+                    img(height='24px', width='24px', src='https://assets2.freshdesk.com/assets/misc/spacer.gif', alt='Spacer')
+                    span Mark as spam
+                li.collapse_on_default
+                  a(rel='nofollow', data-method='delete', data-keybinding='#', href='/helpdesk/tickets/1') Delete
+                .ticket-btns
+                  #more-btn.btn-group
+                    a.btn.dropdown-toggle(data-toggle='dropdown')
+                      | more
+                      span.caret
+                    ul#collapse-list.dropdown-menu(style='display: none;', role='menu')
+                      li
+                        a(rel='triggerAddTimer', data-keybinding='m', href='#') Add time
+                      li
+                        a(href='/helpdesk/tickets/1/edit') Edit
+                      li
+                        a(target='_blank', href='/helpdesk/tickets/1/print') Print
+                      li
+                        a.custom-tip-bottom.spam.spamicon(rel='nofollow', data-method='put', data-keybinding='!', href='/helpdesk/tickets/1/spam')
+                          img(height='24px', width='24px', src='https://assets2.freshdesk.com/assets/misc/spacer.gif', alt='Spacer')
+                          span Mark as spam
+                      li
+                        a(rel='nofollow', data-method='delete', data-keybinding='#', href='/helpdesk/tickets/1') Delete
+                      li.show_on_collapse
+                        a#close_ticket_btn(title='Shift + Close to skip notification mail', rel='close_ticket_btn', data-placement='below', data-href='/helpdesk/tickets/1/close', href='#') Close
+                      li.show_on_collapse
+                        a(data-target='#merge_freshdialog', data-template-footer='false', data-placement='below', data-title='Merge Tickets', data-action='merge', rel='freshdialog', data-ticket-display-id='1', data-width='800', href='#merge_freshdialog')
+                          | Merge
+                      li.show_on_collapse
+                        a(title='Execute Scenario', rel='freshdialog', data-template-footer='', data-target='#execute_scenario', data-keybinding='s', data-highlight='true', href='/helpdesk/tickets/14000004899/component?component=scenarios') Scenarios
+          .sticky_left
+            div
+              a(rel='link_ticket_list', data-pjax='#body-container', data-parallel-url='/helpdesk/tickets/filter_options', data-parallel-placeholder='#ticket-leftFilter', href='/helpdesk/tickets') Tickets
+              | 			/ Ticket 
+              span#ticket-display-id #1
+            .source-badge-wrap
+              #ar_notification.source.priority_color_1.status_2(rel='ar-notice-popover')
+                span.source_2
+                .ar_notification_bubble.hide 0
+            #agent_collision_placeholder
+          i#scroll-to-top
+        .clearfix
+        .tkt-wrapper.ticket_show(data-showing='notes')
+          .tkt-wrapper-inner.clearfix
+            #forFixed.conversation_thread
+            #tkt-inner.scollable_content.clearfix
+              #ticket_details_sidebar.tkt-sidebar
+                #due-by-element-parent.open-box
+                  h4.title Open
+                  p#edit-dueby-time-parent
+                    | Due 
+                    abbr in 3 days
+                    br
+                    | on Thu, 25 Feb at  5:00 PM
+                    a#edit-dueby-time(data-widget-container='due-date-dialog-container', href='#', data-placement='topRight')
+                      | Change
+                #requester_info.widget.clearfix
+                  h3 Requestor Info
+                  .content
+                    .tkt-tabs-wrap
+                    #contact_info_default.requester_tab
+                      .requester-details
+                        .contact_hover
+                          .preview_pic.small.avatar-text.text-center.thumb.bg-1 R
+                          .infoblock.muted
+                            .user_name
+                              a(target='_self', data-pjax='#body-container', href='/users/14000004272') Rachel
+                            .user_design
+                            .contact-append
+                              span.add-on
+                                i.product-email-logo
+                              a.hover-contact-box.lowercase rachel@freshdesk.com
+                            .recent-tickets
+                              a(title='Recent tickets from Rachel', rel='freshdialog', data-template-footer='', data-target='#requester_tickets', href='/helpdesk/tickets/14000004899/component?component=requester_tickets') Recent tickets
+                #TicketProperties.widget
+                  h3.title Ticket Properties
+                  .content(data-remote-url='/helpdesk/tickets/14000004899/component?component=ticket_fields')
+                    form#custom_ticket_form.ui-form.content.dont-validate(method='post', action='/helpdesk/tickets/1/update_ticket_properties', accept-charset='UTF-8')
+                      div(style='margin:0;padding:0;display:inline')
+                        input(type='hidden', value='✓', name='utf8')
+                        input(type='hidden', value='put', name='_method')
+                        input(type='hidden', value='tNAEtr5Y805iNl69LzLqTi54k5+8jXbCphASqcnt8r0=', name='authenticity_token')
+                      .button-container.top
+                        input#helpdesk_ticket_submit_dup.btn.btn-primary(type='submit', value='Update', name='commit', data-saved-text='✔ Done', data-loading-text='Updating...', data-default-text='Update')
+                      ul#TicketPropertiesFields.cnt.dont-validate
+                        // form values starts here
+                        li.dropdown.default_priority.field
+                          label(for='helpdesk_ticket_priority')
+                            | Priority
+                            span.required_star *
+                          #s2id_helpdesk_ticket_priority.select2-container.required.dropdown.select2(title='Priority*')
+                            a.select2-choice(tabindex='-1', href='javascript:void(0)')
+                              span#select2-chosen-45.select2-chosen
+                                i.priority_block.priority_color_1
+                                | Low
+                              abbr.select2-search-choice-close
+                              .select2-arrow(role='presentation')
+                                b(role='presentation')
+                            label.select2-offscreen(for='s2id_autogen45') Priority*
+                            input#s2id_autogen45.select2-focusser.select2-offscreen(type='text', role='button', aria-haspopup='true', aria-labelledby='select2-chosen-45')
+                            .select2-drop.select2-display-none.select2-with-searchbox
+                              .select2-search
+                                label.select2-offscreen(for='s2id_autogen45_search') Priority*
+                                input#s2id_autogen45_search.select2-input(type='text', aria-autocomplete='list', aria-expanded='true', role='combobox', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', aria-owns='select2-results-45')
+                              ul#select2-results-45.select2-results(role='listbox')    
+                          select#helpdesk_ticket_priority.required.dropdown.select2.select2-offscreen(name='helpdesk_ticket[priority]', title='Priority*', tabindex='-1')
+                            option(selected='selected', value='1') Low
+                            option(value='2') Medium
+                            option(value='3') High
+                            option(value='4') Urgent
+                        li.dropdown.default_status.field
+                          label(for='helpdesk_ticket_status')
+                            | Status
+                            span.required_star *
+                          #s2id_helpdesk_ticket_status.select2-container.required.dropdown.select2(title='Status*')
+                            a.select2-choice(tabindex='-1', href='javascript:void(0)')
+                              span#select2-chosen-46.select2-chosen Open
+                              abbr.select2-search-choice-close
+                              .select2-arrow(role='presentation')
+                                b(role='presentation')
+                            label.select2-offscreen(for='s2id_autogen46') Status*
+                            input#s2id_autogen46.select2-focusser.select2-offscreen(type='text', role='button', aria-haspopup='true', aria-labelledby='select2-chosen-46')
+                            .select2-drop.select2-display-none.select2-with-searchbox
+                              .select2-search
+                                label.select2-offscreen(for='s2id_autogen46_search') Status*
+                                input#s2id_autogen46_search.select2-input(type='text', aria-autocomplete='list', aria-expanded='true', role='combobox', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', aria-owns='select2-results-46')
+                              ul#select2-results-46.select2-results(role='listbox')    
+                          select#helpdesk_ticket_status.required.dropdown.select2.select2-offscreen(name='helpdesk_ticket[status]', title='Status*', tabindex='-1')
+                            option(selected='selected', value='2') Open
+                            option(value='3') Pending
+                            option(value='4') Resolved
+                            option(value='5') Closed
+                            option(value='6') Waiting on Customer
+                            option(value='7') Waiting on Third Party
+                        li.dropdown.default_source.field.dynamic_sections
+                          label(for='helpdesk_ticket_source') Source
+                          #s2id_helpdesk_ticket_source.select2-container.dropdown.select2(title='Source')
+                            a.select2-choice(tabindex='-1', href='javascript:void(0)')
+                              span#select2-chosen-47.select2-chosen Portal
+                              abbr.select2-search-choice-close
+                              .select2-arrow(role='presentation')
+                                b(role='presentation')
+                            label.select2-offscreen(for='s2id_autogen47') Source
+                            input#s2id_autogen47.select2-focusser.select2-offscreen(type='text', role='button', aria-haspopup='true', aria-labelledby='select2-chosen-47')
+                            .select2-drop.select2-display-none.select2-with-searchbox
+                              .select2-search
+                                label.select2-offscreen(for='s2id_autogen47_search') Source
+                                input#s2id_autogen47_search.select2-input(type='text', aria-autocomplete='list', aria-expanded='true', role='combobox', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', aria-owns='select2-results-47')
+                              ul#select2-results-47.select2-results(role='listbox')    
+                          select#helpdesk_ticket_source.dropdown.select2.select2-offscreen(name='helpdesk_ticket[source]', title='Source', tabindex='-1')
+                            option(value='1') Email
+                            option(selected='selected', value='2') Portal
+                            option(value='3') Phone
+                            option(value='4') Forum
+                            option(value='5') Twitter
+                            option(value='6') Facebook
+                            option(value='7') Chat
+                            option(value='8') MobiHelp
+                            option(value='9') Feedback Widget
+                            option(value='10') Outbound Email
+                            option(value='11') Ecommerce
+                        li.dropdown_blank.default_group.field
+                          label(for='helpdesk_ticket_group_id') Group
+                          #s2id_helpdesk_ticket_group_id.select2-container.dropdown_blank.select2(title='Group')
+                            a.select2-choice(tabindex='-1', href='javascript:void(0)')
+                              span#select2-chosen-48.select2-chosen ...
+                              abbr.select2-search-choice-close
+                              .select2-arrow(role='presentation')
+                                b(role='presentation')
+                            label.select2-offscreen(for='s2id_autogen48') Group
+                            input#s2id_autogen48.select2-focusser.select2-offscreen(type='text', role='button', aria-haspopup='true', aria-labelledby='select2-chosen-48')
+                            .select2-drop.select2-display-none.select2-with-searchbox
+                              .select2-search
+                                label.select2-offscreen(for='s2id_autogen48_search') Group
+                                input#s2id_autogen48_search.select2-input(type='text', aria-autocomplete='list', aria-expanded='true', role='combobox', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', aria-owns='select2-results-48')
+                              ul#select2-results-48.select2-results(role='listbox')    
+                          select#helpdesk_ticket_group_id.dropdown_blank.select2.select2-offscreen(name='helpdesk_ticket[group_id]', title='Group', tabindex='-1')
+                            option(value='') ...
+                            option(value='14000003394') Product Management
+                            option(value='14000003395') QA
+                            option(value='14000003396') Sales
+                        li.dropdown_blank.default_agent.field
+                          label(for='helpdesk_ticket_responder_id') Agent
+                          #s2id_helpdesk_ticket_responder_id.select2-container.dropdown_blank.select2(title='Agent')
+                            a.select2-choice(tabindex='-1', href='javascript:void(0)')
+                              span#select2-chosen-49.select2-chosen ...
+                              abbr.select2-search-choice-close
+                              .select2-arrow(role='presentation')
+                                b(role='presentation')
+                            label.select2-offscreen(for='s2id_autogen49') Agent
+                            input#s2id_autogen49.select2-focusser.select2-offscreen(type='text', role='button', aria-haspopup='true', aria-labelledby='select2-chosen-49')
+                            .select2-drop.select2-display-none.select2-with-searchbox
+                              .select2-search
+                                label.select2-offscreen(for='s2id_autogen49_search') Agent
+                                input#s2id_autogen49_search.select2-input(type='text', aria-autocomplete='list', aria-expanded='true', role='combobox', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', aria-owns='select2-results-49')
+                              ul#select2-results-49.select2-results(role='listbox')    
+                          select#helpdesk_ticket_responder_id.dropdown_blank.select2.select2-offscreen(name='helpdesk_ticket[responder_id]', title='Agent', tabindex='-1')
+                            option(value='') ...
+                            option(value='14000004271') Nilam Joshi
+                        li.dropdown_blank.default_ticket_type.field.dynamic_sections
+                          label(for='helpdesk_ticket_ticket_type') Type
+                          #s2id_helpdesk_ticket_ticket_type.select2-container.dropdown_blank.select2(title='Type')
+                            a.select2-choice(tabindex='-1', href='javascript:void(0)')
+                              span#select2-chosen-50.select2-chosen Question
+                              abbr.select2-search-choice-close
+                              .select2-arrow(role='presentation')
+                                b(role='presentation')
+                            label.select2-offscreen(for='s2id_autogen50') Type
+                            input#s2id_autogen50.select2-focusser.select2-offscreen(type='text', role='button', aria-haspopup='true', aria-labelledby='select2-chosen-50')
+                            .select2-drop.select2-display-none.select2-with-searchbox
+                              .select2-search
+                                label.select2-offscreen(for='s2id_autogen50_search') Type
+                                input#s2id_autogen50_search.select2-input(type='text', aria-autocomplete='list', aria-expanded='true', role='combobox', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', aria-owns='select2-results-50')
+                              ul#select2-results-50.select2-results(role='listbox')    
+                          select#helpdesk_ticket_ticket_type.dropdown_blank.select2.select2-offscreen(name='helpdesk_ticket[ticket_type]', title='Type', tabindex='-1')
+                            option(value='') ...
+                            option(data-id='14000005944', selected='selected', value='Question') Question
+                            option(data-id='14000005945', value='Incident') Incident
+                            option(data-id='14000005946', value='Problem') Problem
+                            option(data-id='14000005947', value='Feature Request') Feature Request
+                            option(data-id='14000005948', value='Lead') Lead
+                        li#helpdesk_ticket_tags.field
+                          label(for='ticket_tags') Tags
+                          #s2id_helpdesk_ticket_tags_input.select2-container.select2-container-multi
+                            ul.select2-choices
+                              li.select2-search-field
+                                label.select2-offscreen(for='s2id_autogen51')
+                                input#s2id_autogen51.select2-input(type='text', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', placeholder='', style='width: 10px;')
+                            .select2-drop.select2-drop-multi.select2-display-none
+                              ul.select2-results    
+                          input#helpdesk_ticket_tags_input.select2-offscreen(type='text', value='', name='helpdesk[tags]', rel='tagger', tabindex='-1')
+                        // form values ends here
+                        // Custom fields ends here
+                      input#send_and_set(type='hidden', value='true', name='send_and_set', disabled='')
+                      .button-container
+                        input#helpdesk_ticket_submit.btn.btn-primary(type='submit', value='Update', name='commit', data-saved-text='✔ Done', data-loading-text='Updating...', data-default-text='Update')
+                #TimesheetTab.widget.time-tracked.inactive.load_remote
+                  h3
+                    | Time tracked
+                    .tracked_time
+                      span#timeentry_timer_total.time(data-static-total='true') 00:00
+                      span.time_unit Hrs 
+                  .content(data-remote-url='/helpdesk/tickets/1/time_sheets', rel='remote')
+                #ToDoList.widget.inactive.load_remote
+                  h3 To Do
+                  .content(data-remote-url='/helpdesk/tickets/14000004899/component?component=todo', rel='remote')
+                #fa-dev-pholder(style='display:none')
+                // Marketplace Plugs
+              // content Left
+              .leftcontent
+                #original_request.conversation_thread
+                  .conversation
+                    a.avatar-wrap(href='/users/14000004272')
+                      .preview_pic.circle.avatar-text.text-center.thumb.bg-1 R
+                    .commentbox.private-note
+                      div
+                        h2.subject
+                          | This is a sample ticket
+                        .author-mail-detail
+                          div
+                            a.username(rel='contact-hover', data-pjax='#body-container', data-contact-url='/contacts/14000004272/hover_card', data-contact-id='14000004272', href='/users/14000004272', data-original-title='') Rachel
+                            |  reported 
+                            abbr 19 minutes ago
+                            | 			(Tue, 23 Feb at  3:34 AM)
+                            | 			via
+                            | 				Portal
+                          |       		Created by: Nilam Joshi
+                          .info
+                            div
+                        #ticket_original_request(rel='image-enlarge', data-quoted='true')
+                          div This is a sample ticket, feel free to delete it.
+                        #ticket_attachments_container_14000004899
+                #show_more.conversation_thread.hide
+                  .conversation
+                    a.avatar-wrap.avatar-wrap-collapse(href='')
+                      p
+                        span.count_number.not_on_loading(rel='count-total-remaining')
+                        span.count_number.loading_only ...
+                        span.count_more.not_on_loading(rel='count_more') more
+                    a.commentbox.commentbox-blue(href='')
+                      div Expand
+                #all_notes.conversation_thread(rel='activity_container')
+                  #helpdesk_note_14000004486.conversation(data-timestamp='1456217002', style='display: none;')
+                    #note14000004486.avatar-wrap(name='note14000004486')
+                      .preview_pic.circle.avatar-text.text-center.thumb.bg-8 N
+                    .commentbox.commentbox-gray.private-note
+                      span.comment-lock
+                      .helpdesk_note
+                        .actions
+                          a.red_links.conv-action-icon.conv-actions-delete.tooltip(rel='nofollow', data-remote='true', data-method='delete', data-confirm='Remove this from the ticket conversation?', href='/helpdesk/tickets/1/notes/14000004486', data-original-title='Delete', twipsy-content-set='true')
+                          a.conv-action-icon.conv-actions-edit.tooltip(onclick="jQuery('#note_details_14000004486').addClass('hide'); jQuery('#edit-14000004486').show().trigger('afterShow'); return false;", href='#', data-original-title='Edit', twipsy-content-set='true')
+                        .author-mail-detail.cc_bcc_info
+                          a.username(rel='contact-hover', data-pjax='#body-container', data-contact-url='/contacts/14000004271/hover_card', data-contact-id='14000004271', href='/users/14000004271', data-original-title='') Nilam Joshi
+                          |  added a private note 
+                          abbr 10 minutes ago
+                          |  (Tue, 23 Feb at  3:43 AM)
+                          br
+                        .author-mail-detail
+                          span(rel='hover-popover', data-placement='below', data-content='', data-original-title='')
+                        #edit-14000004486.request_panel.email-edit-form.hide(rel='remote', data-remote-url='/helpdesk/tickets/1/notes/14000004486/edit', style='display: block;')
+                          form#edit_14000004486.edit_helpdesk_note(rel='edit_note_form', method='post', enctype='multipart/form-data', data-show-pseudo-reply='false', data-panel='edit-14000004486', data-fetch-latest='false', data-cnt-id='14000004486', action='/helpdesk/tickets/1/notes/14000004486', accept-charset='UTF-8')
+                            div(style='margin:0;padding:0;display:inline')
+                              input(type='hidden', value='✓', name='utf8')
+                              input(type='hidden', value='put', name='_method')
+                              input(type='hidden', value='tNAEtr5Y805iNl69LzLqTi54k5+8jXbCphASqcnt8r0=', name='authenticity_token')
+                            ul.ui-form.dont-validate
+                              li.inline-field.field.continous
+                                input#helpdesk_note_source(type='hidden', value='2', name='helpdesk_note[source]')
+                                .redactor_box
+                                  ul.redactor_toolbar
+                                    li
+                                      a.redactor_btn_bold(tabindex='-1', title='Bold (Ctrl-B)', href='javascript:void(null);')
+                                    li
+                                      a.redactor_btn_italic(tabindex='-1', title='Italic (Ctrl-I)', href='javascript:void(null);')
+                                    li
+                                      a.redactor_btn_underline(tabindex='-1', title='Underline (Ctrl-U)', href='javascript:void(null);')
+                                    li.redactor_separator
+                                    li
+                                      a.redactor_btn_unorderedlist(tabindex='-1', title='• Unordered List (Ctrl-Shift-7)', href='javascript:void(null);')
+                                    li
+                                      a.redactor_btn_orderedlist(tabindex='-1', title='1. Ordered List (Ctrl-Shift-8)', href='javascript:void(null);')
+                                    li.redactor_separator
+                                    li
+                                      a.redactor_btn_fontcolor(tabindex='-1', title='Font Color', href='javascript:void(null);')
+                                    li
+                                      a.redactor_btn_backcolor(tabindex='-1', title='Back Color', href='javascript:void(null);')
+                                    li.redactor_separator
+                                    li
+                                      a.redactor_btn_link(tabindex='-1', title='Link', href='javascript:void(null);')
+                                    li
+                                      a.redactor_btn_image(tabindex='-1', title='Insert Image...', href='javascript:void(null);')
+                                    li
+                                      a.redactor_btn_removeFormat(tabindex='-1', title='Remove formatting (Ctrl-\)', href='javascript:void(null);')
+                                  div(contenteditable='true', style='width:50px;height:0px; overflow: hidden;', rel='getPasteImage')
+                                  .redactor_editor(contenteditable='true', dir='ltr', style='height: 333px; font-size: 13px; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;')
+                                    div(style='font-size: 13px; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;')
+                                      div  
+                                  textarea#14000004486-body.required(rows='20', name='helpdesk_note[note_body_attributes][body_html]', cols='40', style='display: none;')
+                                    | <div style="font-size: 13px; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;">
+                                    | <div> </div>
+                                    | </div>
+                                input#helpdesk_note_note_body_attributes_id(type='hidden', value='14000004475', name='helpdesk_note[note_body_attributes][id]')
+                              li#attachment-options-note.inline-field.field.attachment-options.continous
+                                .attach-wrapper.row-fluid.new-attach
+                                  .span8
+                                    #edit-note-14000004486-container.attachments-list-form
+                                      .attachment_contents
+                                        #edit-note-14000004486-attachments.attachments-wrap.shared_attachment_list
+                                    .hidden_upload
+                                      .add_attachment
+                                        span +
+                                        |  Attach a file
+                                      input#edit-note-14000004486_file.original_input(type='file', max_attachment='', max_size='15', sendfocusto='edit-note-14000004486-body', filelist='edit-note-14000004486-attachments', filecontainer='edit-note-14000004486-container', namewhenfilled='helpdesk_note[attachments][][resource]', data-attach-id='edit-note-14000004486', name='emptyfile')
+                                script#file-list-template(type='text/x-jquery-tmpl').
+                                  &lt;div class="item"&gt;
+                                  {{if (file_valid)}}
+                                  &lt;a class="attachment-close"  href="javascript:void(0)"
+                                  onclick="remove_file_size_alert(this); Helpdesk.Multifile.remove(this); return false;"
+                                  inputId="${inputId}"&gt;&lt;/a&gt;
+                                  {{/if}}
+                                  &lt;div class="attachment-type file-types-def"&gt;
+                                  &lt;span class="{{if (!file_valid) }} invalid_attachment {{/if}}"&gt;
+                                  &lt;a href="javascript:void(0)"&gt;${name} {{if (size != '0' &amp;&amp; size != '0.00 KB ') }}( ${size} ){{/if}}&lt;/a&gt;
+                                  {{if (!file_valid)}}
+                                  &lt;b class="alert-text tooltip" title="Exceeds attachments size"&gt;(Not Added)&lt;/b&gt;
+                                  {{/if}}
+                                  &lt;/span&gt;
+                                  &lt;/div&gt;
+                                  &lt;/div&gt;
+                              li.button-container.hide
+                                input.uiButton.special(type='submit', value='Update', name='commit')
+                                input.uiButton(type='button', value='Cancel', onclick="jQuery('#edit-14000004486').slideUp();jQuery('#note_details_14000004486').show();")
+                            .btn-toolbar
+                              input.btn(type='button', value='Cancel', onclick="jQuery('#edit-14000004486').slideUp();jQuery('#note_details_14000004486').show();")
+                              input.btn.btn-primary(type='submit', value='Update', name='commit')
+                            .clearfix
+                        #cnt-fwd-14000004486.request_panel.note-forward-form.hide(rel='remote', data-remote-url='/helpdesk/tickets/1/forward_conv?note_id=14000004486')
+                        #note_details_14000004486.details.hide(data-note-id='14000004486', rel='image-enlarge')
+                          div(data-quoted='true')
+                            div(style='font-size: 13px; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;')
+                              div  
+                        #note_attachments_container_14000004486
+                      #cnt-fwd-14000004486.request_panel.note-forward-form.hide(rel='remote', data-remote-url='/helpdesk/tickets/1/forward_conv?note_id=14000004486')
+                      #cnt-reply-fwd-14000004486.request_panel.note-forward-form.hide(rel='remote', data-remote-url='/helpdesk/tickets/1/reply_to_forward?note_id=14000004486')
+                  #helpdesk_note_14000004492.conversation(data-timestamp='1456217085', style='display: none;')
+                    #note14000004492.avatar-wrap(name='note14000004492')
+                      .preview_pic.circle.avatar-text.text-center.thumb.bg-8 N
+                    .commentbox.commentbox-gray.private-note
+                      span.comment-lock
+                      .helpdesk_note
+                        .actions
+                          a.red_links.conv-action-icon.conv-actions-delete.tooltip(rel='nofollow', data-remote='true', data-method='delete', data-confirm='Remove this from the ticket conversation?', href='/helpdesk/tickets/1/notes/14000004492', data-original-title='Delete', twipsy-content-set='true')
+                          a.conv-action-icon.conv-actions-edit.tooltip(onclick="jQuery('#note_details_14000004492').addClass('hide'); jQuery('#edit-14000004492').show().trigger('afterShow'); return false;", href='#', data-original-title='Edit', twipsy-content-set='true')
+                        .author-mail-detail.cc_bcc_info
+                          a.username(rel='contact-hover', data-pjax='#body-container', data-contact-url='/contacts/14000004271/hover_card', data-contact-id='14000004271', href='/users/14000004271', data-original-title='') Nilam Joshi
+                          |  added a private note 
+                          abbr 9 minutes ago
+                          |  (Tue, 23 Feb at  3:44 AM)
+                          br
+                        .author-mail-detail
+                          span(rel='hover-popover', data-placement='below', data-content='', data-original-title='')
+                        #edit-14000004492.request_panel.email-edit-form.hide(rel='remote', data-remote-url='/helpdesk/tickets/1/notes/14000004492/edit')
+                        #cnt-fwd-14000004492.request_panel.note-forward-form.hide(rel='remote', data-remote-url='/helpdesk/tickets/1/forward_conv?note_id=14000004492')
+                        #note_details_14000004492.details(data-note-id='14000004492', rel='image-enlarge')
+                          div(data-quoted='true')
+                            div(style='font-size: 13px; font-family: Helvetica Neue,Helvetica,Arial,sans-serif;')
+                              div ticket details..
+                              div
+                                br
+                        #note_attachments_container_14000004492
+                      #cnt-fwd-14000004492.request_panel.note-forward-form.hide(rel='remote', data-remote-url='/helpdesk/tickets/1/forward_conv?note_id=14000004492')
+                      #cnt-reply-fwd-14000004492.request_panel.note-forward-form.hide(rel='remote', data-remote-url='/helpdesk/tickets/1/reply_to_forward?note_id=14000004492')
+                .redactor.conversation_thread
+                  .conversation
+                    .avatar-wrap
+                      .preview_pic.circle.avatar-text.text-center.thumb.bg-8 N
+                    .commentbox.commentbox-dark
+                      #TicketForms
+                        .hide
+                          a#canned_response_show(title='Canned Responses', rel='freshdialog', data-width='700', data-template-footer='', data-target='#canned_responses', href='/helpdesk/canned_responses/index/1')
+                            span.translation_missing(title='translation missing: en.ticket.canned_responses.ca_response') Ca Response
+                          a#suggested_solutions_show(title='Suggested Solutions', rel='freshdialog', data-template-footer='', data-target='#related_solutions', href='/search/related_solutions/ticket/14000004899') Solution
+                        #cnt-reply.request_panel.hide(data-node-name='agent_replying', rel='emitter')
+                          .form_title
+                            | Reply to: 
+                            span rachel@freshdesk.com
+                          .list_agents_replying.hide
+                          form#HelpdeskReply.new_helpdesk_note(method='post', enctype='multipart/form-data', data-show-pseudo-reply='true', data-panel='cnt-reply', data-fulltext='true', data-fetch-latest='true', data-destroy-editor='true', data-cnt-id='cnt-reply', action='/helpdesk/tickets/1/conversations/reply', accept-charset='UTF-8', novalidate='novalidate')
+                            div(style='margin:0;padding:0;display:inline')
+                              input(type='hidden', value='✓', name='utf8')
+                              input(type='hidden', value='tNAEtr5Y805iNl69LzLqTi54k5+8jXbCphASqcnt8r0=', name='authenticity_token')
+                            ul.ui-form.dont-validate.botm-space
+                              li.inline-field.field
+                                label.mailaddr-label.from(for='helpdesk_note_reply_email') From:
+                                .request_form_options
+                                  a#add_cc_btn_cnt-reply(data-toggle-checkbox='include_cc', data-toggle-button='add_cc_btn_cnt-reply', data-container='cc-form-container-cnt-reply', rel='toggle_email_container', href='#')
+                                    | Cc
+                                  a#add_bcc_btn-cnt-reply.(data-toggle-checkbox='include_bcc', data-toggle-button='add_bcc_btn-cnt-reply', data-container='bcc-form-container-cnt-reply', rel='toggle_email_container', href='#')
+                                    | Bcc
+                                input#include_cc.hide(type='checkbox', name='include_cc')
+                                input#include_bcc.hide(type='checkbox', name='include_bcc')
+                                #s2id_reply_email_id.select2-container.select2.responder_field
+                                  a.select2-choice(tabindex='-1', href='javascript:void(0)')
+                                    span#select2-chosen-31.select2-chosen "jay ambey" <support@jayambey.freshdesk.com>
+                                    abbr.select2-search-choice-close
+                                    .select2-arrow(role='presentation')
+                                      b(role='presentation')
+                                  label.select2-offscreen(for='s2id_autogen31')
+                                  input#s2id_autogen31.select2-focusser.select2-offscreen(type='text', role='button', aria-haspopup='true', aria-labelledby='select2-chosen-31')
+                                  .select2-drop.select2-display-none.select2-with-searchbox
+                                    .select2-search
+                                      label.select2-offscreen(for='s2id_autogen31_search')
+                                      input#s2id_autogen31_search.select2-input(type='text', aria-autocomplete='list', aria-expanded='true', role='combobox', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', aria-owns='select2-results-31')
+                                    ul#select2-results-31.select2-results(role='listbox')    
+                                select#reply_email_id.select2.responder_field.select2-offscreen(name='reply_email[id]', tabindex='-1', title='')
+                                  option(selected='selected', data-email-config-id='14000001129', value='"jay ambey" <support@jayambey.freshdesk.com>') "jay ambey" <support@jayambey.freshdesk.com>
+                              li#cc-form-container-cnt-reply.inline-field.field.hide.cc_fields
+                                label.mailaddr-label(for='cc_emails_cnt-reply') Cc:
+                                a.clear_emails(data-clear='true', data-toggle-button='add_cc_btn_cnt-reply', data-container='cc-form-container-cnt-reply', rel='toggle_email_container', href='#') Clear
+                                .email_container
+                                  ul.multi_value_field
+                                    li.search_field_item
+                                      input(type='text', autocomplete='off', tabindex='', placeholder='')
+                                  .autocomplete(style='position: absolute; display: none;')
+                                    ul
+                              li#bcc-form-container-cnt-reply.inline-field.field.hide.cc_fields
+                                label.mailaddr-label(for='cc_emails_cnt-reply') Bcc:
+                                a.clear_emails(data-clear='true', data-toggle-button='add_bcc_btn-cnt-reply', data-container='bcc-form-container-cnt-reply', rel='toggle_email_container', href='#') Clear
+                                .email_container
+                                  ul.multi_value_field
+                                    li.search_field_item
+                                      input(type='text', autocomplete='off', tabindex='', placeholder='')
+                                  .autocomplete(style='position: absolute; display: none;')
+                                    ul
+                              li.inline-field.field.clearField.message
+                                .redactor_insert_btns
+                                  ul.redactor_toolbar
+                                    li
+                                      a.insert_solution.tooltip(title='Insert Solution', rel='ticket_solutions', data-editor-id='cnt-reply-body', href='#') Solution
+                                    li.redactor_separator
+                                    li
+                                      a.insert_ca_response.tooltip(title='Insert Canned Response', rel='ticket_canned_response', data-editor-id='cnt-reply-body', href='#') Canned Response
+                                      a.redactor_btn_bold(tabindex='-1', title='Bold (⌘B)', href='javascript:void(null);')
+                                textarea#cnt-reply-body.required(rows='20', name='helpdesk_note[note_body_attributes][body_html]', data-wrap-font-family='true', data-quoted-textarea='#cnt-reply-quoted', cols='40', aria-required='true')
+                                  | <p/><div><p>Hi Rachel,<br><br>Ticket: https://jayambey.freshdesk.com/helpdesk/tickets/1<br></p></div>
+                                textarea#cnt-reply-body-fulltext(style='display:none;', rows='20', name='helpdesk_note[note_body_attributes][full_text_html]', cols='40')
+                                textarea#cnt-reply-quoted.hide(name='quoted_text_html')
+                                  | <div class="freshdesk_quote">
+                                  | <blockquote class="freshdesk_quote">On Tue, 23 Feb at  3:34 AM
+                                  | <span class="separator" />,  Rachel &lt;rachel@freshdesk.com&gt;  wrote:
+                                  | <div>This is a sample ticket, feel free to delete it.</div>
+                                  | </blockquote>
+                                  | </div>
+                              li#file_size_alert_cnt-reply.inline-field.field.continous.file_size_alert.hide
+                                span.alert-text Reply was not sent!
+                                |         Your attachments exceed 15 MB. Please make changes before you proceed.
+                              li#attachment-options-reply.inline-field.field.attachment-options.continous
+                                .attach-wrapper.row-fluid.new-attach
+                                  .span8
+                                    #send-email-container.attachments-list-form
+                                      .attachment_contents
+                                        #send-email-attachments.attachments-wrap.shared_attachment_list
+                                    .hidden_upload
+                                      .add_attachment
+                                        span +
+                                        |  Attach a file
+                                      input#send-email_file.original_input(type='file', max_attachment='', max_size='15', sendfocusto='send-email-body', filelist='send-email-attachments', filecontainer='send-email-container', namewhenfilled='helpdesk_note[attachments][][resource]', data-attach-id='send-email', name='emptyfile')
+                                script#file-list-template(type='text/x-jquery-tmpl').
+                                  &lt;div class="item"&gt;
+                                  {{if (file_valid)}}
+                                  &lt;a class="attachment-close"  href="javascript:void(0)"
+                                  onclick="remove_file_size_alert(this); Helpdesk.Multifile.remove(this); return false;"
+                                  inputId="${inputId}"&gt;&lt;/a&gt;
+                                  {{/if}}
+                                  &lt;div class="attachment-type file-types-def"&gt;
+                                  &lt;span class="{{if (!file_valid) }} invalid_attachment {{/if}}"&gt;
+                                  &lt;a href="javascript:void(0)"&gt;${name} {{if (size != '0' &amp;&amp; size != '0.00 KB ') }}( ${size} ){{/if}}&lt;/a&gt;
+                                  {{if (!file_valid)}}
+                                  &lt;b class="alert-text tooltip" title="Exceeds attachments size"&gt;(Not Added)&lt;/b&gt;
+                                  {{/if}}
+                                  &lt;/span&gt;
+                                  &lt;/div&gt;
+                                  &lt;/div&gt;
+                            // reply will be always public
+                            input#helpdesk_note_private(type='hidden', value='false', name='helpdesk_note[private]')
+                            // reply source will be always email
+                            input#helpdesk_note_source(type='hidden', value='0', name='helpdesk_note[source]')
+                            input#helpdesk_note_to_emails(type='hidden', value='rachel@freshdesk.com', name='helpdesk_note[to_emails]')
+                            input#reply_from_email_cnt-reply(type='hidden', value='"jay ambey" <support@jayambey.freshdesk.com>', name='helpdesk_note[from_email]')
+                            input#helpdesk_note_email_config_id(type='hidden', value='14000001129', name='helpdesk_note[email_config_id]')
+                            input#last_note_id.last_note_id(type='hidden', value='-1', name='last_note_id')
+                            .clearfix.zeroh
+                            .post_in_forum
+                              span#reply-draft.reply-draft
+                                #draft-save.sav.tooltip(title='Your last draft', data-placement='below') Draft Saved
+                            .btn-toolbar
+                              span
+                                a.btn.cancel_btn.reply_agent_collision(data-show-pseudo-reply='true', data-editor-id='cnt-reply-body', data-cnt-id='cnt-reply', data-clear-draft='true', href='#') Cancel
+                              span.btn-group.dropup
+                                button.btn.btn-primary.submit_btn
+                                  | Send
+                                button#reply_dialog.btn.btn-primary.dropdown-toggle.dialog-btn(href='#', data-toggle='dropdown')
+                                  span.caret
+                                ul#conversation_reply.menuselector.dropdown-menu.custom_statuses.pull-right(data-menu-trigger='a', data-menu-hover-in='li', tabindex='1', style='display: none;')
+                                  li.active
+                                    a.reply_agent_collision(data-status-val='3', data-cnt-id='cnt-reply', data-status-name='Pending', rel='custom-reply-status', href='#')
+                                      | Send and set as 
+                                      strong Pending
+                                  li
+                                    a.reply_agent_collision(data-status-val='4', data-cnt-id='cnt-reply', data-status-name='Resolved', rel='custom-reply-status', href='#')
+                                      | Send and set as 
+                                      strong Resolved
+                                  li
+                                    a.reply_agent_collision(data-status-val='5', data-cnt-id='cnt-reply', data-status-name='Closed', rel='custom-reply-status', href='#')
+                                      | Send and set as 
+                                      strong Closed
+                                  li
+                                    a.reply_agent_collision(data-status-val='6', data-cnt-id='cnt-reply', data-status-name='Waiting on Customer', rel='custom-reply-status', href='#')
+                                      | Send and set as 
+                                      strong Waiting on Customer
+                                  li
+                                    a.reply_agent_collision(data-status-val='7', data-cnt-id='cnt-reply', data-status-name='Waiting on Third Party', rel='custom-reply-status', href='#')
+                                      | Send and set as 
+                                      strong Waiting on Third Party
+                            input.emptyValueField(type='hidden', name='helpdesk_note[cc_emails]')
+                            input.emptyValueField(type='hidden', name='helpdesk_note[bcc_emails]')
+                        #cnt-fwd.request_panel.hide
+                          form#HelpdeskFwd_cnt-fwd.new_helpdesk_note(rel='forward_form', method='post', enctype='multipart/form-data', data-show-pseudo-reply='true', data-panel='cnt-fwd', data-fulltext='true', data-form='', data-fetch-latest='true', data-destroy-editor='true', data-cnt-id='cnt-fwd', action='/helpdesk/tickets/1/conversations/forward', accept-charset='UTF-8', novalidate='novalidate')
+                            div(style='margin:0;padding:0;display:inline')
+                              input(type='hidden', value='✓', name='utf8')
+                              input(type='hidden', value='tNAEtr5Y805iNl69LzLqTi54k5+8jXbCphASqcnt8r0=', name='authenticity_token')
+                            #fwd_title.form_title Forward
+                            .list_agents_replying.hide
+                            ul.ui-form.dont-validate.botm-space
+                              li.inline-field.field
+                                label.mailaddr-label.from(for='helpdesk_note_reply_email') From:
+                                #s2id_reply_email_id.select2-container.select2.responder_field
+                                  a.select2-choice(tabindex='-1', href='javascript:void(0)')
+                                    span#select2-chosen-32.select2-chosen "jay ambey" <support@jayambey.freshdesk.com>
+                                    abbr.select2-search-choice-close
+                                    .select2-arrow(role='presentation')
+                                      b(role='presentation')
+                                  label.select2-offscreen(for='s2id_autogen32')
+                                  input#s2id_autogen32.select2-focusser.select2-offscreen(type='text', role='button', aria-haspopup='true', aria-labelledby='select2-chosen-32')
+                                  .select2-drop.select2-display-none.select2-with-searchbox
+                                    .select2-search
+                                      label.select2-offscreen(for='s2id_autogen32_search')
+                                      input#s2id_autogen32_search.select2-input(type='text', aria-autocomplete='list', aria-expanded='true', role='combobox', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', aria-owns='select2-results-32')
+                                    ul#select2-results-32.select2-results(role='listbox')    
+                                select#reply_email_id.select2.responder_field.select2-offscreen(name='reply_email[id]', tabindex='-1', title='')
+                                  option(selected='selected', data-email-config-id='14000001129', value='"jay ambey" <support@jayambey.freshdesk.com>') "jay ambey" <support@jayambey.freshdesk.com>
+                              li.inline-field.field.cc_fields
+                                label.caption.mailaddr-label(for='helpdesk_note_forward_email') To: 
+                                .request_form_options
+                                  a#fwd_add_cc_btn_cnt-fwd(data-toggle-checkbox='fwd_include_cc_cnt-fwd', data-toggle-button='fwd_add_cc_btn_cnt-fwd', data-container='fwd_cc-form-container-cnt-fwd', rel='toggle_email_container', href='#')
+                                    | Cc
+                                  a#fwd_add_bcc_btn-cnt-fwd.(data-toggle-checkbox='fwd_include_bcc_cnt-fwd', data-toggle-button='fwd_add_bcc_btn-cnt-fwd', data-container='fwd_bcc-form-container-cnt-fwd', rel='toggle_email_container', href='#')
+                                    | Bcc
+                                .email_container.forward_email
+                                  ul.multi_value_field
+                                    li.search_field_item
+                                      input(type='text', autocomplete='off', tabindex='', placeholder='')
+                                  .autocomplete(style='position: absolute; display: none;')
+                                    ul
+                                input#fwd_include_cc_cnt-fwd.hide(type='checkbox', name='include_cc')
+                                input#fwd_include_bcc_cnt-fwd.hide(type='checkbox', name='include_bcc')
+                              li#fwd_cc-form-container-cnt-fwd.inline-field.field.hide.cc_fields
+                                label.mailaddr-label(for='cc_emails_cnt-fwd') Cc:
+                                a.clear_emails(data-clear='true', data-toggle-button='fwd_add_cc_btn_cnt-fwd', data-container='fwd_cc-form-container-cnt-fwd', rel='toggle_email_container', href='#') Clear
+                                .email_container
+                                  ul.multi_value_field
+                                    li.search_field_item
+                                      input(type='text', autocomplete='off', tabindex='', placeholder='')
+                                  .autocomplete(style='position: absolute; display: none;')
+                                    ul
+                              li#fwd_bcc-form-container-cnt-fwd.inline-field.field.hide.cc_fields
+                                label.mailaddr-label(for='cc_emails_cnt-fwd') Bcc:
+                                a.clear_emails(data-clear='true', data-toggle-button='fwd_add_bcc_btn-cnt-fwd', data-container='fwd_bcc-form-container-cnt-fwd', rel='toggle_email_container', href='#') Clear
+                                .email_container
+                                  ul.multi_value_field
+                                    li.search_field_item
+                                      input(type='text', autocomplete='off', tabindex='', placeholder='')
+                                  .autocomplete(style='position: absolute; display: none;')
+                                    ul
+                              li.inline-field.field.clearField.message
+                                .redactor_insert_btns
+                                  ul.redactor_toolbar
+                                    li
+                                      a.insert_solution.tooltip(title='Insert Solution', rel='ticket_solutions', data-editor-id='cnt-fwd-body', href='#') Solution
+                                    li.redactor_separator
+                                    li
+                                      a.insert_ca_response.tooltip(title='Insert Canned Response', rel='ticket_canned_response', data-editor-id='cnt-fwd-body', href='#') Canned Response
+                                      a.redactor_btn_bold(tabindex='-1', title='Bold (⌘B)', href='javascript:void(null);')
+                                textarea#cnt-fwd-body.body_html.required(rows='20', name='helpdesk_note[note_body_attributes][body_html]', data-wrap-font-family='true', cols='40', aria-required='true')
+                                  | <p/><br/> <div class="freshdesk_quote">
+                                  | <blockquote class="freshdesk_quote">On Tue, 23 Feb at  3:34 AM
+                                  | <span class="separator" />,  Rachel &lt;rachel@freshdesk.com&gt;  wrote:
+                                  | <div>This is a sample ticket, feel free to delete it.</div>
+                                  | </blockquote>
+                                  | </div>
+                                textarea#cnt-fwd-body-fulltext(style='display:none;', rows='20', name='helpdesk_note[note_body_attributes][full_text_html]', cols='40')
+                              li#file_size_alert_cnt-fwd.inline-field.field.continous.file_size_alert.hide
+                                span.alert-text Reply was not forwarded!
+                                |     Your attachments exceed 15 MB. Please make changes before you proceed.
+                              li#attachment-options-reply.inline-field.field.attachment-options.continous
+                                .attach-wrapper.row-fluid.new-attach
+                                  .span8
+                                    #send-fwd-email-container.attachments-list-form
+                                      .attachment_contents
+                                        #send-fwd-email-attachments.attachments-wrap.shared_attachment_list
+                                    .hidden_upload
+                                      .add_attachment
+                                        span +
+                                        |  Attach a file
+                                      input#send-fwd-email_file.original_input(type='file', max_attachment='', max_size='15', sendfocusto='send-fwd-email-body', filelist='send-fwd-email-attachments', filecontainer='send-fwd-email-container', namewhenfilled='helpdesk_note[attachments][][resource]', data-attach-id='send-fwd-email', name='emptyfile')
+                                script#file-list-template(type='text/x-jquery-tmpl').
+                                  &lt;div class="item"&gt;
+                                  {{if (file_valid)}}
+                                  &lt;a class="attachment-close"  href="javascript:void(0)"
+                                  onclick="remove_file_size_alert(this); Helpdesk.Multifile.remove(this); return false;"
+                                  inputId="${inputId}"&gt;&lt;/a&gt;
+                                  {{/if}}
+                                  &lt;div class="attachment-type file-types-def"&gt;
+                                  &lt;span class="{{if (!file_valid) }} invalid_attachment {{/if}}"&gt;
+                                  &lt;a href="javascript:void(0)"&gt;${name} {{if (size != '0' &amp;&amp; size != '0.00 KB ') }}( ${size} ){{/if}}&lt;/a&gt;
+                                  {{if (!file_valid)}}
+                                  &lt;b class="alert-text tooltip" title="Exceeds attachments size"&gt;(Not Added)&lt;/b&gt;
+                                  {{/if}}
+                                  &lt;/span&gt;
+                                  &lt;/div&gt;
+                                  &lt;/div&gt;
+                              // forward will be always private
+                              input#helpdesk_note_private(type='hidden', value='true', name='helpdesk_note[private]')
+                              input#helpdesk_note_source(type='hidden', value='8', name='helpdesk_note[source]')
+                              input#fwd_from_email_cnt-fwd(type='hidden', value='"jay ambey" <support@jayambey.freshdesk.com>', name='helpdesk_note[from_email]')
+                              input#helpdesk_note_email_config_id(type='hidden', value='14000001129', name='helpdesk_note[email_config_id]')
+                            .btn-toolbar
+                              span
+                                a.btn.cancel_btn(data-cnt-id='cnt-fwd', data-show-pseudo-reply='true')
+                                  | Cancel
+                              span.btn-group
+                                button.btn.btn-primary.submit_btn Forward
+                            .clearfix.overflowh
+                            input.emptyValueField(type='hidden', name='helpdesk_note[to_emails]')
+                            input.emptyValueField(type='hidden', name='helpdesk_note[cc_emails]')
+                            input.emptyValueField(type='hidden', name='helpdesk_note[bcc_emails]')
+                        #cnt-note.request_panel(data-node-name='agent_replying', rel='emitter', style='position: relative; display: none;')
+                          form#HelpdeskNotes.new_helpdesk_note(rel='note_form', method='POST', enctype='multipart/form-data', data-show-pseudo-reply='true', data-panel='cnt-note', data-fetch-latest='true', data-destroy-editor='true', data-cnt-id='cnt-note', action='/helpdesk/tickets/1/conversations/note', accept-charset='UTF-8', novalidate='novalidate', encoding='multipart/form-data')
+                            div(style='margin:0;padding:0;display:inline')
+                              input(type='hidden', value='✓', name='utf8')
+                              input(type='hidden', value='tNAEtr5Y805iNl69LzLqTi54k5+8jXbCphASqcnt8r0=', name='authenticity_token')
+                            .form_title Add a Note
+                            .list_agents_replying.hide
+                            ul.ui-form.dont-validate.botm-space
+                              li.inline-field.field.notify_agent
+                                label.notify.mailaddr-label.from(for='helpdesk_note_to_emails')
+                                  | Notify Agents:
+                                .email_container.add_select2_custom
+                                  #s2id_helpdesk_note_to_emails.select2-container.select2-container-multi.select2
+                                    ul.select2-choices
+                                      li.select2-search-field
+                                        label.select2-offscreen(for='s2id_autogen53')
+                                          | Notify Agents:
+                                        input#s2id_autogen53.select2-input(type='text', spellcheck='false', autocapitalize='off', autocorrect='off', autocomplete='off', placeholder='Select agents to notify', style='width: 100%;')
+                                    .select2-drop.select2-drop-multi.select2-display-none
+                                      ul.select2-results
+                                        li.select2-no-results No matches found
+                                        li.select2-no-results No matches found
+                                        li.select2-no-results No matches found
+                                  select#helpdesk_note_to_emails.select2.select2-offscreen(name='helpdesk_note[to_emails][]', multiple='multiple', data-placeholder='Select agents to notify', tabindex='-1')
+                                    option(value='Nilam Joshi <nilam.joshi49@gmail.com>') Nilam Joshi <nilam.joshi49@gmail.com>
+                              li.inline-field.field.clearField.message
+                                .redactor_insert_btns
+                                  ul.redactor_toolbar
+                                    li
+                                      a.insert_solution.tooltip(title='Insert Solution', rel='ticket_solutions', data-editor-id='cnt-note-body', href='#') Solution
+                                    li.redactor_separator
+                                    li
+                                      a.insert_ca_response.tooltip(title='Insert Canned Response', rel='ticket_canned_response', data-editor-id='cnt-note-body', href='#') Canned Response
+                                      a.redactor_btn_bold(tabindex='-1', title='Bold (⌘B)', href='javascript:void(null);')
+                                textarea#cnt-note-body.body_html.required.valid(rows='20', name='helpdesk_note[note_body_attributes][body_html]', data-wrap-font-family='true', cols='40', style='display: inline-block; height: 300px;', aria-required='true')
+                              li#file_size_alert_cnt-note.inline-field.field.continous.file_size_alert.hide
+                                span.alert-text Note has not been added!
+                                |         Your attachments exceed 15 MB. Please make changes before you proceed.
+                              li#attachment-options-note.inline-field.field.attachment-options.continous
+                                .attach-wrapper.row-fluid.new-attach
+                                  .span8
+                                    #add-note-container.attachments-list-form
+                                      .attachment_contents
+                                        #add-note-attachments.attachments-wrap.shared_attachment_list
+                                    .hidden_upload
+                                      .add_attachment
+                                        span +
+                                        |  Attach a file
+                                      input#add-note_file.original_input(type='file', max_attachment='', max_size='15', sendfocusto='add-note-body', filelist='add-note-attachments', filecontainer='add-note-container', namewhenfilled='helpdesk_note[attachments][][resource]', data-attach-id='add-note', name='emptyfile')
+                                script#file-list-template(type='text/x-jquery-tmpl').
+                                  &lt;div class="item"&gt;
+                                  {{if (file_valid)}}
+                                  &lt;a class="attachment-close"  href="javascript:void(0)"
+                                  onclick="remove_file_size_alert(this); Helpdesk.Multifile.remove(this); return false;"
+                                  inputId="${inputId}"&gt;&lt;/a&gt;
+                                  {{/if}}
+                                  &lt;div class="attachment-type file-types-def"&gt;
+                                  &lt;span class="{{if (!file_valid) }} invalid_attachment {{/if}}"&gt;
+                                  &lt;a href="javascript:void(0)"&gt;${name} {{if (size != '0' &amp;&amp; size != '0.00 KB ') }}( ${size} ){{/if}}&lt;/a&gt;
+                                  {{if (!file_valid)}}
+                                  &lt;b class="alert-text tooltip" title="Exceeds attachments size"&gt;(Not Added)&lt;/b&gt;
+                                  {{/if}}
+                                  &lt;/span&gt;
+                                  &lt;/div&gt;
+                                  &lt;/div&gt;
+                            input#helpdesk_note_source(type='hidden', value='2', name='helpdesk_note[source]')
+                            input#last_note_id.last_note_id(type='hidden', value='-1', name='last_note_id')
+                            #toggle-note-visibility
+                              label Visible to the customer
+                              input(type='hidden', value='0', name='helpdesk_note[private]')
+                              input#helpdesk_note_private.tooltip(type='checkbox', value='1', rel='toggle', name='helpdesk_note[private]', data-unchecked-label='Yes', data-checked-label='No', checked='checked', style='display: none;')
+                              a.toggle-button.active(href='#')
+                                span.toggle-container
+                                  span.on-label
+                                    span No
+                                  span.toggle-handle
+                                    span
+                                  span.off-label
+                                    span Yes
+                                p Yes
+                            .btn-toolbar
+                              span.btn-group
+                                button.btn.cancel_btn.reply_agent_collision(data-cnt-id='cnt-note', data-show-pseudo-reply='true')
+                                  | Cancel
+                              span.btn-group.dropup
+                                button.btn.btn-primary.submit_btn.reply_agent_collision(data-default-text='Add Private Note', data-public-text='Add Public Note')
+                                  span(rel='text') Add Private Note
+                                button.btn.btn-primary.dropdown-toggle.dialog-btn(href='#', data-toggle='dropdown', type='button')
+                                  span.caret
+                                ul#conversation_note.menuselector.dropdown-menu.custom_statuses.pull-right(data-menu-trigger='a', data-menu-hover-in='li', tabindex='1', style='display: none;')
+                                  li.active
+                                    a.reply_agent_collision(data-status-val='3', data-cnt-id='cnt-note', data-status-name='Pending', rel='custom-reply-status', href='#')
+                                      | Add and set as 
+                                      strong Pending
+                                  li
+                                    a.reply_agent_collision(data-status-val='4', data-cnt-id='cnt-note', data-status-name='Resolved', rel='custom-reply-status', href='#')
+                                      | Add and set as 
+                                      strong Resolved
+                                  li
+                                    a.reply_agent_collision(data-status-val='5', data-cnt-id='cnt-note', data-status-name='Closed', rel='custom-reply-status', href='#')
+                                      | Add and set as 
+                                      strong Closed
+                                  li
+                                    a.reply_agent_collision(data-status-val='6', data-cnt-id='cnt-note', data-status-name='Waiting on Customer', rel='custom-reply-status', href='#')
+                                      | Add and set as 
+                                      strong Waiting on Customer
+                                  li
+                                    a.reply_agent_collision(data-status-val='7', data-cnt-id='cnt-note', data-status-name='Waiting on Third Party', rel='custom-reply-status', href='#')
+                                      | Add and set as 
+                                      strong Waiting on Third Party
+                          .clearfix.overflowh
+                      #TicketPseudoReply.pseudo_reply(style='display: block;')
+                        a#FwdButton(data-replyto-handle='', data-note-type='reply', rel='note-button', href='') Reply
+                        |  / 
+                        a#FwdButton(data-note-type='fwd', rel='note-button', href='') Forward
+                        |  /
+                        a(data-note-type='note', rel='note-button', href='#') Add note
+        #duedate-dialog-container(style='display:none; position:absolute; left:0px; top:0px; width: 100%; height: 100%; ')
+          #due-date-overlay.transparent-overlay
+          #due-date-dialog.due-date-dialog(style='display:none;')
+            span.right_pointer
+            form#DueDateForm.edit_helpdesk_ticket(method='post', action='/helpdesk/tickets/1/change_due_by', accept-charset='UTF-8')
+              div(style='margin:0;padding:0;display:inline')
+                input(type='hidden', value='✓', name='utf8')
+                input(type='hidden', value='put', name='_method')
+                input(type='hidden', value='tNAEtr5Y805iNl69LzLqTi54k5+8jXbCphASqcnt8r0=', name='authenticity_token')
+              label When's it Due?
+              select#due-date-options(name='due_date_options')
+                option(value='today') Today
+                option(value='tomorrow') Tomorrow
+                option(value='thisweek') This week
+                option(value='nextweek') Next week
+                option(value='specific') Specific date/time...
+              span#due-date-button
+                | or 
+                a#set-date-time(href='javascript:void(0)') Set Date/time
+              #due-date-calender.due-date-calender(style='display:none;')
+                #due-date-picker.hasDatepicker
+                  .ui-datepicker-inline.ui-datepicker.ui-widget.ui-widget-content.ui-helper-clearfix.ui-corner-all(style='display: block;')
+                    .ui-datepicker-header.ui-widget-header.ui-helper-clearfix.ui-corner-all
+                      a.ui-datepicker-prev.ui-corner-all(title='Prev', data-event='click', data-handler='prev')
+                        span.ui-icon.ui-icon-circle-triangle-w Prev
+                      a.ui-datepicker-next.ui-corner-all(title='Next', data-event='click', data-handler='next')
+                        span.ui-icon.ui-icon-circle-triangle-e Next
+                      .ui-datepicker-title
+                        select.ui-datepicker-month(data-event='change', data-handler='selectMonth')
+                          option(value='0') Jan
+                          option(selected='selected', value='1') Feb
+                          option(value='2') Mar
+                          option(value='3') Apr
+                          option(value='4') May
+                          option(value='5') Jun
+                          option(value='6') Jul
+                          option(value='7') Aug
+                          option(value='8') Sep
+                          option(value='9') Oct
+                          option(value='10') Nov
+                          option(value='11') Dec
+                        select.ui-datepicker-year(data-event='change', data-handler='selectYear')
+                          option(value='2006') 2006
+                          option(value='2007') 2007
+                          option(value='2008') 2008
+                          option(value='2009') 2009
+                          option(value='2010') 2010
+                          option(value='2011') 2011
+                          option(value='2012') 2012
+                          option(value='2013') 2013
+                          option(value='2014') 2014
+                          option(value='2015') 2015
+                          option(selected='selected', value='2016') 2016
+                          option(value='2017') 2017
+                          option(value='2018') 2018
+                          option(value='2019') 2019
+                          option(value='2020') 2020
+                          option(value='2021') 2021
+                          option(value='2022') 2022
+                          option(value='2023') 2023
+                          option(value='2024') 2024
+                          option(value='2025') 2025
+                          option(value='2026') 2026
+                    table.ui-datepicker-calendar
+                      thead
+                        tr
+                          th.ui-datepicker-week-end(scope='col')
+                            span(title='Sunday') Su
+                          th(scope='col')
+                            span(title='Monday') Mo
+                          th(scope='col')
+                            span(title='Tuesday') Tu
+                          th(scope='col')
+                            span(title='Wednesday') We
+                          th(scope='col')
+                            span(title='Thursday') Th
+                          th(scope='col')
+                            span(title='Friday') Fr
+                          th.ui-datepicker-week-end(scope='col')
+                            span(title='Saturday') Sa
+                      tbody
+                        tr
+                          td.ui-datepicker-week-end.ui-datepicker-other-month(data-year='2016', data-month='0', data-event='click', data-handler='selectDay')
+                            a.ui-state-default.ui-priority-secondary(href='#') 31
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 1
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 2
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 3
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 4
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 5
+                          td.ui-datepicker-week-end(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 6
+                        tr
+                          td.ui-datepicker-week-end(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 7
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 8
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 9
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 10
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 11
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 12
+                          td.ui-datepicker-week-end(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 13
+                        tr
+                          td.ui-datepicker-week-end(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 14
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 15
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 16
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 17
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 18
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 19
+                          td.ui-datepicker-week-end(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 20
+                        tr
+                          td.ui-datepicker-week-end(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 21
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 22
+                          td.ui-datepicker-days-cell-over.ui-datepicker-current-day.ui-datepicker-today(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default.ui-state-highlight.ui-state-active.ui-state-hover(href='#') 23
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 24
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 25
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 26
+                          td.ui-datepicker-week-end(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 27
+                        tr
+                          td.ui-datepicker-week-end(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 28
+                          td.(data-year='2016', data-month='1', data-event='click', data-handler='selectDay')
+                            a.ui-state-default(href='#') 29
+                          td.ui-datepicker-other-month(data-year='2016', data-month='2', data-event='click', data-handler='selectDay')
+                            a.ui-state-default.ui-priority-secondary(href='#') 1
+                          td.ui-datepicker-other-month(data-year='2016', data-month='2', data-event='click', data-handler='selectDay')
+                            a.ui-state-default.ui-priority-secondary(href='#') 2
+                          td.ui-datepicker-other-month(data-year='2016', data-month='2', data-event='click', data-handler='selectDay')
+                            a.ui-state-default.ui-priority-secondary(href='#') 3
+                          td.ui-datepicker-other-month(data-year='2016', data-month='2', data-event='click', data-handler='selectDay')
+                            a.ui-state-default.ui-priority-secondary(href='#') 4
+                          td.ui-datepicker-week-end.ui-datepicker-other-month(data-year='2016', data-month='2', data-event='click', data-handler='selectDay')
+                            a.ui-state-default.ui-priority-secondary(href='#') 5
+                .due-date-info
+                  p
+                    | Due
+                    span#due-date-value
+                      | Thu, 25 Feb, 2016
+                  p
+                    | at	
+                    select#due_by_hour(name='due_by_hour')
+                      option(value='1') 1
+                      option(value='2') 2
+                      option(value='3') 3
+                      option(value='4') 4
+                      option(selected='selected', value='5') 5
+                      option(value='6') 6
+                      option(value='7') 7
+                      option(value='8') 8
+                      option(value='9') 9
+                      option(value='10') 10
+                      option(value='11') 11
+                      option(value='12') 12
+                    |  :
+                    select#due_by_minute(name='due_by_minute')
+                      option(selected='selected', value='00') 00
+                      option(value='15') 15
+                      option(value='30') 30
+                      option(value='45') 45
+                    select#due_by_am_pm(name='due_by_am_pm')
+                      option(value='AM') AM
+                      option(selected='selected', value='PM') PM
+              input#due_by_date_time(type='hidden', name='due_by_date_time')
+              #calender-buttons.calender-buttons
+                a.uiButton.small(onclick='showHideDueByDialog(false); return false;', href='#') Cancel
+                input#helpdesk_ticket_submit.uiButton.small(type='submit', value='Save', name='commit')
+                span.loading-item
+              #calender-info.info-highlight(style='display:none;')
+                | Please give a date & time that is newer than the ticket's created date & time
