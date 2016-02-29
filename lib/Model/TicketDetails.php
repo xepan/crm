@@ -7,5 +7,7 @@ class Model_TicketDetails extends \xepan\base\Model_Table{
 
 	function init(){
 		parent::init();
+
+	
 	}
 }
