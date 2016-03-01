@@ -10,11 +10,12 @@ class Initiator extends \Controller_Addon {
         parent::init();
         
         $this->routePages('xepan_crm');
-
-        $m = $this->app->top_menu->addMenu('Crm');
-        $m->addItem('SupportTicket','xepan_crm_supportticket');
-       
-        
         $this->addLocation(array('template'=>'templates'));
+
+        if($this->app->is_admin){
+	        $m = $this->app->top_menu->addMenu('Crm');
+	        $m->addItem('SupportTicket','xepan_crm_supportticket');
+	    }
+	              
     }
 }
