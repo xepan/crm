@@ -7,8 +7,9 @@ class page_supportticket extends \Page{
 		
 		$st=$this->add('xepan\crm\Model_SupportTicket');
 		$crud=$this->add('xepan\base\CRUD',null,null,['view/supportticket/grid']);
-		$crud->setModel($st,['first_name','last_name','created_at','status','email']);
+		$crud->setModel($st);
 		$crud->grid->addQuickSearch(['name']);
+		
 	}
 	// function setModel($model){
 	// 	$model->getField('name')->caption('SupportTicket');

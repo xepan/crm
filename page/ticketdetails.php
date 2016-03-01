@@ -7,12 +7,15 @@ class page_ticketdetails extends \Page{
 
 	function init(){
 		parent::init();
+		$ticket_id=$this->app->stickyGET('ticket_id');
+		$m_ticket=$this->add('xepan/crm/Model_SupportTicket');
+		$m_ticket->addCondition('id',$ticket_id);
 
-		//$this->add('View_Info')->set('Hello');
-
+		$crud=$this->add('xepan/hr/CRUD',null,null,['grid/ticketdetail-grid']);
+		$crud->setModel($m_ticket);
 	}
 
-	function defaultTemplate(){
-		return['view/ticketdetails/ticketdetails'];
-	}
+	// function defaultTemplate(){
+	// 	return['view/ticketdetails/ticketdetails'];
+	// }
 }
