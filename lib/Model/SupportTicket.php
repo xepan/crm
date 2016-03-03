@@ -5,15 +5,15 @@ namespace xepan\crm;
 class Model_SupportTicket extends \xepan\hr\Model_Document{
 	public $status=[
 		'Pending',
-		'Active',
-		'Assign',
+		'Activated',
+		'Assigned',
 		'Completed'
 	];
 	public $actions=[
-		'Pending'=>['view','edit','delete','convert','reject'],
-		'Active'=>['view','edit','delete','open','reject'],
-		'Assign'=>['view','edit','delete','open','convert'],
-		'Completed'=>['view','edit','delete','open','convert']
+		'Pending'=>['view','edit','delete','convert','reject','assign','complete'],
+		'Activated'=>['view','edit','delete','open','reject','assign','complete'],
+		'Assigned'=>['view','edit','delete','open','convert','complete'],
+		'Completed'=>['view','edit','delete','open','convert','reject']
 
 	];
 	function init(){
@@ -31,36 +31,29 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	}
 
-	function pending(){
+		function assign(){
 		$this['status']='Pending';
 
 		$this->app->employee
-			->addActivity("Converted supportticket", $this->id, $this['ticket_id'])
-			->notifyWhoCan('pending,convert,open','Converted');
-
-		$this->saveAndUnload();
-	}
-
-	function active(){
-		$this['status']='Active';
-		$this->app->employee
-			->addActivity("Active supportticket", $this->id, $this['ticket_id'])
-			->notifyWhoCan('active,convert,open','Converted');
-		$this->saveAndUnload();
-	}
-
-	function assign(){
-		$this['status']='Assign';
-		$this->app->employee
-			->addActivity("Assign supportticket", $this->id, $this['ticket_id'])
+			->addActivity("Converted Opportunity", $this->id, $this['ticket_id'])
 			->notifyWhoCan('assign,convert,open','Converted');
+
 		$this->saveAndUnload();
 	}
-	function completed(){
-		$this['status']='Completed';
+
+	function reject(){
+		$this['status']='Pending';
 		$this->app->employee
-			->addActivity("Completed supportticket", $this->id, $this['ticket_id'])
-			->notifyWhoCan('completed,convert,open','Converted');
+			->addActivity("Rejected Supportticket", $this->id, $this['ticket_id'])
+			->notifyWhoCan('reject,convert,open','Converted');
+		$this->saveAndUnload();
+	}
+
+	function complete(){
+		$this['status']='Pending';
+		$this->app->employee
+			->addActivity("Completed Opportunity", $this->id, $this['ticket_id'])
+			->notifyWhoCan('reject,convert,open','Converted');
 		$this->saveAndUnload();
 	}
 }
