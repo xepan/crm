@@ -9,22 +9,16 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><a href="#"><span>Ticket Name</span></a></th>
-        <th><a href="#" class="asc"><span>Date Of Ticket</span></a></th>
-        <th><a href="#" class="asc"><span>Email</span></a></th>
+        <th><a href="#"><span>Department</span></a></th>
+        <th class="text-right"><a href="#" class="asc"><span>Production Level</span></a></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td><img alt="" src="{image}img/samples/scarlet-159.png{/}"/><a href="{url}index.php?page=xepan_crm_ticketdetails&amp;ticket_id={$id}{/}" class="user-link">{customer}Scarlett{/} [{id}Ticket_id{/}]</a>
-          </td>
-          <td>{created_at}2013/08/08{/}</td>
-          <td><a href="#">{email}mila@kunis.com{/}</a></td>
-          <td>
-             
-            {$action}
-          </td>
+          <td>{$ticket_name}Ticket{/}</td>
+          <td class="text-right">{$date_of_ticket}Date Of Ticket{/}</td>
+          <td>{action}Action{/}</td>
           <td style="width: 15%;">
             {$edit}
             {$delete}

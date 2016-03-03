@@ -20,9 +20,6 @@
                         span Date Of Ticket
                 th
                     a.asc(href='#')
-                        span Status
-                th
-                    a.asc(href='#')
                         span Email
                 th 
                 {/}{/}
@@ -41,9 +38,9 @@
                     td
                       | {created_at}2013/08/08{/}
                     td
-                      span.label.label-default {status}Inactive{/}
-                    td
                       a(href='#') {email}mila@kunis.com{/}
+                    td  
+                        | {$action}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
