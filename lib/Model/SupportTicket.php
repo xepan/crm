@@ -23,6 +23,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		parent::init();
 		$st_j=$this->join('supportticket.document_id');
 		$st_j->hasOne('xepan\commerce\Customer','customer_id');
+		$st_j->hasMany('xepan\communication','communication_id');
 
 
 		$st_j->addField('title');

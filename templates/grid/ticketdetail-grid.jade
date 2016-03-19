@@ -4,6 +4,7 @@
         div.filter-block
             .pull-right {$grid_buttons} 
             .form-group.pull-right.xepan-filter-form
+                input#322fb157__id_quicksearch_q(type='text', placeholder='Search', value='', data-shortname='q', name='322fb157__id_quicksearch_q', data-initvalue='')
                 div(class="form-control pull-left")|{$quick_search}
                     i(class="fa fa-search search-icon")
     {/Pannel}
@@ -26,7 +27,26 @@
                             .text
                               {description}| I don't think they tried to market it to the billionaire, spelunking,
                               | base-jumping crowd.{/}
+                        .conversation-item.item-right.clearfix
+                          .conversation-user
+                            img(alt='', src='img/samples/kunis.png')
+                          .conversation-body
+                            .name
+                                {admin}Xavoc Technocrats{/}
+                            .time.hidden-xs {created_at}September 27, 2016 18:28{/}
+                            .text
+                                {description}| The path of the righteous man is beset on all sides by good will.{/}
+                        .row.form-group
+                          .col-md-3
+                            input(type='file', data-edit='insertImage', data-target='#pictureBtn', data-role='magic-overlay')
 
+                          .col-md-10
+                            input#exampleInpSubject.form-control(type='text', placeholder='Enter subject')
+                        textarea.form-control(placeholder='Enter your message...', rows='2')
+                        button.btn.btn-success.pull-right(type='submit') Send message
+                        button.btn.btn-default.pull-right(type='button')
+                          i.fa.fa-times
+                          |  Cancel
             {/}
             {/}{/}
             {not_found}

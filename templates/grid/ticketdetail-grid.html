@@ -4,6 +4,7 @@
     <div class="filter-block">
       <div class="pull-right">{$grid_buttons} </div>
       <div class="form-group pull-right xepan-filter-form">
+        <input id="322fb157__id_quicksearch_q" type="text" placeholder="Search" value="" data-shortname="q" name="322fb157__id_quicksearch_q" data-initvalue=""/>
         <div class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></div>
       </div>
     </div>
@@ -28,6 +29,25 @@
                     </div>
                   </div>
                 </div>
+                <div class="conversation-item item-right clearfix">
+                  <div class="conversation-user"><img alt="" src="img/samples/kunis.png"/></div>
+                  <div class="conversation-body">
+                    <div class="name">{admin}Xavoc Technocrats{/}</div>
+                    <div class="time hidden-xs">{created_at}September 27, 2016 18:28{/}</div>
+                    <div class="text">{description}| The path of the righteous man is beset on all sides by good will.{/}</div>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <div class="col-md-3">
+                    <input type="file" data-edit="insertImage" data-target="#pictureBtn" data-role="magic-overlay"/>
+                  </div>
+                  <div class="col-md-10">
+                    <input id="exampleInpSubject" type="text" placeholder="Enter subject" class="form-control"/>
+                  </div>
+                </div>
+                <textarea placeholder="Enter your message..." rows="2" class="form-control"></textarea>
+                <button type="submit" class="btn btn-success pull-right">Send message</button>
+                <button type="button" class="btn btn-default pull-right"><i class="fa fa-times"></i> Cancel</button>
               </div>
             </div>
           </div>
