@@ -27,7 +27,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j=$this->join('support_ticket.document_id');
 
 		$st_j->hasOne('xepan\base\Contact','contact_id');
-		$st_j->hasOne('xepan\communication\Communication','communication_id');
+		$st_j->hasOne('xepan\communication\Communication','communication_email_id');
 		
 		$st_j->addField('name');
 		$st_j->addField('uid');
@@ -80,5 +80,61 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			->addActivity("Completed Supportticket", $this->id, $this['ticket_id'])
 			->notifyWhoCan('reject,convert,open','Converted');
 		$this->saveAndUnload();
+	}
+
+	function createComment($communication){
+		$comment = $this->add('xepan\crm\Model_Ticket_Comments');
+		$comment['ticket_id'] = $this->id;
+		$comment['communication_email_id'] = $communication->id;
+		$comment->save();
+
+
+	}
+
+	function replyRejection(){
+		throw new \Exception("Error Processing Request", 1);
+		
+	}
+
+	function getTicket($subject=null){
+		if(!$subject)
+			return false;
+
+		preg_match_all('/([a-zA-Z]+[\\\\][a-zA-Z]+[ ]+[0-9]+)/',$subject,$preg_match_array);
+		// $array=array(0 => array(), 1=> array ("Re: resume"));
+			// var_dump($preg_match_array[1]);
+			// // exit;
+		if(count($preg_match_array[1])){
+			//get Ticket
+			$relatedticket = $preg_match_array[1][0];
+			$relatedticket_array = explode(" ", $relatedticket);
+			
+			$this->tryLoadBy('subject',$relatedticket_array[1]);
+			if($this->loaded()){
+				return $this ;
+			}
+		}
+	}
+
+	function createTicket($communication){
+		$ticket = $this->add('xepan\crm\Model_SupportTicket');
+		$ticket['status'] = "Pending";
+		$ticket['communication_id'] = $communication->id;
+		$ticket['uid'] = $this['uid'];
+		$ticket['from_id'] = $this['from_id'];
+		$ticket['from_email'] = $this['from_raw']['email'];
+		$ticket['from_name'] = $this['from_raw']['name'];
+		$ticket['to'] = $this['to_raw'];
+		$ticket['to_id'] = $this['to_id'];
+		$ticket['to_email'] = $this['to_raw']['email'];
+		$ticket['cc'] = $this['cc_raw']['email'];
+		$ticket['subject'] = $this['title'];
+		$ticket['message'] = $this['description'];
+		$ticket['contact_id'] = $this['from_id'];
+		$ticket->save();
+		// foreach ($this->attachment() as $attach) {
+		// 	$ticket->addAttachment($attach['attachment_url_id'],$attach['file_id']);	
+		// }
+		// $t->autoReply();
 	}
 }
