@@ -29,7 +29,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->hasOne('xepan\base\Contact','contact_id');
 		$st_j->hasOne('xepan\communication\Communication','communication_email_id');
 		
-		$st_j->addField('name');
+		$st_j->addField('name')->defaultValue(rand(999,999999));
 		$st_j->addField('uid');
 		$st_j->addField('from_id');
 		$st_j->addField('from_email');
@@ -91,15 +91,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	}
 
-	function replyRejection(){
-		throw new \Exception("Your Email Id Not Registerd on Support", 1);
-		
-	}
-
 	function getTicket($subject=null){
 		if(!$subject)
 			return false;
-
+		
 		preg_match_all('/([a-zA-Z]+[\\\\][a-zA-Z]+[ ]+[0-9]+)/',$subject,$preg_match_array);
 		// $array=array(0 => array(), 1=> array ("Re: resume"));
 			// var_dump($preg_match_array[1]);
@@ -117,27 +112,96 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function createTicket($communication){
-		$this['status'] = "Pending";
-		$this['communication_id'] = $communication->id;
+		$this['communication_email_id'] = $communication->id;
 		$this['uid'] = $communication['uid'];
 		$this['from_id'] = $communication['from_id'];
 		$this['from_email'] = $communication['from_raw']['email'];
 		$this['from_name'] = $communication['from_raw']['name'];
 		$this['to'] = $communication['to_raw'];
 		$this['to_id'] = $communication['to_id'];
-		$this['to_email'] = $communication['to_raw']['email'];
+		$this['to_email'] = $communication['to_raw'][0]['email'];
 		$this['cc'] = $communication['cc_raw']['email'];
 		$this['subject'] = $communication['title'];
 		$this['message'] = $communication['description'];
 		$this['contact_id'] = $communication['from_id'];
+		$this['status'] = "Pending";
 		$this->save();
 		// foreach ($this->attachment() as $attach) {
 		// 	$ticket->addAttachment($attach['attachment_url_id'],$attach['file_id']);	
 		// }
-		$this->autoReply();
 	}
 
-	function autoReply(){
+	function supportEmail($to_email=null){
+		$support_email = $this->add('xepan\base\Model_Epan_EmailSetting');
+		$support_email->addCondition(
+					$support_email->dsql()->orExpr()
+						->where('imap_email_username',$to_email)
+						->where('is_support_email',true)
+				);			
+
+		return $support_email->tryLoadAny();
+	}
+
+	function autoReply($communication){
 		
+		if(!$this->loaded()){
+			return false;	
+		}
+		$mailbox=explode('#', $communication['mailbox']);
+		$support_email = $this->supportEmail($mailbox[0]);
+
+		if(!$this['from_email']){
+			return false;
+		}
+
+		$mail = $this->add('xepan\communication\Model_Communication_Email');
+
+		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
+		$config_model->addCondition('application','crm');
+
+		$email_subject=$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
+		$email_body=$config_model->getConfig('TICKET_GENERATED_EMAIL_BODY');
+
+		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
+		$temp->setHTML('ticket_no',$this['name']);
+		// echo $temp->render();
+		// exit;		
+		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+		$mail->addTo($this['from_email']);
+		$mail->setSubject($email_subject);
+		$mail->setBody($temp->render());
+		$mail->send($support_email);
+	}
+	
+	function replyRejection($communication){
+		// throw new \Exception("Your Email Id Not Registerd on Support", 1);
+		if(!$this->loaded()){
+			return false;	
+		}
+		$mailbox=explode('#', $communication['mailbox']);
+		$support_email = $this->supportEmail($mailbox[0]);
+
+		// $from_email="vijay.mali552@gmail.com";
+		if(!$this['from_email']){
+			return false;
+		}
+		
+		$mail = $this->add('xepan\communication\Model_Communication_Email');
+
+		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
+		$config_model->addCondition('application','crm');
+		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_REGISTERED_SUBJECT');
+		$email_body=$config_model->getConfig('SUPPORT_EMAIL_REGISTERED_BODY');
+
+		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
+		$temp->setHTML('email',$from_email);
+		// echo $temp->render();
+		// exit;		
+		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+		$mail->addTo($this['from_email']);
+		$mail->setSubject($email_subject);
+		$mail->setBody($temp->render());
+		$mail->send($support_email);
+
 	}
 }
