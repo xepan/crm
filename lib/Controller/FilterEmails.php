@@ -27,21 +27,24 @@ class Controller_FilterEmails extends \AbstractController {
 
 		foreach ($emails as $email) {
 			$ticket=$this->add('xepan\crm\Model_SupportTicket');
-			if(!$email['from_id']){
-				// this is junk, reply with : you are not supported
-				$ticket->replyRejection();
-				continue;
-			}
 			// check if this contains any past support number [SUP 1] like this
 			$ticket->getTicket($email['title']);
 			// if yes
-				// create a new comment to that support .. add $email->id as its communication_id
 			if($ticket->loaded()){
+				// create a new comment to that support .. add $email->id as its communication_id
 				$ticket->createComment($email);
 			// if no
-				// create a new ticket with communication_id = this email id
 			}else{
+				// create a new ticket with communication_id = this email id
 				$ticket->createTicket($email);
+				if(!$email['from_id']){
+					// this is junk, reply with : you are not supported
+					$ticket->replyRejection($email);
+					$ticket['status']="Rejected";
+					$ticket->save();
+				}else{
+					$ticket->autoReply($email);
+				}
 			}
 		}
 	}
