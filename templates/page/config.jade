@@ -1,0 +1,14 @@
+.main-box.clearfix
+      .tabs-wrapper.profile-tabs
+        ul.nav.nav-tabs
+          //- li.active
+          //-   a(data-toggle='tab', href='#tab-user') User Managment 
+          li.active
+            a(data-toggle='tab', href='#auto-reply') Support Auto Reply Mail Content 
+          li
+            a(data-toggle='tab', href='#reject-reply') Support Denied Mail Content
+        .tab-content
+          #auto-reply.tab-pane.fade.in.active
+            {$auto-reply}                       
+          #reject-reply.tab-pane.fade
+            {$reject-reply}                       
