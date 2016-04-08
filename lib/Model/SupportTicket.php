@@ -35,7 +35,6 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->addField('from_email');
 		$st_j->addField('from_name');
 
-		$st_j->addField('to');
 		$st_j->addField('to_id');
 		$st_j->addField('to_email');
 
@@ -117,9 +116,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['from_id'] = $communication['from_id'];
 		$this['from_email'] = $communication['from_raw']['email'];
 		$this['from_name'] = $communication['from_raw']['name'];
-		$this['to'] = $communication['to_raw'];
 		$this['to_id'] = $communication['to_id'];
-		$this['to_email'] = $communication['to_raw'][0]['email'];
+		$this['to_email'] = $communication['to_raw'];
 		$this['cc'] = $communication['cc_raw']['email'];
 		$this['subject'] = $communication['title'];
 		$this['message'] = $communication['description'];
