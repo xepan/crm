@@ -56,7 +56,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	}
 
-		function assign(){
+	function assign(){
 		$this['status']='Assigned';
 
 		$this->app->employee
@@ -92,7 +92,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function replyRejection(){
-		throw new \Exception("Error Processing Request", 1);
+		throw new \Exception("Your Email Id Not Registerd on Support", 1);
 		
 	}
 
@@ -117,24 +117,27 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function createTicket($communication){
-		$ticket = $this->add('xepan\crm\Model_SupportTicket');
-		$ticket['status'] = "Pending";
-		$ticket['communication_id'] = $communication->id;
-		$ticket['uid'] = $this['uid'];
-		$ticket['from_id'] = $this['from_id'];
-		$ticket['from_email'] = $this['from_raw']['email'];
-		$ticket['from_name'] = $this['from_raw']['name'];
-		$ticket['to'] = $this['to_raw'];
-		$ticket['to_id'] = $this['to_id'];
-		$ticket['to_email'] = $this['to_raw']['email'];
-		$ticket['cc'] = $this['cc_raw']['email'];
-		$ticket['subject'] = $this['title'];
-		$ticket['message'] = $this['description'];
-		$ticket['contact_id'] = $this['from_id'];
-		$ticket->save();
+		$this['status'] = "Pending";
+		$this['communication_id'] = $communication->id;
+		$this['uid'] = $communication['uid'];
+		$this['from_id'] = $communication['from_id'];
+		$this['from_email'] = $communication['from_raw']['email'];
+		$this['from_name'] = $communication['from_raw']['name'];
+		$this['to'] = $communication['to_raw'];
+		$this['to_id'] = $communication['to_id'];
+		$this['to_email'] = $communication['to_raw']['email'];
+		$this['cc'] = $communication['cc_raw']['email'];
+		$this['subject'] = $communication['title'];
+		$this['message'] = $communication['description'];
+		$this['contact_id'] = $communication['from_id'];
+		$this->save();
 		// foreach ($this->attachment() as $attach) {
 		// 	$ticket->addAttachment($attach['attachment_url_id'],$attach['file_id']);	
 		// }
-		// $t->autoReply();
+		$this->autoReply();
+	}
+
+	function autoReply(){
+		
 	}
 }
