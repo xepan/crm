@@ -2,8 +2,9 @@
 
 namespace xepan\crm;
 
-class page_ticketdetails extends \Page{
+class page_ticketdetails extends \xepan\base\Page{
 	public $title='Ticket-Detail';
+	public $breadcrumb=['Home'=>'index','Support Ticket'=>'xepan_crm_supportticket','Details'=>'#'];
 
 	function init(){
 		parent::init();
