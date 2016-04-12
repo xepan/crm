@@ -11,7 +11,7 @@ class page_ticketdetails extends \Page{
 		$m_ticket=$this->add('xepan/crm/Model_SupportTicket');
 		$m_ticket->addCondition('id',$ticket_id);
 
-		$crud=$this->add('xepan/hr/CRUD',null,null,['grid/ticketdetail-grid']);
+		$crud=$this->add('xepan/hr/CRUD',null,null,['view/grid/ticketdetail-grid']);
 		$crud->setModel($m_ticket);
 	}
 
