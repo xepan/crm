@@ -5,8 +5,7 @@
             .pull-right {$grid_buttons} 
             .form-group.pull-right.xepan-filter-form
                 span(class="form-control pull-left")|{$quick_search}
-                    //- i(class="fa fa-search search-icon")
-            
+                    i(class="fa fa-search search-icon")
     {/Pannel}
     .main-box-body.clearfix.table
         table.table.user-list.table-hover(style="width:100%")
@@ -15,12 +14,15 @@
                 {cols}{col}
                 th
                     a(href='#')
-                        span Department
-                th.text-right
+                        span Ticket No.
+                th
                     a.asc(href='#')
-                        span Production Level
+                        span Generated Date
+                th
+                    a.asc(href='#')
+                        span Email
                 th 
-                {/}{/}   
+                {/}{/}
             {/}
             {$subheader}
 
@@ -29,11 +31,16 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     td
-                      | {$ticket_name}Ticket{/}
-                    td.text-right
-                      | {$date_of_ticket}Date Of Ticket{/}
+                      img(alt='', src='{image}img/samples/scarlet-159.png{/}')
+                      a.user-link(href='{url}index.php?page=xepan_crm_ticketdetails&ticket_id={$id}{/}') {contact}Scarlett{/} [{name}Ticket_id{/}]
+                      span.user-subhead {status}Ticket_name{/}
+                
                     td
-                        | {action}Action{/}
+                      | {created_at}2013/08/08{/}
+                    td
+                      a(href='#') {from_email}mila@kunis.com{/}
+                    td  
+                        | {$action}
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
