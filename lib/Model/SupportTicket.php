@@ -192,7 +192,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$email_body=$config_model->getConfig('SUPPORT_EMAIL_REGISTERED_BODY');
 
 		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$temp->setHTML('email',$from_email);
+		$temp->setHTML('email',$this['from_email']);
 		// echo $temp->render();
 		// exit;		
 		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
