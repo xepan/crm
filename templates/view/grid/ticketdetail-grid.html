@@ -16,25 +16,14 @@
       <div data-id="{$id}" class="{$odd_even} col-md-{col-width}12{/}">{cols} 
         <div class="conversation-wrapper">
           <div class="conversation-content">
-            <div style="position: relative; overflow: hidden; width: auto; height: 352px;" class="slimScrollDiv">
-              <div style="overflow: hidden; width: auto; height: 352px;" class="conversation-inner">
+            <div style="position: relative; overflow: hidden; width: auto;" class="slimScrollDiv">
+              <div style="overflow: hidden; width: auto;" class="conversation-inner">
                 <div class="conversation-item item-left clearfix">
-                  <div class="conversation-user"><img src="img/samples/ryan.png" alt=""/></div>
+                  <div class="conversation-user">{$avatar}</div>
                   <div class="conversation-body">
-                    <div class="name">{contact}Bhavani pvt ltd{/}</div>
-                    <div class="time hidden-xs">{created_at}September 21, 2013 18:28{/}</div>
-                    <div class="text">
-                      {message}| I don't think they tried to market it to the billionaire, spelunking,
-                      base-jumping crowd.{/}
-                    </div>
-                  </div>
-                </div>
-                <div class="conversation-item item-right clearfix">
-                  <div class="conversation-user"><img alt="" src="img/samples/kunis.png"/></div>
-                  <div class="conversation-body">
-                    <div class="name">{to}Xavoc Technocrats{/}</div>
-                    <div class="time hidden-xs">{created_at}September 27, 2016 18:28{/}</div>
-                    <div class="text">{message}| The path of the righteous man is beset on all sides by good will.{/}</div>
+                    <div class="name">{$title}</div>
+                    <div class="time hidden-xs">{$created_at}</div>
+                    <div style="overflow: hidden; height: 25px;" class="text">{$message}</div>
                   </div>
                 </div>
                 <div class="row form-group">
@@ -43,16 +32,15 @@
                   </div>
                   <div class="col-md-10"></div>
                 </div>
-                <textarea placeholder="Enter your message..." rows="2" class="form-control"></textarea>
-                <button type="submit" class="btn btn-success pull-right">Send message</button>
-                <button type="button" class="btn btn-default pull-right"><i class="fa fa-times"></i> Cancel</button>
               </div>
             </div>
           </div>
         </div>
       </div>{/}
       {/}{/}
-      {not_found}
+      <textarea placeholder="Enter your message..." rows="2" class="form-control"></textarea>
+      <button type="submit" class="btn btn-success pull-right send">Send Email</button>
+      <button type="button" class="btn btn-default pull-right cancle"><i class="fa fa-times"></i> Cancel</button>{not_found}
       <div class="row">
         <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
       </div>{/}

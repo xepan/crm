@@ -16,38 +16,28 @@
                 {cols} 
                 .conversation-wrapper
                   .conversation-content
-                    .slimScrollDiv(style='position: relative; overflow: hidden; width: auto; height: 352px;')
-                      .conversation-inner(style='overflow: hidden; width: auto; height: 352px;')
+                    .slimScrollDiv(style='position: relative; overflow: hidden; width: auto;')
+                      .conversation-inner(style='overflow: hidden; width: auto;')
                         .conversation-item.item-left.clearfix
                           .conversation-user
-                            img(src='img/samples/ryan.png', alt='')
+                            {$avatar}
                           .conversation-body
-                            .name {contact}Bhavani pvt ltd{/}
-                            .time.hidden-xs {created_at}September 21, 2013 18:28{/}
-                            .text
-                              {message}| I don't think they tried to market it to the billionaire, spelunking,
-                              | base-jumping crowd.{/}
-                        .conversation-item.item-right.clearfix
-                          .conversation-user
-                            img(alt='', src='img/samples/kunis.png')
-                          .conversation-body
-                            .name
-                                {to}Xavoc Technocrats{/}
-                            .time.hidden-xs {created_at}September 27, 2016 18:28{/}
-                            .text
-                                {message}| The path of the righteous man is beset on all sides by good will.{/}
+                            .name {$title}
+                            .time.hidden-xs {$created_at}
+                            .text(style="overflow: hidden; height: 25px;") {$message}
+                              
                         .row.form-group
                           .col-md-3
                             input(type='file', data-edit='insertImage', data-target='#pictureBtn', data-role='magic-overlay')
 
                           .col-md-10
-                        textarea.form-control(placeholder='Enter your message...', rows='2')
-                        button.btn.btn-success.pull-right(type='submit') Send message
-                        button.btn.btn-default.pull-right(type='button')
-                          i.fa.fa-times
-                          |  Cancel
             {/}
             {/}{/}
+            textarea.form-control(placeholder='Enter your message...', rows='2')
+            button.btn.btn-success.pull-right.send(type='submit') Send Email
+            button.btn.btn-default.pull-right.cancle(type='button')
+              i.fa.fa-times
+              |  Cancel
             {not_found}
             div.row
                 .col-md-12.text-center.alert.alert-warning(role="alert")

@@ -4,7 +4,7 @@ namespace xepan\crm;
 
 class Model_Ticket_Comments extends \xepan\base\Model_Table{
 	public $table="comments";
-
+	public $acl = false;
 	function init(){
 		parent::init();
 
