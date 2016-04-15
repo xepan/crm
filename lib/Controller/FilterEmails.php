@@ -5,6 +5,7 @@ namespace xepan\crm;
 class Controller_FilterEmails extends \AbstractController {
 
 	function emails_fetched($app,$data){
+		if(!isset($data['fetched_emails_from'])) return;
 		// Emails fetched and now you can track if anything
 		// 		for new ticket, 
 
