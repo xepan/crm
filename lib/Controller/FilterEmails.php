@@ -23,7 +23,7 @@ class Controller_FilterEmails extends \AbstractController {
 			$or->where('to_raw','like','%'.$es['email_username'].'%');
 		}
 		
-		$emails->addCondition('id','>',11);
+		$emails->addCondition('id','>',$data['fetched_emails_from']);
 		$emails->addCondition($or);
 
 		foreach ($emails as $email) {
