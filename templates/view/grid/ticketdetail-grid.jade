@@ -27,17 +27,13 @@
                             .text(style="overflow: hidden; height: 25px;") {$message}
                               
                         .row.form-group
-                          .col-md-3
-                            input(type='file', data-edit='insertImage', data-target='#pictureBtn', data-role='magic-overlay')
 
-                          .col-md-10
             {/}
             {/}{/}
-            textarea.form-control(placeholder='Enter your message...', rows='2')
-            button.btn.btn-success.pull-right.send(type='submit') Send Email
-            button.btn.btn-default.pull-right.cancle(type='button')
-              i.fa.fa-times
-              |  Cancel
+            .col-md-3
+                input(type='file', data-edit='insertImage', data-target='#pictureBtn', data-role='magic-overlay')
+            .col-md-10.text-right
+                {$form}
             {not_found}
             div.row
                 .col-md-12.text-center.alert.alert-warning(role="alert")

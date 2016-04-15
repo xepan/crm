@@ -26,21 +26,17 @@
                     <div style="overflow: hidden; height: 25px;" class="text">{$message}</div>
                   </div>
                 </div>
-                <div class="row form-group">
-                  <div class="col-md-3">
-                    <input type="file" data-edit="insertImage" data-target="#pictureBtn" data-role="magic-overlay"/>
-                  </div>
-                  <div class="col-md-10"></div>
-                </div>
+                <div class="row form-group"></div>
               </div>
             </div>
           </div>
         </div>
       </div>{/}
       {/}{/}
-      <textarea placeholder="Enter your message..." rows="2" class="form-control"></textarea>
-      <button type="submit" class="btn btn-success pull-right send">Send Email</button>
-      <button type="button" class="btn btn-default pull-right cancle"><i class="fa fa-times"></i> Cancel</button>{not_found}
+      <div class="col-md-3">
+        <input type="file" data-edit="insertImage" data-target="#pictureBtn" data-role="magic-overlay"/>
+      </div>
+      <div class="col-md-10 text-right">{$form}</div>{not_found}
       <div class="row">
         <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
       </div>{/}

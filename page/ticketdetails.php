@@ -35,8 +35,33 @@ class page_ticketdetails extends \xepan\base\Page{
 
 		$comment_lister->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
 
-		$comment_lister->on('click','.send',function($js){
-				return $js->univ()->alert('hi');
+		$form = $comment_lister->add('Form',null,'form');
+		$form->addField('xepan\base\RichText','body');
+
+		$form->addSubmit('Send Mail');
+		
+		$form->onSubmit(function($form)use($ticket_id){
+			$email_settings = $this->add('xepan\base\Model_Epan_EmailSetting');
+			$email_settings->addCondition('is_support_email',true);
+			$email_settings->tryLoadAny();
+
+			$ticket = $this->add('xepan\crm\Model_SupportTicket');
+			$ticket->load($ticket_id);
+			$comment=$ticket->ref('Comments');
+			
+
+			$mail = $this->add('xepan\communication\Model_Communication_Email');
+			$mail->setfrom($email_settings['from_email'],$email_settings['from_name']);
+			$mail->addTo($ticket['from_email']);
+			$mail->setSubject($ticket['subject']);
+			$mail->setBody($form['body']);
+			$mail->send($email_settings);
+			$mail->save();
+
+			$comment['communication_email_id']=$mail->id;
+			$comment->save();
+
+			return $this->js()->univ()->successMessage('E-Mail Send');			
 		});
 	}
 }
