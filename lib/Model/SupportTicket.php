@@ -156,9 +156,14 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
 		$config_model->addCondition('application','crm');
+		// $email_subject=$communication['title'] ." ".$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT')." [ ".$this->id. " ]  " .;
 
 		$email_subject=$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
 		$email_body=$config_model->getConfig('TICKET_GENERATED_EMAIL_BODY');
+		
+		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
+		$temp->setHTML('ticket_id',"[ ".$this->id." ]");
+		$temp->setHTML('title',"[ ".$communication['title']);
 
 		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
 		$temp->setHTML('ticket_no',$this['name']);
@@ -166,7 +171,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		// exit;		
 		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
 		$mail->addTo($this['from_email']);
-		$mail->setSubject($email_subject);
+		$mail->setSubject($subject->render());
 		$mail->setBody($temp->render());
 		$mail->send($support_email);
 	}

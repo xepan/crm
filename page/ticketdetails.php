@@ -25,7 +25,8 @@ class page_ticketdetails extends \xepan\base\Page{
 		$comment_lister->setModel($m_comment);
 
 		$comment_lister->addMethod('format_message',function($g,$f){
-			$g->current_row_html[$f]=$g->model['description'];
+			$g->current_row_html[$f]= strip_tags($g->model['description']);
+			// $this->current_row['body'] = strip_tags($this->current_row['body']);
 		});
 
 		$comment_lister->addFormatter('message','message');
