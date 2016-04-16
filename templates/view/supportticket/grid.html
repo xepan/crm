@@ -17,9 +17,9 @@
       {$subheader}
       <tbody>{rows}{row}
         <tr data-id="{$id}" class="{$odd_even}">{cols}
-          <td>{avatar}<a href="{url}index.php?page=xepan_crm_ticketdetails&amp;ticket_id={$id}{/}" class="user-link">{$id}</a><small><a class="user-subhead"></a><br/><a href="{url}?page=xepan_commerce_customerdetail&amp;contact_id={$id}{/}" class="user-subhead">{customer_id}Xavoctacnocratspvt.ltd{/}   </a></small></td>
-          <td>{created_at}2013/08/08{/}</td>
-          <td><a href="#">{email}mila@kunis.com{/}</a></td>
+          <td>{$avatar}<a href="{url}index.php?page=xepan_crm_ticketdetails&amp;ticket_id={$id}{/}" class="user-link">{$id}</a><small><a href="{url}?page=xepan_commerce_customerdetail&amp;contact_id={$id}{/}" class="user-subhead">{$contact}   </a></small></td>
+          <td>{$created_at}</td>
+          <td><a href="#">{$from_email}</a></td>
           <td>
              
             {$action}

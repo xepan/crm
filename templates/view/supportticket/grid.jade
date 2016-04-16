@@ -32,19 +32,17 @@
                     {cols}
                     
                     td
-                      {avatar}
+                      {$avatar}
                       a.user-link(href='{url}index.php?page=xepan_crm_ticketdetails&ticket_id={$id}{/}')
                             {$id}
                       small
-                          a.user-subhead
-                          br
-                          a.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){customer_id}Xavoctacnocratspvt.ltd{/}   
+                          a.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){$contact}   
 
                 
                     td
-                      | {created_at}2013/08/08{/}
+                      | {$created_at}
                     td
-                      a(href='#') {email}mila@kunis.com{/}
+                      a(href='#') {$from_email}
                     td  
                         | {$action}
                     td(style="width: 15%;")
