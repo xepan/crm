@@ -10,8 +10,8 @@ class page_config extends \Page{
 		$auto_subject = $auto_config->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
 		$auto_body = $auto_config->getConfig('TICKET_GENERATED_EMAIL_BODY');
 		$form=$this->add('Form',null,'auto-reply');
-		$form->addField('line','subject')->set($auto_subject);
-		$form->addField('xepan\base\RichText','body')->set($auto_body);
+		$form->addField('line','subject')->set($auto_subject)->setFieldHint('{{ticket_id}}, {{title}}');
+		$form->addField('xepan\base\RichText','body')->set($auto_body)->setFieldHint('{{contact}}, {{ticket_id}}');
 		$form->addSubmit('Update');
 
 		if($form->isSubmitted()){
@@ -28,7 +28,7 @@ class page_config extends \Page{
 		$reject_body = $reject_config->getConfig('SUPPORT_EMAIL_REGISTERED_BODY');
 		$form=$this->add('Form',null,'reject-reply');
 		$form->addField('line','subject')->set($reject_subject);
-		$form->addField('xepan\base\RichText','body')->set($reject_body);
+		$form->addField('xepan\base\RichText','body')->set($reject_body)->setFieldHint('{{email}},');
 		$form->addSubmit('Update');
 
 		if($form->isSubmitted()){

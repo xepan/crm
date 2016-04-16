@@ -10,7 +10,6 @@ class Model_Ticket_Comments extends \xepan\base\Model_Table{
 
 		$this->hasOne('xepan\communication\Communication_Abstract_Email','communication_email_id');
 		$this->hasOne('xepan\crm\SupportTicket','ticket_id');
-
-	
+		$this->addField('created_by');
 	}
 }

@@ -60,6 +60,8 @@ class page_ticketdetails extends \xepan\base\Page{
 			$mail->save();
 
 			$comment['communication_email_id']=$mail->id;
+			$comment->addCondition('created_by',$this->app->employee->id);
+
 			$comment->save();
 
 			return $this->js()->univ()->successMessage('E-Mail Send');			
