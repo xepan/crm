@@ -90,24 +90,23 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	}
 
+	function fetchTicketNumberFromSubject($subject){
+		preg_match_all('/\[#([0-9]+)\]/',$subject,$preg_match_array);
+		return count($preg_match_array[1])?$preg_match_array[1][0]:false;
+	}
+
 	function getTicket($subject=null){
 		if(!$subject)
-			return false;
-		
-		preg_match_all('/([a-zA-Z]+[\\\\][a-zA-Z]+[ ]+[0-9]+)/',$subject,$preg_match_array);
-		// $array=array(0 => array(), 1=> array ("Re: resume"));
-			// var_dump($preg_match_array[1]);
-			// // exit;
-		if(count($preg_match_array[1])){
-			//get Ticket
-			$relatedticket = $preg_match_array[1][0];
-			$relatedticket_array = explode(" ", $relatedticket);
-			
-			$this->tryLoadBy('subject',$relatedticket_array[1]);
+			return $this;
+
+		if($relatedticket = $this->fetchTicketNumberFromSubject($subject)){
+			$this->tryLoad($relatedticket);
 			if($this->loaded()){
 				return $this ;
 			}
 		}
+
+		return $this;
 	}
 
 	function createTicket($communication){
