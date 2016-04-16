@@ -16,10 +16,10 @@
                     a(href='#')
                         span Ticket Name
                 th
-                    a.asc(href='#')
-                        span Date Of Ticket
+                    a(href='#')
+                        span Created On
                 th
-                    a.asc(href='#')
+                    a(href='#')
                         span Email
                 th 
                 {/}{/}
@@ -31,22 +31,18 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     
-                    td(style="width: 30%;")
-                      {avatar}
-                      img(src='img/samples/scarlet-159.png', alt='')
-                      {/}
+                    td
+                      {$avatar}
                       a.user-link(href='{url}index.php?page=xepan_crm_ticketdetails&ticket_id={$id}{/}')
                             {$id}
                       small
-                          a.user-subhead
-                          br
-                          a.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){customer_id}Xavoctacnocratspvt.ltd{/}   
+                          a.user-subhead(href='{url}?page=xepan_commerce_customerdetail&contact_id={$id}{/}'){$contact}   
 
                 
                     td
-                      | {created_at}2013/08/08{/}
+                      | {$created_at}
                     td
-                      a(href='#') {email}mila@kunis.com{/}
+                      a(href='#') {$from_email}
                     td  
                         | {$action}
                     td(style="width: 15%;")

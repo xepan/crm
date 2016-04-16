@@ -156,17 +156,24 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
 		$config_model->addCondition('application','crm');
+		// $email_subject=$communication['title'] ." ".$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT')." [ ".$this->id. " ]  " .;
 
 		$email_subject=$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
 		$email_body=$config_model->getConfig('TICKET_GENERATED_EMAIL_BODY');
+		
+		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
+		$subject->setHTML('ticket_id',"[ ".$this->id." ]");
+		$subject->setHTML('title',"[ ".$communication['title']);
 
 		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$temp->setHTML('ticket_no',$this['name']);
+		$temp->setHTML('contact_name',$this['contact']);
+		$temp->setHTML('sender_email_id',$this['from_email']);
+		$temp->setHTML('ticket_id',$this['name']);
 		// echo $temp->render();
 		// exit;		
 		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
 		$mail->addTo($this['from_email']);
-		$mail->setSubject($email_subject);
+		$mail->setSubject($subject->render());
 		$mail->setBody($temp->render());
 		$mail->send($support_email);
 	}
@@ -188,11 +195,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
 		$config_model->addCondition('application','crm');
-		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_REGISTERED_SUBJECT');
-		$email_body=$config_model->getConfig('SUPPORT_EMAIL_REGISTERED_BODY');
+		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_DENIED_SUBJECT');
+		$email_body=$config_model->getConfig('SUPPORT_EMAIL_DENIED_BODY');
 
 		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$temp->setHTML('email',$this['from_email']);
+		$temp->setHTML('sender_email_id',$this['from_email']);
 		// echo $temp->render();
 		// exit;		
 		$mail->setfrom($support_email['from_email'],$support_email['from_name']);

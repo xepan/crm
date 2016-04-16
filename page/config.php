@@ -10,8 +10,8 @@ class page_config extends \Page{
 		$auto_subject = $auto_config->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
 		$auto_body = $auto_config->getConfig('TICKET_GENERATED_EMAIL_BODY');
 		$form=$this->add('Form',null,'auto-reply');
-		$form->addField('line','subject')->set($auto_subject);
-		$form->addField('xepan\base\RichText','body')->set($auto_body);
+		$form->addField('line','subject')->set($auto_subject)->setFieldHint('{$ticket_id}, {$title}');
+		$form->addField('xepan\base\RichText','body')->set($auto_body)->setFieldHint('{$contact_name}, {$ticket_id}, {$sender_email_id}');
 		$form->addSubmit('Update');
 
 		if($form->isSubmitted()){
@@ -24,17 +24,17 @@ class page_config extends \Page{
 		/*Reject Mail Content*/
 
 		$reject_config = $this->app->epan->config;
-		$reject_subject = $reject_config->getConfig('SUPPORT_EMAIL_REGISTERED_SUBJECT');
-		$reject_body = $reject_config->getConfig('SUPPORT_EMAIL_REGISTERED_BODY');
+		$reject_subject = $reject_config->getConfig('SUPPORT_EMAIL_DENIED_SUBJECT');
+		$reject_body = $reject_config->getConfig('SUPPORT_EMAIL_DENIED_BODY');
 		$form=$this->add('Form',null,'reject-reply');
 		$form->addField('line','subject')->set($reject_subject);
-		$form->addField('xepan\base\RichText','body')->set($reject_body);
+		$form->addField('xepan\base\RichText','body')->set($reject_body)->setFieldHint('{{sender_email_id}}');
 		$form->addSubmit('Update');
 
 		if($form->isSubmitted()){
-			$reject_config->setConfig('SUPPORT_EMAIL_REGISTERED_SUBJECT',$form['subject'],'crm');
+			$reject_config->setConfig('SUPPORT_EMAIL_DENIED_SUBJECT',$form['subject'],'crm');
 
-			$reject_config->setConfig('SUPPORT_EMAIL_REGISTERED_BODY',$form['body'],'crm');
+			$reject_config->setConfig('SUPPORT_EMAIL_DENIED_BODY',$form['body'],'crm');
 			$form->js(null,$form->js()->reload())->univ()->successMessage('Update Information')->execute();
 		}
 	}
