@@ -16,10 +16,10 @@
                     a(href='#')
                         span Ticket Name
                 th
-                    a.asc(href='#')
-                        span Date Of Ticket
+                    a(href='#')
+                        span Created On
                 th
-                    a.asc(href='#')
+                    a(href='#')
                         span Email
                 th 
                 {/}{/}
@@ -31,10 +31,8 @@
                 tr(class="{$odd_even}" data-id="{$id}")
                     {cols}
                     
-                    td(style="width: 30%;")
+                    td
                       {avatar}
-                      img(src='img/samples/scarlet-159.png', alt='')
-                      {/}
                       a.user-link(href='{url}index.php?page=xepan_crm_ticketdetails&ticket_id={$id}{/}')
                             {$id}
                       small
