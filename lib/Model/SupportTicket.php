@@ -5,18 +5,16 @@ namespace xepan\crm;
 class Model_SupportTicket extends \xepan\hr\Model_Document{
 	public $status=[
 		'Pending',
-		'Activated',
 		'Assigned',
 		'Completed',
 		'Rejected'
 	];
 	// 'draft','submitted','solved','canceled','assigned','junk'
 	public $actions=[
-		'Pending'=>['view','edit','delete','convert','reject','assign','complete'],
-		'Activated'=>['view','edit','delete','open','reject','assign','complete'],
-		'Assigned'=>['view','edit','delete','open','complete','reject'],
-		'Completed'=>['view','edit','delete','open','reject','assign'],
-		'Rejected'=>['view','edit','delete','open','complete','assign']
+		'Pending'=>['view','edit','delete','reject','assign','complete'],
+		'Assigned'=>['view','edit','delete','complete','reject'],
+		'Completed'=>['view','edit','delete','reject','assign'],
+		'Rejected'=>['view','edit','delete']
 
 
 	];
