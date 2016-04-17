@@ -22,4 +22,7 @@ class Initiator extends \Controller_Addon {
 	    }
 	              
     }
+
+    function generateInstaller(){
+    }
 }

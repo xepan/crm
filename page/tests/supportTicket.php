@@ -5,13 +5,13 @@ class page_tests_supportTicket extends \xepan\base\Page_Tester {
     public $title = 'Communication Tests';
 
     public $proper_responses=[
-     	"Test_CheckGetTicket"=> '',
+     	"Test_CheckGetTicket"=> true,
         "Test_CheckForTicket"=>[false,false,false,123,false]
         ];
 
     function test_CheckGetTicket(){
     	$st = $this->add('xepan\crm\Model_SupportTicket');
-    	return get_class($st->getTicket(''));
+    	return $st->getTicket('') instanceof \xepan\crm\Model_SupportTicket;
     }
 
     function test_CheckForTicket(){
