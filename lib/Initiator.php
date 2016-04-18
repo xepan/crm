@@ -24,5 +24,15 @@ class Initiator extends \Controller_Addon {
     }
 
     function generateInstaller(){
+        $this->app->epan=$this->app->old_epan;
+        $truncate_tables = ['Ticket_Comments','Ticket_Attachment','SupportTicket'];
+        foreach ($truncate_tables as $t) {
+            $m=$this->add('xepan\crm\Model_'.$t);
+            foreach ($m as $mt) {
+                $mt->delete();
+            }
+        }
+        
+        $this->app->epan=$this->app->new_epan;
     }
 }
