@@ -5,18 +5,16 @@ namespace xepan\crm;
 class Model_SupportTicket extends \xepan\hr\Model_Document{
 	public $status=[
 		'Pending',
-		'Activated',
 		'Assigned',
 		'Completed',
 		'Rejected'
 	];
 	// 'draft','submitted','solved','canceled','assigned','junk'
 	public $actions=[
-		'Pending'=>['view','edit','delete','convert','reject','assign','complete'],
-		'Activated'=>['view','edit','delete','open','reject','assign','complete'],
-		'Assigned'=>['view','edit','delete','open','complete','reject'],
-		'Completed'=>['view','edit','delete','open','reject','assign'],
-		'Rejected'=>['view','edit','delete','open','complete','assign']
+		'Pending'=>['view','edit','delete','reject','assign','complete'],
+		'Assigned'=>['view','edit','delete','complete','reject'],
+		'Completed'=>['view','edit','delete','reject','assign'],
+		'Rejected'=>['view','edit','delete']
 
 
 	];
@@ -90,24 +88,23 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	}
 
+	function fetchTicketNumberFromSubject($subject){
+		preg_match_all('/\[#([0-9]+)\]/',$subject,$preg_match_array);
+		return count($preg_match_array[1])?$preg_match_array[1][0]:false;
+	}
+
 	function getTicket($subject=null){
 		if(!$subject)
-			return false;
-		
-		preg_match_all('/([a-zA-Z]+[\\\\][a-zA-Z]+[ ]+[0-9]+)/',$subject,$preg_match_array);
-		// $array=array(0 => array(), 1=> array ("Re: resume"));
-			// var_dump($preg_match_array[1]);
-			// // exit;
-		if(count($preg_match_array[1])){
-			//get Ticket
-			$relatedticket = $preg_match_array[1][0];
-			$relatedticket_array = explode(" ", $relatedticket);
-			
-			$this->tryLoadBy('subject',$relatedticket_array[1]);
+			return $this;
+
+		if($relatedticket = $this->fetchTicketNumberFromSubject($subject)){
+			$this->tryLoad($relatedticket);
 			if($this->loaded()){
 				return $this ;
 			}
 		}
+
+		return $this;
 	}
 
 	function createTicket($communication){
@@ -156,17 +153,24 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
 		$config_model->addCondition('application','crm');
+		// $email_subject=$communication['title'] ." ".$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT')." [ ".$this->id. " ]  " .;
 
 		$email_subject=$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
 		$email_body=$config_model->getConfig('TICKET_GENERATED_EMAIL_BODY');
+		
+		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
+		$subject->setHTML('ticket_id',"[ ".$this->id." ]");
+		$subject->setHTML('title',"[ ".$communication['title']);
 
 		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$temp->setHTML('ticket_no',$this['name']);
+		$temp->setHTML('contact_name',$this['contact']);
+		$temp->setHTML('sender_email_id',$this['from_email']);
+		$temp->setHTML('ticket_id',$this['name']);
 		// echo $temp->render();
 		// exit;		
 		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
 		$mail->addTo($this['from_email']);
-		$mail->setSubject($email_subject);
+		$mail->setSubject($subject->render());
 		$mail->setBody($temp->render());
 		$mail->send($support_email);
 	}
@@ -188,11 +192,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
 		$config_model->addCondition('application','crm');
-		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_REGISTERED_SUBJECT');
-		$email_body=$config_model->getConfig('SUPPORT_EMAIL_REGISTERED_BODY');
+		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_DENIED_SUBJECT');
+		$email_body=$config_model->getConfig('SUPPORT_EMAIL_DENIED_BODY');
 
 		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$temp->setHTML('email',$from_email);
+		$temp->setHTML('sender_email_id',$this['from_email']);
 		// echo $temp->render();
 		// exit;		
 		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
