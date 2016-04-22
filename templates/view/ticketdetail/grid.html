@@ -1,0 +1,64 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div class="filter-block">
+      <div class="pull-right">{$grid_buttons} </div>
+      <div class="form-group pull-right xepan-filter-form">
+        <input type="text" placeholder="Search" value="" data-shortname="q" name="322fb157__id_quicksearch_q" data-initvalue=""/>
+        <div class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></div>
+      </div>
+    </div>
+  </header>{/Pannel}
+  <div class="main-box-body clearfix">
+    <div class="row">
+      {header}{cols}{col}{/}{/}{/}
+      {rows}{row}
+      <div id="{$_name}" class="{$class}">{cols} 
+        <div class="conversation-wrapper">
+          <div class="conversation-content">
+            <div style="position: relative; overflow: hidden; width: auto; height: 352px;" class="slimScrollDiv">
+              <div style="overflow: hidden; width: auto; height: 352px;" class="conversation-inner">
+                <div class="conversation-item item-left clearfix">
+                  <div class="conversation-user"><img src="img/samples/ryan.png" alt=""/></div>
+                  <div class="conversation-body">
+                    <div class="name">{contact}Bhavani pvt ltd{/}</div>
+                    <div class="time hidden-xs">{created_at}September 21, 2013 18:28{/}</div>
+                    <div class="text">
+                      {message}| I don't think they tried to market it to the billionaire, spelunking,
+                      base-jumping crowd.{/}
+                    </div>
+                  </div>
+                </div>
+                <div class="conversation-item item-right clearfix">
+                  <div class="conversation-user"><img alt="" src="img/samples/kunis.png"/></div>
+                  <div class="conversation-body">
+                    <div class="name">{to}Xavoc Technocrats{/}</div>
+                    <div class="time hidden-xs">{created_at}September 27, 2016 18:28{/}</div>
+                    <div class="text">{message}| The path of the righteous man is beset on all sides by good will.{/}</div>
+                  </div>
+                </div>
+                <div class="row form-group">
+                  <div class="col-md-3">
+                    <input type="file" data-edit="insertImage" data-target="#pictureBtn" data-role="magic-overlay"/>
+                  </div>
+                  <div class="col-md-10">
+                    <input id="exampleInpSubject" type="text" placeholder="Enter subject" class="form-control"/>
+                  </div>
+                </div>
+                <textarea placeholder="Enter your message..." rows="2" class="form-control"></textarea>
+                <button type="submit" class="btn btn-success pull-right">Send message</button>
+                <button type="button" class="btn btn-default pull-right"><i class="fa fa-times"></i> Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>{/}
+      {/}{/}
+      {not_found}
+      <div class="row">
+        <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+      </div>{/}
+      {totals}{cols}{col}{$content}{/}{/}{/}
+    </div>{$Paginator}
+  </div>
+</div>

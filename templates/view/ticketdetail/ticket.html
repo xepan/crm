@@ -1,0 +1,54 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix atk-table atk-table-zebra atk-table-bordered {$class}">{Pannel}
+  <header class="main-box-header clearfix atk-actions  {$class} ">
+    <div style="100%" class="filter-block">
+      <div class="pull-right">{$grid_buttons} </div>
+      <div class="form-group pull-right xepan-filter-form"><span class="form-control pull-left">{$quick_search}</span></div>
+    </div>
+  </header>{/Pannel}
+  <div class="main-box-body clearfix table">
+    <table style="width:100%" class="table user-list table-hover">{header}
+      <thead>{cols}{col}
+<<<<<<< HEAD:templates/grid/supportticket-grid.html
+        <th><a href="#"><span>Department</span></a></th>
+        <th class="text-right"><a href="#" class="asc"><span>Production Level</span></a></th>
+        <th> </th>{/}{/}   
+=======
+        <th><a href="#"><span>Ticket No.</span></a></th>
+        <th><a href="#" class="asc"><span>Generated Date</span></a></th>
+        <th><a href="#" class="asc"><span>Email</span></a></th>
+        <th> </th>{/}{/}
+>>>>>>> cadd0b152c2af7c8a471275baefd78137705f221:templates/view/grid/ticket.html
+      </thead>{/}
+      {$subheader}
+      <tbody>{rows}{row}
+        <tr data-id="{$id}" class="{$odd_even}">{cols}
+          <td><img alt="" src="{image}img/samples/scarlet-159.png{/}"/><a href="{url}index.php?page=xepan_crm_ticketdetails&amp;ticket_id={$id}{/}" class="user-link">{contact}Scarlett{/} [{name}Ticket_id{/}]</a><span class="user-subhead">{status}Ticket_name{/}</span></td>
+          <td>{created_at}2013/08/08{/}</td>
+          <td><a href="#">{from_email}mila@kunis.com{/}</a></td>
+          <td>
+             
+            {$action}
+          </td>
+          <td style="width: 15%;">
+            {$edit}
+            {$delete}
+          </td>{/}
+        </tr>{/}{/}
+        {not_found}
+        <div class="row">
+          <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+        </div>{/}
+      </tbody>{totals}
+      <tfoot>
+        <tr class="totals">
+          {cols}{col}
+          <td {$tdparam}>
+          {$content}
+          </td>
+          {/}{/}
+        </tr>
+      </tfoot>{/}
+    </table>{$Paginator}
+  </div>
+</div>
