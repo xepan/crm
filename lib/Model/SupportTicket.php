@@ -89,7 +89,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function fetchTicketNumberFromSubject($subject){
-		preg_match_all('/\[#([0-9]+)\]/',$subject,$preg_match_array);
+		preg_match_all('/# \[( [0-9]+ )\]/',$subject,$preg_match_array);
 		return count($preg_match_array[1])?$preg_match_array[1][0]:false;
 	}
 
@@ -138,7 +138,6 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function autoReply($communication){
-		
 		if(!$this->loaded()){
 			return false;	
 		}
