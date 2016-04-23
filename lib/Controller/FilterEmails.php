@@ -7,7 +7,6 @@ class Controller_FilterEmails extends \AbstractController {
 	function emails_fetched($app,$data){
 		if(!isset($data['fetched_emails_from'])) return;
 		// Emails fetched and now you can track if anything
-		var_dump($data['fetched_emails_from']);
 		// 		for new ticket, 
 
 		// 		to reply rejection
@@ -27,9 +26,6 @@ class Controller_FilterEmails extends \AbstractController {
 		$emails->addCondition('id','>=',$data['fetched_emails_from']);
 		$emails->addCondition($or);
 
-		// echo "Rakesh";
-		// echo $emails->count()->getOne();
-		
 		foreach ($emails as $email) {			
 			$ticket=$this->add('xepan\crm\Model_SupportTicket');
 			// check if this contains any past support number [SUP 1] like this
