@@ -23,7 +23,7 @@ class page_ticketdetails extends \xepan\base\Page{
 		$comment_join->addField('title');
 		$comment_join->addField('description');
 		$comment_join->addField('from_id');
-		$comment_join->addField('created_at');
+		// $comment_join->addField('created_at');
 		$comment_join->addField('status');
 
 		$comment_lister=$this->add('xepan/hr/Grid',null,null,['view/grid/ticketdetail-comment-grid']);
@@ -62,14 +62,14 @@ class page_ticketdetails extends \xepan\base\Page{
 			
 			$to_mails=json_decode($ticket['to_email'],true);
 			foreach ($to_mails as $to_mail) {
-				if($to_mail['email'] != $email_settings['from_email']){
+				if($to_mail['email'] != $support['from_email']){
 					$mail->addTo($to_mail['email'],$to_mail['name']);
 				}
 			}
 			if(isset($ticket['cc']) and $ticket['cc']){
 				$cc_mails=json_decode($ticket['cc'],true);
 				foreach ($cc_mails as $cc_mail) {
-					if($cc_mail['email'] != $email_settings['from_email']){
+					if($cc_mail['email'] != $support['from_email']){
 						$mail->addCc($cc_mail['email'],$cc_mail['name']);
 					}
 				}
@@ -77,7 +77,7 @@ class page_ticketdetails extends \xepan\base\Page{
 			if(isset($ticket['bcc']) and $ticket['bcc']){
 				$bcc_mails=json_decode($ticket['bcc'],true);
 				foreach ($bcc_mails as $bcc_mail) {
-					if($bcc_mail['email'] != $email_settings['from_email']){
+					if($bcc_mail['email'] != $support['from_email']){
 						$mail->addBcc($bcc_mail['email'],$bcc_mail['name']);
 					}
 				}
