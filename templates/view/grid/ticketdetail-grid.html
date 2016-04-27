@@ -1,44 +1,55 @@
 
-<div id="{$_name}" class="xepan-grid main-box clearfix {$class}">{Pannel}
-  <header class="main-box-header clearfix atk-actions  {$class} ">
-    <div class="filter-block">
-      <div class="pull-right">{$grid_buttons} </div>
-      <div class="form-group pull-right xepan-filter-form">
-        <input type="text" placeholder="Search" value="" data-shortname="q" name="322fb157__id_quicksearch_q" data-initvalue=""/>
-        <div class="form-control pull-left">{$quick_search}<i class="fa fa-search search-icon"></i></div>
-      </div>
-    </div>
-  </header>{/Pannel}
-  <div class="main-box-body clearfix">
-    <div class="row">
-      {header}{cols}{col}{/}{/}{/}
-      {rows}{row}
-      <div data-id="{$id}" class="{$odd_even} col-md-{col-width}12{/}">{cols} 
-        <div class="conversation-wrapper">
-          <div class="conversation-content">
-            <div style="position: relative; overflow: hidden; width: auto;" class="slimScrollDiv">
-              <div style="overflow: hidden; width: auto;" class="conversation-inner">
-                <div class="conversation-item item-left clearfix">
-                  <div class="conversation-user">{$avatar}</div>
-                  <div class="conversation-body">
-                    <div class="name">{$title}</div>
-                    <div class="time hidden-xs">{$created_at}</div>
-                    <div style="overflow: hidden; height: 25px;" class="text">{$message}</div>
-                  </div>
+<div id="{$_name}">
+  <div id="email-box" style="margin-left:0px" class="email-detail-nano has-scrollbar">
+    <div tabindex="0" style="right: -13px;" class="email-detail-nano-content">
+      <div id="email-detail-inner">
+        <div id="email-detail-subject" class="clearfix"><span class="subject">{subject}FW: Like your new movie{/}</span><span class="label label-success">{status}Work{/}</span></div>
+        <div id="email-detail-sender" style="height:auto;" class="clearfix">
+          <div class="picture hidden-xs"><img alt="" src="img/samples/angelina-300.jpg"/></div>
+          <div style="width:88%" class="users">
+            <div class="from clearfix">
+              <div class="name">{$from_name},  {from_email}| Angelina Jolie{/}</div>
+              <div class="email hidden-xs"></div>
+            </div>
+            <div class="to">
+              To:
+              {to_lister}
+              {rows}{row} <span>{name} Me{/} ,&nbsp;{email} Brad Pitt{/}&nbsp;&nbsp;</span>{/}{/}
+              {/}
+            </div>
+            <div class="to">
+              Cc:
+              {cc_lister}
+              {rows}{row} <small>{name}Me{/},&nbsp;{email} Brad Pitt{/}&nbsp;&nbsp;</small>{/}{/}
+              {/}
+            </div>
+            <div class="to">Bcc: <small>{$bcc_name}</small></div>
+          </div>
+          <div class="tools">
+            <div class="date">{callback_date}Sep 12 (6 days ago){/}</div>
+          </div>
+        </div>
+        <div id="email-body">
+          <div id="accordion" class="panel-group accordion">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 style="height: 20px;overflow: hidden;" class="panel-title"><a href="#collapseTwo" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed">{collapse_header}Collapsible Group Item #2{/}</a></h4>
+              </div>
+              <div id="collapseTwo" style="height: 2px;" class="panel-collapse collapse">
+                <div class="panel-body">{email_body}  
+                  <p>Hey Scarlett,</p>
+                  <p>
+                    Well, the way they make shows is, they make one show. That show's called a pilot. Then they
+                    show that show to the people who make shows, and on the strength of that one show they decide
+                    if they're going to make more shows. <a href="#">Some pilots</a> get picked and become television
+                    programs. Some don't, become nothing. She starred in one of the ones that became nothing.
+                  </p>{/}
                 </div>
-                <div class="row form-group"></div>
               </div>
             </div>
           </div>
         </div>
-      </div>{/}
-      {/}{/}
-      <div class="col-md-3"></div>
-      <div class="col-md-10 text-right">{$form}</div>{not_found}
-      <div class="row">
-        <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
-      </div>{/}
-      {totals}{cols}{col}{$content}{/}{/}{/}
-    </div>{$Paginator}
+      </div>
+    </div>
   </div>
 </div>

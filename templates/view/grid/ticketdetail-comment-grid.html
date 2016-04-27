@@ -1,0 +1,34 @@
+
+<div id="{$_name}" class="xepan-grid main-box clearfix {$class}">
+  <div class="main-box-body clearfix">
+    <div class="row">
+      {header}{cols}{col}{/}{/}{/}
+      {rows}{row}
+      <div data-id="{$id}" class="{$odd_even} col-md-{col-width}12{/}">{cols} 
+        <div class="conversation-wrapper">
+          <div class="conversation-content">
+            <div style="position: relative; overflow: hidden; width: auto;" class="slimScrollDiv">
+              <div style="overflow: hidden; width: auto;" class="conversation-inner">
+                <div class="conversation-item item-left clearfix">
+                  <div class="conversation-user">{$avatar}</div>
+                  <div class="conversation-body">
+                    <div class="name">{$title}</div><span class="label label-success pull-right">{$status}</span>
+                    <div class="time hidden-xs">{$created_at}</div>
+                    <div style="overflow: hidden; height: 25px;" class="text">{$message}</div>
+                  </div>
+                </div>
+                <div class="row form-group"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>{/}
+      {/}{/}
+      <div class="col-md-12">{$form}</div>{not_found}
+      <div class="row">
+        <div role="alert" class="col-md-12 text-center alert alert-warning"><span class="icon-attention fa fa-exclamation-triangle"> &nbsp;{$not_found_message}</span></div>
+      </div>{/}
+      {totals}{cols}{col}{$content}{/}{/}{/}
+    </div>{$Paginator}
+  </div>
+</div>
