@@ -27,7 +27,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->hasOne('xepan\base\Contact','contact_id');
 		$st_j->hasOne('xepan\communication\Communication','communication_email_id');
 		
-		$st_j->addField('name')->defaultValue(rand(999,999999));
+		$st_j->addField('name')->defaultValue(rand(999,999999))->sortable(true);
 		$st_j->addField('uid');
 		$st_j->addField('from_id');
 		$st_j->addField('from_email');
@@ -48,7 +48,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->hasMany('xepan\crm\Ticket_Attachment','ticket_id',null,'TicketAttachments');
 
 		$this->getElement('status')->defaultValue('Pending');
-		$this->getElement('created_at')->defaultValue($this->app->now);
+		$this->getElement('created_at')->defaultValue($this->app->now)->sortable(true);
 
 		$this->add('misc/Field_Callback','callback_date')->set(function($m){
 			if(date('Y-m-d',strtotime($m['created_at']))==date('Y-m-d',strtotime($this->app->now))){
@@ -56,6 +56,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			}
 			return date('M d',strtotime($m['created_at']));
 		});
+
+		$this->addExpression('last_comment')->set(function($m,$q){
+			return $m->refSQL('Comments')->setLimit(1)->setOrder('created_at','desc')->fieldQuery('created_at');
+		})->sortable(true);
 
 
 	}

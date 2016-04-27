@@ -9,8 +9,12 @@
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
       <thead>{cols}{col}
-        <th><a href="#"><span>Ticket Name</span></a></th>
-        <th><a href="#"><span>Created On</span></a></th>
+        <th id="{$name_sortid}"><span>Ticket Name {$name_sort}</span>
+        </th>
+        <th id="{$created_at_sortid}"><span>Created On {$created_at_sort}</span>
+        </th>
+        <th id="{$last_comment_sortid}"><span>Last Comment On {$last_comment_sort}</span>
+        </th>
         <th><a href="#"><span>Email</span></a></th>
         <th> </th>{/}{/}
       </thead>{/}
@@ -19,6 +23,7 @@
         <tr data-id="{$id}" class="{$odd_even}">{cols}
           <td>{avatar}<img src="img/samples/scarlet-159.png" alt=""/>{/}<a href="{url}?page=xepan_crm_ticketdetails&amp;ticket_id={$id}{/}" class="user-link">{$id}</a><a href="?page=xepan_commerce_customerdetail&amp;contact_id={$contact_id}"><span class="user-subhead">{$contact}</span></a></td>
           <td>{$created_at}</td>
+          <td>{$last_comment}</td>
           <td><a href="#">{$from_email}</a></td>
           <td>
              
