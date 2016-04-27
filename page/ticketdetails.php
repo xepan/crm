@@ -88,7 +88,7 @@ class page_ticketdetails extends \xepan\base\Page{
 
 			$mail->setSubject($ticket['subject']);
 			$mail->setBody($form['body']);
-			$mail->send($email_settings);
+			$mail->send($support);
 			$mail->save();
 
 			$comment['communication_email_id']=$mail->id;
