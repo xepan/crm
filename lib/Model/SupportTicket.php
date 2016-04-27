@@ -82,12 +82,57 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this->saveAndUnload();
 	}
 
-	function complete(){
-		$this['status']='Completed';
-		$this->app->employee
-			->addActivity("Completed Supportticket", $this->id, $this['ticket_id'])
-			->notifyWhoCan('reject,convert,open','Converted');
-		$this->saveAndUnload();
+
+	function page_complete($p){
+		if(!$this->loaded()){
+			return false;	
+		}
+		$communication=$this->ref('communication_email_id');
+		$mailbox=explode('#', $communication['mailbox']);
+		$support_email = $this->supportEmail($mailbox[0]);
+
+		if(!$this['from_email']){
+			return false;
+		}
+
+		$mail = $this->add('xepan\communication\Model_Communication_Email');
+
+		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
+		$config_model->addCondition('application','crm');
+		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT');
+		$email_body=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
+		
+		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
+		$subject->setHTML('ticket_id'," ".$this->id);
+
+		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
+		$temp->setHTML('contact_name',$this['contact']);
+		$temp->setHTML('sender_email_id',$this['from_email']);
+		$temp->setHTML('ticket_id',$this->id);
+
+
+		$form=$p->add('Form');
+		$form->addField('line','subject')->set($email_subject);
+		$form->addField('xepan\base\RichText','email_body')->set($email_body);
+
+		$form->addSubmit('Send');
+		$form->addSubmit('close');
+		if($form->isSubmitted()){
+			$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			$mail->addTo($this['from_email']);
+			$mail->setSubject($form['subject']);
+			$mail->setBody($form['email_body']);
+			$mail->send($support_email);
+	
+			$this->createComment($mail);
+
+			$this['status']='Completed';
+			$this->app->employee
+				->addActivity("Completed Supportticket", $this->id, $this['ticket_id'])
+				->notifyWhoCan('reject,convert,open','Converted');
+			$this->saveAndUnload();
+			$form->js()->univ()->successMessage("Email Send SuccessFully")->execute();
+		}
 	}
 
 	function createComment($communication){
