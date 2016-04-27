@@ -8,10 +8,15 @@ class page_ticketdetails extends \xepan\base\Page{
 
 	function init(){
 		parent::init();
-		
 		$ticket_id=$this->app->stickyGET('ticket_id');
+
+		$ticket_model=$this->add('xepan\crm\Model_SupportTicket')->load($ticket_id);
+		$td_view=$this->add('xepan/crm/View_TicketDetail');
+		$td_view->setModel($ticket_model);
+		
 		$m_comment=$this->add('xepan\crm\Model_Ticket_Comments');			
 		$m_comment->addCondition('ticket_id',$ticket_id);
+		
 		
 		$comment_join = $m_comment->join('communication.id','communication_email_id');
 		
@@ -19,8 +24,9 @@ class page_ticketdetails extends \xepan\base\Page{
 		$comment_join->addField('description');
 		$comment_join->addField('from_id');
 		$comment_join->addField('created_at');
+		$comment_join->addField('status');
 
-		$comment_lister=$this->add('xepan/hr/Grid',null,null,['view/grid/ticketdetail-grid']);
+		$comment_lister=$this->add('xepan/hr/Grid',null,null,['view/grid/ticketdetail-comment-grid']);
 		$comment_lister->addColumn('message');
 		$comment_lister->setModel($m_comment);
 
@@ -37,7 +43,7 @@ class page_ticketdetails extends \xepan\base\Page{
 		$comment_lister->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
 
 		$form = $comment_lister->add('Form',null,'form');
-		$form->addField('xepan\base\RichText','body');
+		$form->addField('xepan\base\RichText','body','');
 
 		$form->addSubmit('Send Mail');
 		
