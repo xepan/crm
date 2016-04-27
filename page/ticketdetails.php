@@ -93,6 +93,7 @@ class page_ticketdetails extends \xepan\base\Page{
 
 			$comment['communication_email_id']=$mail->id;
 			$comment->addCondition('created_by',$this->app->employee->id);
+			$comment->addCondition('created_at',$this->app->today);
 
 			$comment->save();
 
