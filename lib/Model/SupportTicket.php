@@ -183,7 +183,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$mail->setSubject($subject->render());
 		$mail->setBody($temp->render());
 		$mail->send($support_email);
-		$this->createComment($communication);
+
+		$this->createComment($mail);
 
 	}
 	
