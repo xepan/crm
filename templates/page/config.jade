@@ -7,8 +7,12 @@
             a(data-toggle='tab', href='#auto-reply') Support Auto Reply Mail Content 
           li
             a(data-toggle='tab', href='#reject-reply') Support Denied Mail Content
+          li
+            a(data-toggle='tab', href='#close-reply') Closed Ticket Mail Content
         .tab-content
           #auto-reply.tab-pane.fade.in.active
             {$auto-reply}                       
           #reject-reply.tab-pane.fade
             {$reject-reply}                       
+          #close-reply.tab-pane.fade
+            {$close-reply}                       
