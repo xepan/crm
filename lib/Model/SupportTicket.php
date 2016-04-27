@@ -50,6 +50,13 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this->getElement('status')->defaultValue('Pending');
 		$this->getElement('created_at')->defaultValue($this->app->now);
 
+		$this->add('misc/Field_Callback','callback_date')->set(function($m){
+			if(date('Y-m-d',strtotime($m['created_at']))==date('Y-m-d',strtotime($this->app->now))){
+				return date('h:i a',strtotime($m['created_at']));	
+			}
+			return date('M d',strtotime($m['created_at']));
+		});
+
 
 	}
 
@@ -115,7 +122,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['from_name'] = $communication['from_raw']['name'];
 		$this['to_id'] = $communication['to_id'];
 		$this['to_email'] = $communication['to_raw'];
-		$this['cc'] = $communication['cc_raw']['email'];
+		$this['cc'] = $communication['cc_raw'];
 		$this['subject'] = $communication['title'];
 		$this['message'] = $communication['description'];
 		$this['contact_id'] = $communication['from_id'];
