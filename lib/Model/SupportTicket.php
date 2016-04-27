@@ -37,7 +37,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->addField('to_email');
 
 		$st_j->addField('cc')->type('text');
-		// $st_j->addField('bcc')->type('text');
+		$st_j->addField('bcc')->type('text');
 
 		$st_j->addField('subject');
 		$st_j->addField('message')->type('text');
