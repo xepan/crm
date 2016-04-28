@@ -6,14 +6,14 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	public $status=[
 		'Pending',
 		'Assigned',
-		'Completed',
+		'Closed',
 		'Rejected'
 	];
 	// 'draft','submitted','solved','canceled','assigned','junk'
 	public $actions=[
-		'Pending'=>['view','edit','delete','reject','assign','complete'],
-		'Assigned'=>['view','edit','delete','complete','reject'],
-		'Completed'=>['view','edit','delete','reject','assign'],
+		'Pending'=>['view','edit','delete','reject','assign','closed'],
+		'Assigned'=>['view','edit','delete','closed','reject'],
+		'Closed'=>['view','edit','delete','reject','assign'],
 		'Rejected'=>['view','edit','delete']
 
 
@@ -83,7 +83,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 
-	function page_complete($p){
+	function page_closed($p){
 		if(!$this->loaded()){
 			return false;	
 		}
@@ -114,6 +114,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 
 		$form=$p->add('Form');
+		$form->addField('Checkbox','send_email');
 		$form->addField('line','to')->set($this['from_email']);
 		$form->addField('line','cc');
 		$form->addField('line','bcc');
@@ -123,39 +124,39 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send');
 		$form->addSubmit('close');
 		if($form->isSubmitted()){
-			$mail->setfrom($support_email['from_email'],$support_email['from_name']);
-			
-			$to_emails=explode(',', $form['to']);
-			foreach ($to_emails as $to_mail) {
-				$mail->addTo($to_mail);
-			}
-			// var_dump($mail->data);
-			// exit;
-			if($form['cc']){
-				$cc_emails=explode(',', $form['cc']);
-				foreach ($cc_emails as $cc_mail) {
-						$mail->addCc($cc_mail);
+			if($form['send_email']){
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+				$to_emails=explode(',', trim($form['to']));
+				foreach ($to_emails as $to_mail) {
+					$mail->addTo($to_mail);
 				}
-			}
-			if($form['bcc']){
-				$bcc_emails=explode(',', $form['bcc']);
-				foreach ($bcc_emails as $bcc_mail) {
-						$mail->addBcc($bcc_mail);
+				if($form['cc']){
+					$cc_emails=explode(',', trim($form['cc']));
+					foreach ($cc_emails as $cc_mail) {
+							$mail->addCc($cc_mail);
+					}
 				}
+				if($form['bcc']){
+					$bcc_emails=explode(',', trim($form['bcc']));
+					foreach ($bcc_emails as $bcc_mail) {
+							$mail->addBcc($bcc_mail);
+					}
+				}
+				// $mail->addTo($this['from_email']);
+				$mail->setSubject($form['subject']);
+				$mail->setBody($form['email_body']);
+				$mail->send($support_email);
 			}
-			// $mail->addTo($this['from_email']);
-			$mail->setSubject($form['subject']);
-			$mail->setBody($form['email_body']);
-			$mail->send($support_email);
 	
 			$this->createComment($mail);
 
-			$this['status']='Completed';
+			$this['status']='Closed';
+			$this->save();
 			$this->app->employee
-				->addActivity("Completed Supportticket", $this->id, $this['ticket_id'])
+				->addActivity("Closed Supportticket", $this->id, $this['ticket_id'])
 				->notifyWhoCan('reject,convert,open','Converted');
-			$this->saveAndUnload();
-			$form->js()->univ()->successMessage("Email Send SuccessFully")->execute();
+			
+			return $form->js()->univ()->successMessage("Email Send SuccessFully");
 		}
 	}
 
