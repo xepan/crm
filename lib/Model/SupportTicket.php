@@ -13,7 +13,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	public $actions=[
 		'Pending'=>['view','edit','delete','reject','assign','closed'],
 		'Assigned'=>['view','edit','delete','closed','reject'],
-		'Closed'=>['view','edit','delete','reject','assign'],
+		'Closed'=>['view','edit','delete'],
 		'Rejected'=>['view','edit','delete']
 
 
@@ -121,8 +121,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addField('line','subject')->set($subject->render());
 		$form->addField('xepan\base\RichText','email_body')->set($temp->render());
 
-		$form->addSubmit('Send');
-		$form->addSubmit('close');
+		$form->addSubmit('Send')->addClass('btn btn-primary');
+		// $form->addSubmit('close');
 		if($form->isSubmitted()){
 			if($form['send_email']){
 				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
@@ -155,8 +155,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$this->app->employee
 				->addActivity("Closed Supportticket", $this->id, $this['ticket_id'])
 				->notifyWhoCan('reject,convert,open','Converted');
-			
-			return $form->js()->univ()->successMessage("Email Send SuccessFully");
+			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
 		}
 	}
 
