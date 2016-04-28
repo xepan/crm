@@ -43,7 +43,9 @@
                         a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
                             span.user-subhead{$contact}
                     td
-                      | {$created_at}
+                        {$created_at}
+                        br
+                        span.user-subhead(style="overflow: hidden;position: absolute;text-overflow: ellipsis;white-space: nowrap;width: 200px;"){$subject}
                     td
                       | {$last_comment}
                     td
@@ -54,7 +56,7 @@
                         {$edit}
                         {$delete}
                     
-                    {/}
+                {/}
                 {/}{/}
                 {not_found}
                 div.row
