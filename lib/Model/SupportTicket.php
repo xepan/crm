@@ -114,6 +114,9 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 
 		$form=$p->add('Form');
+		$form->addField('line','to')->set($this['from_email']);
+		$form->addField('line','cc');
+		$form->addField('line','bcc');
 		$form->addField('line','subject')->set($subject->render());
 		$form->addField('xepan\base\RichText','email_body')->set($temp->render());
 
@@ -121,7 +124,26 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addSubmit('close');
 		if($form->isSubmitted()){
 			$mail->setfrom($support_email['from_email'],$support_email['from_name']);
-			$mail->addTo($this['from_email']);
+			
+			$to_emails=explode(',', $form['to']);
+			foreach ($to_emails as $to_mail) {
+				$mail->addTo($to_mail);
+			}
+			// var_dump($mail->data);
+			// exit;
+			if($form['cc']){
+				$cc_emails=explode(',', $form['cc']);
+				foreach ($cc_emails as $cc_mail) {
+						$mail->addCc($cc_mail);
+				}
+			}
+			if($form['bcc']){
+				$bcc_emails=explode(',', $form['bcc']);
+				foreach ($bcc_emails as $bcc_mail) {
+						$mail->addBcc($bcc_mail);
+				}
+			}
+			// $mail->addTo($this['from_email']);
 			$mail->setSubject($form['subject']);
 			$mail->setBody($form['email_body']);
 			$mail->send($support_email);
