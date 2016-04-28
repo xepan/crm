@@ -102,18 +102,20 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT');
 		$email_body=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
 		
-		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
+		$subject=$this->add('GiTemplate');
+		$subject->loadTemplateFromString($email_subject);
 		$subject->setHTML('ticket_id'," ".$this->id);
 
-		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
+		$temp=$this->add('GiTemplate');
+		$temp->loadTemplateFromString($email_body);
 		$temp->setHTML('contact_name',$this['contact']);
 		$temp->setHTML('sender_email_id',$this['from_email']);
 		$temp->setHTML('ticket_id',$this->id);
 
 
 		$form=$p->add('Form');
-		$form->addField('line','subject')->set($email_subject);
-		$form->addField('xepan\base\RichText','email_body')->set($email_body);
+		$form->addField('line','subject')->set($subject->render());
+		$form->addField('xepan\base\RichText','email_body')->set($temp->render());
 
 		$form->addSubmit('Send');
 		$form->addSubmit('close');
