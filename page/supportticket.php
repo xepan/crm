@@ -9,7 +9,6 @@ class page_supportticket extends \Page{
 		$st=$this->add('xepan\crm\Model_SupportTicket');
 		$st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
-		// $st->debug();
 
 		$crud=$this->add('xepan\hr\CRUD',null,null,['view/supportticket/grid']);
 		$crud->setModel($st);

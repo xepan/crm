@@ -14,7 +14,7 @@ class Initiator extends \Controller_Addon {
 
         if($this->app->is_admin){
 	        $m = $this->app->top_menu->addMenu('Crm');
-            $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending']));
+            $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
 	        $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_crm_config');
             $cont = $this->add('xepan\crm\Controller_FilterEmails');
 

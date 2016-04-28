@@ -32,7 +32,7 @@ class Controller_SideBarStatusFilter extends \AbstractController{
 		}
 
 		if($status=$this->api->stickyGET('status')){
-			$this->owner->addCondition('status',$status);
+			$this->owner->addCondition('status','in',explode(",",$status));
 			$this->owner->owner->title .= ' ['.$status .' :'. $counts_redefined[$status] .']';
 		}
 	}
