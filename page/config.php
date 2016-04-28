@@ -37,6 +37,23 @@ class page_config extends \Page{
 			$reject_config->setConfig('SUPPORT_EMAIL_DENIED_BODY',$form['body'],'crm');
 			$form->js(null,$form->js()->reload())->univ()->successMessage('Update Information')->execute();
 		}
+		/*Closed / Complete  Ticket Mail Content*/
+
+		$close_config = $this->app->epan->config;
+		$close_subject = $close_config->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT');
+		$close_body = $close_config->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
+		$form=$this->add('Form',null,'close-reply');
+		$form->addField('line','subject')->set($close_subject);
+		$form->addField('xepan\base\RichText','body')->set($close_body)->setFieldHint('{{sender_email_id}}');
+		$form->addSubmit('Update');
+
+		if($form->isSubmitted()){
+			$close_config->setConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT',$form['subject'],'crm');
+
+			$close_config->setConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY',$form['body'],'crm');
+			
+			$form->js(null,$form->js()->reload())->univ()->successMessage('Update Information')->execute();
+		}
 	}
 	
 	function defaultTemplate(){
