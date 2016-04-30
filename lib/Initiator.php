@@ -19,12 +19,15 @@ class Initiator extends \Controller_Addon {
 
             $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
 	    }
-	              
+	            
+        return $this;  
     }
 
     function setup_frontend(){
         $this->routePages('xepan_crm');
         $this->addLocation(array('template'=>'templates'));
+
+        return $this;
     }
 
     function resetDB(){
