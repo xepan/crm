@@ -12,7 +12,9 @@ class page_supportticket extends \Page{
 
 		$crud=$this->add('xepan\hr\CRUD',null,null,['view/supportticket/grid']);
 		$crud->setModel($st);
-		$crud->grid->controller->importField('created_at');
+		if(!$crud->isEditing())
+			$crud->grid->controller->importField('created_at');
+		
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['name']);
