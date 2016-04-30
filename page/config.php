@@ -44,7 +44,7 @@ class page_config extends \Page{
 		$close_body = $close_config->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
 		$form=$this->add('Form',null,'close-reply');
 		$form->addField('line','subject')->set($close_subject);
-		$form->addField('xepan\base\RichText','body')->set($close_body)->setFieldHint('{{sender_email_id}}');
+		$form->addField('xepan\base\RichText','body')->set($close_body)->setFieldHint('{$sender_email_id} {$ticket_id} {$title}');
 		$form->addSubmit('Update');
 
 		if($form->isSubmitted()){

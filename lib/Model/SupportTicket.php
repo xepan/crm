@@ -104,13 +104,15 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		
 		$subject=$this->add('GiTemplate');
 		$subject->loadTemplateFromString($email_subject);
-		$subject->setHTML('ticket_id'," ".$this->id);
+		$subject->trySetHTML('ticket_id'," ".$this->id);
+		$subject->trySetHTML('title', $communication['title']);
 
 		$temp=$this->add('GiTemplate');
 		$temp->loadTemplateFromString($email_body);
-		$temp->setHTML('contact_name',$this['contact']);
-		$temp->setHTML('sender_email_id',$this['from_email']);
-		$temp->setHTML('ticket_id',$this->id);
+		$temp->trySetHTML('contact_name',$this['contact']);
+		$temp->trySetHTML('sender_email_id',$this['from_email']);
+		$temp->trySetHTML('ticket_id',$this->id);
+		$temp->trySetHTML('title', $communication['title']);
 
 
 		$form=$p->add('Form');
@@ -124,27 +126,30 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 		// $form->addSubmit('close');
 		if($form->isSubmitted()){
+				
+			$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			$to_emails=explode(',', trim($form['to']));
+			foreach ($to_emails as $to_mail) {
+				$mail->addTo($to_mail);
+			}
+			if($form['cc']){
+				$cc_emails=explode(',', trim($form['cc']));
+				foreach ($cc_emails as $cc_mail) {
+						$mail->addCc($cc_mail);
+				}
+			}
+			if($form['bcc']){
+				$bcc_emails=explode(',', trim($form['bcc']));
+				foreach ($bcc_emails as $bcc_mail) {
+						$mail->addBcc($bcc_mail);
+				}
+			}
+
+			$mail->setSubject($form['subject']);
+			$mail->setBody($form['email_body']);
+			$mail['to_id']=$this['contact_id'];
+
 			if($form['send_email']){
-				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
-				$to_emails=explode(',', trim($form['to']));
-				foreach ($to_emails as $to_mail) {
-					$mail->addTo($to_mail);
-				}
-				if($form['cc']){
-					$cc_emails=explode(',', trim($form['cc']));
-					foreach ($cc_emails as $cc_mail) {
-							$mail->addCc($cc_mail);
-					}
-				}
-				if($form['bcc']){
-					$bcc_emails=explode(',', trim($form['bcc']));
-					foreach ($bcc_emails as $bcc_mail) {
-							$mail->addBcc($bcc_mail);
-					}
-				}
-				// $mail->addTo($this['from_email']);
-				$mail->setSubject($form['subject']);
-				$mail->setBody($form['email_body']);
 				$mail->send($support_email);
 			}
 	
@@ -163,6 +168,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$comment = $this->add('xepan\crm\Model_Ticket_Comments');
 		$comment['ticket_id'] = $this->id;
 		$comment['communication_email_id'] = $communication->id;
+		$comment['title'] = $communication['title'];
+		$comment['description'] = $communication['description'];
 		$comment->save();
 
 
@@ -239,12 +246,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		
 		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
 		$subject->setHTML('ticket_id',"[ ".$this->id." ]");
-		$subject->setHTML('title',"[ ".$communication['title']);
+		$subject->setHTML('title', $communication['title']);
 
 		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
 		$temp->setHTML('contact_name',$this['contact']);
 		$temp->setHTML('sender_email_id',$this['from_email']);
-		$temp->setHTML('ticket_id',$this['name']);
+		$temp->setHTML('ticket_id',$this->id);
 		// echo $temp->render();
 		// exit;		
 		$mail->setfrom($support_email['from_email'],$support_email['from_name']);

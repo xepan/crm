@@ -17,25 +17,39 @@ class page_ticketdetails extends \xepan\base\Page{
 		$m_comment=$this->add('xepan\crm\Model_Ticket_Comments');			
 		$m_comment->addCondition('ticket_id',$ticket_id);
 		
-		
-		$comment_join = $m_comment->join('communication.id','communication_email_id');
-		
-		$comment_join->addField('title');
-		$comment_join->addField('description');
-		$comment_join->addField('from_id');
-		// $comment_join->addField('created_at');
+		$ticket_j = $m_comment->join('support_ticket.document_id','ticket_id');
+		$ticket_j->addField('from_id');
+		$ticket_j->addField('to_id');
+
+		$comment_join = $m_comment->leftJoin('communication.id','communication_email_id');
 		$comment_join->addField('status');
 
-		$comment_lister=$this->add('xepan/hr/Grid',null,null,['view/grid/ticketdetail-comment-grid']);
-		$comment_lister->addColumn('message');
-		$comment_lister->setModel($m_comment);
 
-		$comment_lister->addMethod('format_message',function($g,$f){
-			$g->current_row_html[$f]= strip_tags($g->model['description']);
-			// $this->current_row['body'] = strip_tags($this->current_row['body']);
+		$m_comment->addExpression('title_expression')->set(function ($m,$q){
+			return $q->expr("IF([0] is null or [0]='',[1],[2])",[
+					$m->getElement('title'),
+					$m->refSQL('communication_email_id')->fieldQuery('title'),
+					$m->getElement('title')
+				]);
 		});
 
-		$comment_lister->addFormatter('message','message');
+		$m_comment->addExpression('message_expression')->set(function ($m,$q){
+			return $q->expr("IF([0] is null or [0]='',[1],[2])",[
+					$m->getElement('description'),
+					$m->refSQL('communication_email_id')->fieldQuery('description'),
+					$m->getElement('description')
+				]);
+		});
+
+
+		$comment_lister=$this->add('xepan/hr/Grid',null,null,['view/grid/ticketdetail-comment-grid']);
+		$comment_lister->setModel($m_comment)->setOrder('created_at','desc');
+
+		$comment_lister->addMethod('format_message_expression',function($g,$f){
+			$g->current_row_html[$f]= strip_tags($g->model['message_expression']);
+		});
+
+		$comment_lister->addFormatter('message_expression','message_expression');
 		
 
 		$comment_lister->removeColumn('description');
