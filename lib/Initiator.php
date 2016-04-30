@@ -6,8 +6,7 @@ class Initiator extends \Controller_Addon {
     
     public $addon_name = 'xepan_crm';
 
-    function init(){
-        parent::init();
+    function setup_admin(){
         
         $this->routePages('xepan_crm');
         $this->addLocation(array('template'=>'templates'));
@@ -21,6 +20,11 @@ class Initiator extends \Controller_Addon {
             $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
 	    }
 	              
+    }
+
+    function setup_frontend(){
+        $this->routePages('xepan_crm');
+        $this->addLocation(array('template'=>'templates'));
     }
 
     function resetDB(){
