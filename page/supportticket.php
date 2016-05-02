@@ -15,6 +15,18 @@ class page_supportticket extends \Page{
 		if(!$crud->isEditing())
 			$crud->grid->controller->importField('created_at');
 		
+		$g=$crud->grid;
+		$g->addMethod('format_ticket_attachment',function($g,$f){
+			if(!$g->model['ticket_attachment']){
+				$g->current_row[$f]='';
+			}else{
+				$g->current_row_html[$f]='<a href="#" class="attachment"><i class="fa fa-paperclip"></i></a>';
+			}
+		});	
+
+		$g->addFormatter('ticket_attachment','ticket_attachment');
+
+
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['name']);
