@@ -8,19 +8,19 @@
           <div class="picture hidden-xs"><img alt="" src="img/samples/angelina-300.jpg"/></div>
           <div style="width:88%" class="users">
             <div class="from clearfix">
-              <div class="name">{$from_name},  {from_email}| Angelina Jolie{/}</div>
+              <div class="name">{$from_name},  {from_email}|{/}</div>
               <div class="email hidden-xs"></div>
             </div>
             <div class="to">
               To:
               {to_lister}
-              {rows}{row} <span>{name} Me{/} ,&nbsp;{email} Brad Pitt{/}&nbsp;&nbsp;</span>{/}{/}
+              {rows}{row} <span>{name} {/} ,&nbsp;{email}{/}&nbsp;&nbsp;</span>{/}{/}
               {/}
             </div>
             <div class="to">
               Cc:
               {cc_lister}
-              {rows}{row} <small>{name}Me{/},&nbsp;{email} Brad Pitt{/}&nbsp;&nbsp;</small>{/}{/}
+              {rows}{row} <small>{name}{/},&nbsp;{email} {/}&nbsp;&nbsp;</small>{/}{/}
               {/}
             </div>
             <div class="to">Bcc: <small>{$bcc_name}</small></div>

@@ -11,20 +11,20 @@ div(id="{$_name}")
                 .users(style="width:88%")
                   .from.clearfix
                     .name
-                      {$from_name},  {from_email}| Angelina Jolie{/}
+                      {$from_name},  {from_email}|{/}
                     .email.hidden-xs
                   .to
                     | To:
                     {to_lister}
                     {rows}{row} 
-                    span {name} Me{/} ,&nbsp;{email} Brad Pitt{/}&nbsp;&nbsp;
+                    span {name} {/} ,&nbsp;{email}{/}&nbsp;&nbsp;
                     {/}{/}
                     {/}
                   .to
                     | Cc:
                     {cc_lister}
                     {rows}{row} 
-                    small{name}Me{/},&nbsp;{email} Brad Pitt{/}&nbsp;&nbsp;
+                    small{name}{/},&nbsp;{email} {/}&nbsp;&nbsp;
                     {/}{/}
                     {/}
                   .to
