@@ -19,7 +19,7 @@ class View_TicketDetail extends \View{
 			$cc_lister->setSource($cc_raw);
 		}
 
-		$this->template->setHTML('collapse_header',strip_tags($model['message']));
+		$this->template->setHTML('collapse_header',strip_tags(substr($model['message'], 0,100)));
 		$this->template->setHTML('email_body',$model['message']);
 
 		$attach=$this->add('CompleteLister',null,'Attachments',['view/emails/email-detail','Attachments']);
