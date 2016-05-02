@@ -18,8 +18,8 @@ class Initiator extends \Controller_Addon {
             $cont = $this->add('xepan\crm\Controller_FilterEmails');
 
             $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
-	    }
-	            
+        }
+                
         return $this;  
     }
 
@@ -27,6 +27,9 @@ class Initiator extends \Controller_Addon {
         $this->routePages('xepan_crm');
         $this->addLocation(array('template'=>'templates'));
 
+        $cont = $this->add('xepan\crm\Controller_FilterEmails');
+        $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
+        
         return $this;
     }
 
