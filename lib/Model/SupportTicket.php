@@ -61,6 +61,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			return $m->refSQL('Comments')->setLimit(1)->setOrder('created_at','desc')->fieldQuery('created_at');
 		})->sortable(true);
 
+		$this->addExpression('ticket_attachment')->set($this->refSQL('communication_email_id')->fieldQuery('attachment_count'));
+
 
 	}
 

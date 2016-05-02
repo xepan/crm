@@ -100,7 +100,7 @@ class page_ticketdetails extends \xepan\base\Page{
 			// echo "<pre>";
 			// var_dump($mail->data);
 
-			$mail->setSubject($ticket['subject']);
+			$mail->setSubject("Re: Ticket # [ ".$ticket->id." ] -".$ticket['subject']);
 			$mail->setBody($form['body']);
 			$mail->send($support);
 			$mail->save();

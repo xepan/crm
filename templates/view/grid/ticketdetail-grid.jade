@@ -54,6 +54,29 @@ div(id="{$_name}")
                             |  get picked and become television
                             | programs. Some don't, become nothing. She starred in one of the ones that became nothing.
                           {/}
+                          #email-detail-attachments
+                            #email-attachments-header.clearfix
+                              .headline
+                                {check_attach}
+                                i.fa.fa-paperclip &nbsp;
+                                span Attachments : 
+                                b {ticket_attachment}( 3 ){/}
+                                {/}
+                              .tools
+                                //- a.all-Attachment-media(data-id="{$id}") Download all
+                            #email-attachments-content
+                              {Attachments}
+                              ul.clearfix
+                                {rows}{row}
+                                li
+                                  .img
+                                    a(href='#')
+                                      img(alt='', src='{file}img/samples/hdr/small/img_5.jpg{/}')
+                                  span.name
+                                    //- {file}| nature.jpg{/}
+                                  a(href='{$file}' download) Download
+                                  {/}
+                              {/}{/}
               
           //- .nano-pane
           //-   .nano-slider(style='height: 502px; transform: translate(0px, 60px);')
