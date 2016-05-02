@@ -44,6 +44,20 @@
                     if they're going to make more shows. <a href="#">Some pilots</a> get picked and become television
                     programs. Some don't, become nothing. She starred in one of the ones that became nothing.
                   </p>{/}
+                  <div id="email-detail-attachments">
+                    <div id="email-attachments-header" class="clearfix">
+                      <div class="headline">{check_attach}<i class="fa fa-paperclip">&nbsp;</i><span>Attachments : </span><b>{ticket_attachment}( 3 ){/}</b>{/}</div>
+                      <div class="tools">
+                      </div>
+                    </div>
+                    <div id="email-attachments-content">{Attachments}
+                      <ul class="clearfix">{rows}{row}
+                        <li>
+                          <div class="img"><a href="#"><img alt="" src="{file}img/samples/hdr/small/img_5.jpg{/}"/></a></div><span class="name"></span><a href="{$file}" download="download">Download</a>{/}
+                        </li>
+                      </ul>{/}{/}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

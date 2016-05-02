@@ -21,6 +21,9 @@ class View_TicketDetail extends \View{
 
 		$this->template->setHTML('collapse_header',strip_tags($model['message']));
 		$this->template->setHTML('email_body',$model['message']);
+
+		$attach=$this->add('CompleteLister',null,'Attachments',['view/emails/email-detail','Attachments']);
+		$attach->setModel('xepan\communication\Communication_Attachment')->addCondition('communication_email_id',$model['communication_email_id']);
 		
 		return $m;
 
