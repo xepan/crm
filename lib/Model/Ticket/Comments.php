@@ -14,6 +14,7 @@ class Model_Ticket_Comments extends \xepan\base\Model_Table{
 
 		$this->addField('title');
 		$this->addField('description')->type('text');
+		$this->addField('type');
 
 		$this->addField('created_at')->type('datetime')->defaultValue($this->app->now);
 	}
