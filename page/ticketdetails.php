@@ -67,14 +67,14 @@ class page_ticketdetails extends \xepan\base\Page{
 			$to_emails[]  = $email_name['email'];
 		}
 
-		$email_to->set(implode(",",$to_emails));
+		$email_to->set(implode(", ",$to_emails));
 
 		$email_cc=$form->addField('line','cc_email');
 		$cc_emails=[];
 		foreach (json_decode($ticket_model['cc'],true) as $email_name) {
 			$cc_emails[]  = $email_name['email'];
 		}	
-		$email_cc->set(implode(",",$cc_emails));
+		$email_cc->set(implode(", ",$cc_emails));
 
 		$email_bcc=$form->addField('line','bcc_email');
 		if($ticket_model['bcc']){
@@ -82,7 +82,7 @@ class page_ticketdetails extends \xepan\base\Page{
 			foreach (json_decode($ticket_model['bcc'],true) as $email_name) {
 				$bcc_emails[]  = $email_name['email'];
 			}	
-			$email_bcc->set(implode(",",$bcc_emails));
+			$email_bcc->set(implode(", ",$bcc_emails));
 		}
 
 	
@@ -116,29 +116,29 @@ class page_ticketdetails extends \xepan\base\Page{
 			// 	}
 			// }
 			foreach (explode(",",$form['email_to']) as  $to_mail) {
-				if($to_mail != $support['from_email']){
-					var_dump($to_mail);
-					$mail->addTo($to_mail);
+				if(trim($to_mail) != $support['from_email']){
+					// var_dump($to_mail);
+					$mail->addTo(trim($to_mail));
 				}
 			}
-			if($form['cc']){
-				foreach (explode(",",$form['cc']) as  $cc_mail) {
-					if($cc_mail != $support['from_email']){
-						$mail->addCc($cc_mail);
+			if($form['cc_email']){
+				foreach (explode(",",$form['cc_email']) as  $cc_mail) {
+					if(trim($cc_mail) != $support['from_email']){
+						$mail->addCc(trim($cc_mail));
 					}
 				}	
 			}
-			if($form['bcc']){
-				foreach (explode(",",$form['bcc']) as  $bcc_mail) {
-					if($bcc_mail != $support['from_email']){
-						$mail->addBcc($bcc_mail);
+			if($form['bcc_email']){
+				foreach (explode(",",$form['bcc_email']) as  $bcc_mail) {
+					if(trim($bcc_mail) != $support['from_email']){
+						$mail->addBcc(trim($bcc_mail));
 					}
 				}	
 			}	
 
 			$mail->setSubject("Re: Ticket # [ " .$ticket->id ." ] - ".$ticket['subject']);
 			$mail->setBody($form['body']);
-			$mail->send($support);
+			// $mail->send($support);
 			$mail->save();
 
 			$comment['communication_email_id']=$mail->id;
