@@ -25,6 +25,7 @@ class page_ticketdetails extends \xepan\base\Page{
 
 		$comment_join = $m_comment->leftJoin('communication.id','communication_id');
 		$comment_join->addField('status');
+		$comment_join->addField('communication_type');
 
 
 		$m_comment->addExpression('title_expression')->set(function ($m,$q){
