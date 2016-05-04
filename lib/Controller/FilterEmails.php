@@ -33,18 +33,18 @@ class Controller_FilterEmails extends \AbstractController {
 			// if yes
 			if($ticket->loaded()){
 				// create a new comment to that support .. add $email->id as its communication_id
-				$ticket->createComment($email);
+				$ticket->createCommentOnly($email);
 			// if no
 			}else{
 				// create a new ticket with communication_id = this email id
 				$ticket->createTicket($email);
 				if(!$email['from_id']){
 					// this is junk, reply with : you are not supported
-					$ticket->replyRejection($email);
+					$ticket->replyRejection();
 					$ticket['status']="Rejected";
 					$ticket->save();
 				}else{
-					$ticket->autoReply($email);
+					$ticket->autoReply();
 				}
 			}
 		}
