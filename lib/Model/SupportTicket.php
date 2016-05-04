@@ -202,6 +202,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$comment['communication_id'] = $related_mail->id;
 		$comment['title'] = $related_mail['title'];
 		$comment['description'] = $related_mail['description'];
+		$comment['type'] = $related_mail['communication_type'];
 		$comment->save();
 
 		return $comment;
