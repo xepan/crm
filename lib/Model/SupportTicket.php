@@ -216,7 +216,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function supportEmail($to_email=null){
-		$support_email = $this->add('xepan\base\Model_Epan_EmailSetting');
+		$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting');
 		$support_email->addCondition(
 					$support_email->dsql()->orExpr()
 						->where('imap_email_username',$to_email)

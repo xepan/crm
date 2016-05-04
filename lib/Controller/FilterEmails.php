@@ -12,7 +12,7 @@ class Controller_FilterEmails extends \AbstractController {
 		// 		to reply rejection
 		// 		or to create a new comment for existing ticket
 		
-		$email_setting=$this->add('xepan\base\Model_Epan_EmailSetting');
+		$email_setting=$this->add('xepan\communication\Model_Communication_EmailSetting');
 		$email_setting->addCondition('is_support_email',true);
 
 
