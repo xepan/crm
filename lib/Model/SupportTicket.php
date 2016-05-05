@@ -245,7 +245,9 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function getReplyEmailFromTo(){
-		$ticket_comm = $this->ref('communication_id');
+		$ticket_comm = $this->add('xepan\communication\Model_Communication_Abstract_Email');
+		$ticket_comm->addCondition('id',$this['communication_id']);
+		$ticket_comm->tryLoadAny();
 		return $ticket_comm->getReplyEmailFromTo();
 	}
 

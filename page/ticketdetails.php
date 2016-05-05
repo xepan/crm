@@ -84,6 +84,7 @@ class page_ticketdetails extends \xepan\base\Page{
 		$form->getElement('email_to')->set(implode(", ", $emails_to));
 		$form->getElement('cc_mails')->set(implode(", ", $emails_cc));
 		$form->getElement('bcc_mails')->set(implode(", ", $emails_bcc));
+		$form->getElement('title')->set("Re: Ticket ".$ticket_model->getToken());
 		
 		$form->getElement('called_to')->set(array_pop($member_phones));
 
