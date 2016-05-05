@@ -19,6 +19,7 @@ class Controller_FilterEmails extends \AbstractController {
 		$emails=$this->add('xepan\communication\Model_Communication_Email_Received');
 		$or = $emails->dsql()->orExpr();
 		
+		$or->where('to_raw','like','%---dummy-hash----%');
 		foreach ($email_setting as $es) {
 			$or->where('to_raw','like','%'.$es['email_username'].'%');
 		}
