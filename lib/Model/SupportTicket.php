@@ -93,7 +93,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function getToken(){
-		return "# [".$this->id."]";
+		return "# [ ".$this->id." ]";
 	}
 
 	function assign(){
@@ -136,14 +136,14 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		
 		$subject=$this->add('GiTemplate');
 		$subject->loadTemplateFromString($email_subject);
-		$subject->trySetHTML('ticket_id'," ".$this->id);
+		$subject->trySetHTML('token',$this->getToken());
 		$subject->trySetHTML('title', $communication['title']);
 
 		$temp=$this->add('GiTemplate');
 		$temp->loadTemplateFromString($email_body);
 		$temp->trySetHTML('contact_name',$this['contact']);
 		$temp->trySetHTML('sender_email_id',$this['from_email']);
-		$temp->trySetHTML('ticket_id',$this->id);
+		$temp->trySetHTML('token',$this->getToken());
 		$temp->trySetHTML('title', $communication['title']);
 
 
@@ -181,11 +181,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$mail->setBody($form['email_body']);
 			$mail['to_id']=$this['contact_id'];
 
+			$this->createCommentOnly($mail);
 			if($form['send_email']){
 				$mail->send($support_email);
 			}
 	
-			$this->createComment($mail);
 
 			$this['status']='Closed';
 			$this->save();
@@ -219,7 +219,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 		if($type=='Email' && !$send_setting) $send_setting = $this->supportEmail();
 
-		$comm = $this->add('xepan\communication\Communication_'.$type);
+		$comm = $this->add('xepan\communication\Model_Communication_'.$type);
 		$comm->setSubject($subject);
 		$comm->setBody($message);
 		
@@ -303,11 +303,13 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['communication_id'] = $communication->id;
 		$this['uid'] = $communication['uid'];
 		$this['from_id'] = $communication['from_id'];
+		$this['from_raw'] = $communication['from_raw'];
 		$this['from_email'] = $communication['from_raw']['email'];
 		$this['from_name'] = $communication['from_raw']['name'];
 		$this['to_id'] = $communication['to_id'];
-		$this['to_email'] = $communication['to_raw'];
-		$this['cc'] = $communication['cc_raw'];
+		$this['to_raw'] = $communication['to_raw'];
+		$this['cc_raw'] = $communication['cc_raw'];
+		$this['bcc_raw'] = $communication['bcc_raw'];
 		$this['subject'] = $communication['title'];
 		$this['message'] = $communication['description'];
 		$this['contact_id'] = $communication['from_id'];
@@ -335,6 +337,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	function autoReply(){
 
+		$communication = $this->ref('communication_id');
 		if(!$this->loaded()){
 			return false;	
 		}
@@ -366,11 +369,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 				$send_setting=null,
 				$send_also=true
 				);
-		
-
 	}
 	
 	function replyRejection(){
+		$communication = $this->ref('communication_id');
 		if(!$this->loaded()){
 			return false;	
 		}
@@ -380,16 +382,9 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_DENIED_SUBJECT');
 		$email_body=$config_model->getConfig('SUPPORT_EMAIL_DENIED_BODY');
 
-		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$temp->setHTML('sender_email_id',$this['from_email']);
-
 		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
-		$subject->setHTML('token',$this->getToken());
-		$subject->setHTML('title', $communication['title']);
-
 		$message=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$message->setHTML('token',$this->getToken());
-		$subject->setHTML('title', $communication['title']);
+		$message->setHTML('sender_email_id',$this['from_email']);
 
 		$reverted_to_from = $this->getReplyEmailFromTo();
 
