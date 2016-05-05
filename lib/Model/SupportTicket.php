@@ -246,38 +246,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	function getReplyEmailFromTo(){
 		$ticket_comm = $this->ref('communication_id');
-		$support_email = explode('#',$ticket_comm['mailbox']);
-		$support_email = $support_email[0];		
-
-		$return =[
-			'to'=>[['email'=>$this['from_raw']['email']]],
-			'cc'=>[],
-			'bcc'=>[],
-			'from'=>[$support_email]
-		];
-		foreach ($this['to_raw'] as  $to_mail) {
-			if(trim($to_mail['email']) != $support_email){
-				$return['to'][] = ['email'=>trim($to_mail['email'])];
-			}
-		}
-
-		if($this['cc_raw']){
-			foreach ($this['cc_raw'] as  $cc_mail) {
-				if(trim($cc_mail['email']) != $support_email){
-					$return['cc'][]  = ['email'=>trim($cc_mail['email'])];
-				}
-			}	
-		}
-
-		if($this['bcc_raw']){
-			foreach ($this['bcc_raw'] as  $bcc_mail) {
-				if(trim($bcc_mail['email']) != $support_email){
-					$return['bcc'][] = ['email'=>trim($bcc_mail['email'])];
-				}
-			}
-		}
-
-		return $return;
+		return $ticket_comm->getReplyEmailFromTo();
 	}
 
 	function fetchTicketNumberFromSubject($subject){
