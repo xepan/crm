@@ -91,6 +91,8 @@ class page_ticketdetails extends \xepan\base\Page{
 		$from_email->getModel()->addcondition('is_support_email',true);
 		$from_email->set($ticket_model->supportEmail()->id);
 
+		$form->addSubmit('Save')->addClass('pull-right btn btn-primary');
+
 		if($form->isSubmitted()){
 			$comm = $form->process();
 			$ticket_model->createCommentOnly($comm);
