@@ -84,14 +84,17 @@ class page_ticketdetails extends \xepan\base\Page{
 		$form->getElement('email_to')->set(implode(", ", $emails_to));
 		$form->getElement('cc_mails')->set(implode(", ", $emails_cc));
 		$form->getElement('bcc_mails')->set(implode(", ", $emails_bcc));
-		$form->getElement('title')->set("Re: Ticket ".$ticket_model->getToken());
-		
 		$form->getElement('called_to')->set(array_pop($member_phones));
+		$form->getElement('title')->set("Re: Ticket ".$ticket_model->getToken()." ".$ticket_model['subject']);
+		
+		$from_email = $form->getElement('from_email');
+		$from_email->getModel()->addcondition('is_support_email',true);
+		$from_email->set($ticket_model->supportEmail()->id);
 
 		if($form->isSubmitted()){
 			$comm = $form->process();
 			$ticket_model->createCommentOnly($comm);
-			$form->js(null,$form->js()->reload())->univ()->successMessage('Done')->execute();
+			$form->js(true,$form->js()->reload())->univ()->successMessage('Done')->execute();
 		}
 	}
 }
