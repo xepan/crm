@@ -90,6 +90,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$m['subject'] = $m['subject']?:("(no subject)");
 		});
 
+		$this->addHook('beforeDelete',[$this,'deleteComments']);
+
+	}
+
+	function deleteComments(){
+		$this->ref('Comments')->deleteAll();		
 	}
 
 	function getToken(){
