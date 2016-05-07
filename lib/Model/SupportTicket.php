@@ -95,7 +95,9 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function deleteComments(){
-		$this->ref('Comments')->deleteAll();		
+		$this->ref('Comments')->each(function($o){
+			$o->delete();
+		});		
 	}
 
 	function getToken(){
