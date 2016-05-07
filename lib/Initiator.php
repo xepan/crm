@@ -21,7 +21,7 @@ class Initiator extends \Controller_Addon {
 
             $pending=$this->add('xepan\crm\Model_SupportTicket')->addCondition('status',['Pending','Assigned'])->count()->getOne();
 
-            $this->app->js(true)->append("<span style='width:42px;top:7px;right:0px;border-radius:0px' class='count'>". $pending ."</span>")->_selector('a:contains(Crm)');
+            $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $pending ."</span>")->_selector('a:contains(Crm)');
         }
                 
         return $this;  
