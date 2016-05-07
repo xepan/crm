@@ -19,9 +19,9 @@ class Controller_FilterEmails extends \AbstractController {
 		$emails=$this->add('xepan\communication\Model_Communication_Email_Received');
 		$or = $emails->dsql()->orExpr();
 		
-		$or->where('to_raw','like','%---dummy-hash----%');
+		$or->where('mailbox','like','---dummy-hash----%');
 		foreach ($email_setting as $es) {
-			$or->where('to_raw','like','%'.$es['email_username'].'%');
+			$or->where('mailbox','like','%'.$es['email_username'].'#%');
 		}
 		
 		$emails->addCondition('id','>=',$data['fetched_emails_from']);
