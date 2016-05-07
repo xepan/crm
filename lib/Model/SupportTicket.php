@@ -297,11 +297,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$mail_box = $mail_box[0];
 
 		$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting');
-		$support_email->addCondition(
-					$support_email->dsql()->orExpr()
-						->where('imap_email_username',$mail_box)
-						->where('is_support_email',true)
-				);			
+		$support_email->addCondition('imap_email_username',$mail_box);
+		$support_email->addCondition('is_support_email',true);
 
 		return $support_email->tryLoadAny();
 	}
