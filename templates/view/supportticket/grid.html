@@ -8,14 +8,11 @@
   </header>{/Pannel}
   <div class="main-box-body clearfix table">
     <table style="width:100%" class="table user-list table-hover">{header}
-      <thead>{cols}{col}
-        <th id="{$name_sortid}"><span>Ticket Name {$name_sort}</span>
-        </th>
-        <th id="{$created_at_sortid}"><span>Created On {$created_at_sort}</span>
-        </th>
-        <th id="{$last_comment_sortid}"><span>Last Comment On {$last_comment_sort}</span>
-        </th>
-        <th><a href="#"><span>Email</span></a></th>
+      <thead class="xepan-hover-hand">{cols}{col}
+        <th id="{$name_sortid}"><span>Ticket Name {$name_sort}</span></th>
+        <th id="{$created_at_sortid}"><span>Created On {$created_at_sort}</span></th>
+        <th id="{$last_comment_sortid}"><span>Last Comment On {$last_comment_sort}</span></th>
+        <th><span>Email</span></th>
         <th> </th>{/}{/}
       </thead>{/}
       {$subheader}
