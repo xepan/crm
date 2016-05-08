@@ -25,19 +25,23 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j=$this->join('support_ticket.document_id');
 
 		$st_j->hasOne('xepan\base\Contact','contact_id');
-		$st_j->hasOne('xepan\communication\Communication','communication_email_id');
+		$st_j->hasOne('xepan\communication\Communication','communication_id');
 		
 		$st_j->addField('name')->defaultValue(rand(999,999999))->sortable(true);
 		$st_j->addField('uid');
-		$st_j->addField('from_id');
+		
+
 		$st_j->addField('from_email');
 		$st_j->addField('from_name');
 
-		$st_j->addField('to_id');
-		$st_j->addField('to_email');
+		$st_j->addField('from_raw');
+		$st_j->addField('from_id');
 
-		$st_j->addField('cc')->type('text');
-		$st_j->addField('bcc')->type('text');
+		$st_j->addField('to_id');
+		$st_j->addField('to_raw');
+
+		$st_j->addField('cc_raw');//->type('text');
+		$st_j->addField('bcc_raw');//->type('text');
 
 		$st_j->addField('subject');
 		$st_j->addField('message')->type('text');
@@ -61,9 +65,43 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			return $m->refSQL('Comments')->setLimit(1)->setOrder('created_at','desc')->fieldQuery('created_at');
 		})->sortable(true);
 
-		$this->addExpression('ticket_attachment')->set($this->refSQL('communication_email_id')->fieldQuery('attachment_count'));
+		$this->addExpression('ticket_attachment')->set($this->refSQL('communication_id')->fieldQuery('attachment_count'));
 
+		$this->addHook('afterLoad',function($m){
+			$this['from_raw'] = json_decode($m['from_raw'],true);
 
+			$this['to_raw'] = json_decode($m['to_raw'],true);
+			// var_dump($this['to_raw']);
+			// exit;
+			$this['cc_raw'] = json_decode($m['cc_raw'],true);
+			$this['bcc_raw'] = json_decode($m['bcc_raw'],true);
+			$this['subject'] = $m['subject']?:'(no subject)';
+		});
+		
+		$this->addHook('beforeSave',function($m){
+			if(is_array($m['to_raw']))
+				$m['to_raw'] = json_encode($m['to_raw']);
+			if(is_array($m['from_raw']))
+				$m['from_raw'] = json_encode($m['from_raw']);
+			if(is_array($m['cc_raw']))
+				$m['cc_raw'] = json_encode($m['cc_raw']);
+			if(is_array($m['bcc_raw']))
+				$m['bcc_raw'] = json_encode($m['bcc_raw']);
+			$m['subject'] = $m['subject']?:("(no subject)");
+		});
+
+		$this->addHook('beforeDelete',[$this,'deleteComments']);
+
+	}
+
+	function deleteComments(){
+		$this->ref('Comments')->each(function($o){
+			$o->delete();
+		});		
+	}
+
+	function getToken(){
+		return "# [ ".$this->id." ]";
 	}
 
 	function assign(){
@@ -89,7 +127,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		if(!$this->loaded()){
 			return false;	
 		}
-		$communication=$this->ref('communication_email_id');
+		$communication=$this->ref('communication_id');
 		$mailbox=explode('#', $communication['mailbox']);
 		$support_email = $this->supportEmail($mailbox[0]);
 
@@ -106,14 +144,14 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		
 		$subject=$this->add('GiTemplate');
 		$subject->loadTemplateFromString($email_subject);
-		$subject->trySetHTML('ticket_id'," ".$this->id);
+		$subject->trySetHTML('token',$this->getToken());
 		$subject->trySetHTML('title', $communication['title']);
 
 		$temp=$this->add('GiTemplate');
 		$temp->loadTemplateFromString($email_body);
 		$temp->trySetHTML('contact_name',$this['contact']);
 		$temp->trySetHTML('sender_email_id',$this['from_email']);
-		$temp->trySetHTML('ticket_id',$this->id);
+		$temp->trySetHTML('token',$this->getToken());
 		$temp->trySetHTML('title', $communication['title']);
 
 
@@ -151,11 +189,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$mail->setBody($form['email_body']);
 			$mail['to_id']=$this['contact_id'];
 
+			$this->createCommentOnly($mail);
 			if($form['send_email']){
 				$mail->send($support_email);
 			}
 	
-			$this->createComment($mail);
 
 			$this['status']='Closed';
 			$this->save();
@@ -166,15 +204,59 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		}
 	}
 
-	function createComment($communication){
+	function createCommentOnly($related_mail){
 		$comment = $this->add('xepan\crm\Model_Ticket_Comments');
 		$comment['ticket_id'] = $this->id;
-		$comment['communication_email_id'] = $communication->id;
-		$comment['title'] = $communication['title'];
-		$comment['description'] = $communication['description'];
+		$comment['communication_id'] = $related_mail->id;
+		$comment['title'] = $related_mail['title'];
+		$comment['description'] = $related_mail['description'];
+		$comment['type'] = $related_mail['communication_type'];
 		$comment->save();
 
+		return $comment;
+	}
 
+
+	function createComment($subject,$message,$type,$to,$cc=[],$bcc=[],$send_setting=null,$send_also=true){
+		if(!in_array($type,['Phone','Email','Comment','SMS']))
+			throw $this->exception('Comment type is wrong')
+						->addMoreInfo('Porvided Type',$type)
+						->addMoreInfo('Accepted Type','Phone,Email.Comment,SMS');
+
+		$ticket_comm = $this->ref('communication_id');
+
+		if($type=='Email' && !$send_setting) $send_setting = $this->supportEmail();
+
+		$comm = $this->add('xepan\communication\Model_Communication_'.$type);
+		$comm->setSubject($subject);
+		$comm->setBody($message);
+		
+		$comm->setfrom($send_setting['from_email'],$send_setting['from_name']);
+		foreach ($to as $_to) {
+			$comm->addTo($_to['email'],$_to['name']);
+		}
+
+		foreach ($cc as $_cc) {
+			$comm->addCc($_cc['email'],$_cc['name']);
+		}
+
+		foreach ($bcc as $_bcc) {
+			$comm->addBcc($_bcc['email'],$_bcc['name']);
+		}
+
+		$comm->save();
+
+		if($send_also)
+			$comm->send($send_setting);
+
+		return $this->createCommentOnly($comm);
+	}
+
+	function getReplyEmailFromTo(){
+		$ticket_comm = $this->add('xepan\communication\Model_Communication_Abstract_Email');
+		$ticket_comm->addCondition('id',$this['communication_id']);
+		$ticket_comm->tryLoadAny();
+		return $ticket_comm->getReplyEmailFromTo();
 	}
 
 	function fetchTicketNumberFromSubject($subject){
@@ -197,14 +279,16 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function createTicket($communication){
-		$this['communication_email_id'] = $communication->id;
+		$this['communication_id'] = $communication->id;
 		$this['uid'] = $communication['uid'];
 		$this['from_id'] = $communication['from_id'];
+		$this['from_raw'] = $communication['from_raw'];
 		$this['from_email'] = $communication['from_raw']['email'];
 		$this['from_name'] = $communication['from_raw']['name'];
 		$this['to_id'] = $communication['to_id'];
-		$this['to_email'] = $communication['to_raw'];
-		$this['cc'] = $communication['cc_raw'];
+		$this['to_raw'] = $communication['to_raw'];
+		$this['cc_raw'] = $communication['cc_raw'];
+		$this['bcc_raw'] = $communication['bcc_raw'];
 		$this['subject'] = $communication['title'];
 		$this['message'] = $communication['description'];
 		$this['contact_id'] = $communication['from_id'];
@@ -215,87 +299,82 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		// }
 	}
 
-	function supportEmail($to_email=null){
-		$support_email = $this->add('xepan\base\Model_Epan_EmailSetting');
-		$support_email->addCondition(
-					$support_email->dsql()->orExpr()
-						->where('imap_email_username',$to_email)
-						->where('is_support_email',true)
-				);			
+	function supportEmail(){
+		$original_comm = $this->ref('communication_id');
+		$mail_box = explode('#',$original_comm['mailbox']);
+		$mail_box = $mail_box[0];
+
+		$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting');
+		$support_email->addCondition('imap_email_username',$mail_box);
+		$support_email->addCondition('is_support_email',true);
 
 		return $support_email->tryLoadAny();
 	}
 
-	function autoReply($communication){
+	function autoReply(){
+
+		$communication = $this->ref('communication_id');
 		if(!$this->loaded()){
 			return false;	
 		}
-		$mailbox=explode('#', $communication['mailbox']);
-		$support_email = $this->supportEmail($mailbox[0]);
-
-		if(!$this['from_email']){
-			return false;
-		}
-
-		$mail = $this->add('xepan\communication\Model_Communication_Email');
-
+		
 		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
 		$config_model->addCondition('application','crm');
-		// $email_subject=$communication['title'] ." ".$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT')." [ ".$this->id. " ]  " .;
 
 		$email_subject=$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
 		$email_body=$config_model->getConfig('TICKET_GENERATED_EMAIL_BODY');
 		
 		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
-		$subject->setHTML('ticket_id',"[ ".$this->id." ]");
+		$subject->setHTML('token',$this->getToken());
 		$subject->setHTML('title', $communication['title']);
 
-		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$temp->setHTML('contact_name',$this['contact']);
-		$temp->setHTML('sender_email_id',$this['from_email']);
-		$temp->setHTML('ticket_id',$this->id);
-		// echo $temp->render();
-		// exit;		
-		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
-		$mail->addTo($this['from_email']);
-		$mail->setSubject($subject->render());
-		$mail->setBody($temp->render());
-		$mail->send($support_email);
+		$message=$this->add('GiTemplate')->loadTemplateFromString($email_body);
+		$message->setHTML('contact_name',$this['contact']);
+		$message->setHTML('sender_email_id',$this['from_email']);
+		$message->setHTML('token',$this->getToken());
 
-		$this->createComment($mail);
+		$reverted_to_from = $this->getReplyEmailFromTo();
 
+		$this->createComment(
+				$subject->render(),
+				$message->render(),
+				'Email',
+				$reverted_to_from['to'],
+				$reverted_to_from['cc'],
+				$reverted_to_from['bcc'],
+				$send_setting=null,
+				$send_also=true
+				);
 	}
 	
-	function replyRejection($communication){
-		// throw new \Exception("Your Email Id Not Registerd on Support", 1);
+	function replyRejection(){
+		$communication = $this->ref('communication_id');
 		if(!$this->loaded()){
 			return false;	
 		}
-		$mailbox=explode('#', $communication['mailbox']);
-		$support_email = $this->supportEmail($mailbox[0]);
-
-		// $from_email="vijay.mali552@gmail.com";
-		if(!$this['from_email']){
-			return false;
-		}
-		
-		$mail = $this->add('xepan\communication\Model_Communication_Email');
 
 		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
 		$config_model->addCondition('application','crm');
 		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_DENIED_SUBJECT');
 		$email_body=$config_model->getConfig('SUPPORT_EMAIL_DENIED_BODY');
 
-		$temp=$this->add('GiTemplate')->loadTemplateFromString($email_body);
-		$temp->setHTML('sender_email_id',$this['from_email']);
-		// echo $temp->render();
-		// exit;		
-		$mail->setfrom($support_email['from_email'],$support_email['from_name']);
-		$mail->addTo($this['from_email']);
-		$mail->setSubject($email_subject);
-		$mail->setBody($temp->render());
-		$mail->send($support_email);
-		$this->createComment($mail);
+		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
+		$message=$this->add('GiTemplate')->loadTemplateFromString($email_body);
+		$message->setHTML('sender_email_id',$this['from_email']);
+
+		$reverted_to_from = $this->getReplyEmailFromTo();
+
+		$this->createComment(
+				$subject->render(),
+				$message->render(),
+				'Email',
+				$reverted_to_from['to'],
+				$reverted_to_from['cc'],
+				$reverted_to_from['bcc'],
+				$send_setting=null,
+				$send_also=true
+				);
+
 
 	}
 }

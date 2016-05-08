@@ -12,15 +12,16 @@ class Controller_FilterEmails extends \AbstractController {
 		// 		to reply rejection
 		// 		or to create a new comment for existing ticket
 		
-		$email_setting=$this->add('xepan\base\Model_Epan_EmailSetting');
+		$email_setting=$this->add('xepan\communication\Model_Communication_EmailSetting');
 		$email_setting->addCondition('is_support_email',true);
 
 
 		$emails=$this->add('xepan\communication\Model_Communication_Email_Received');
 		$or = $emails->dsql()->orExpr();
 		
+		$or->where('mailbox','like','---dummy-hash----%');
 		foreach ($email_setting as $es) {
-			$or->where('to_raw','like','%'.$es['email_username'].'%');
+			$or->where('mailbox','like','%'.$es['email_username'].'#%');
 		}
 		
 		$emails->addCondition('id','>=',$data['fetched_emails_from']);
@@ -33,18 +34,18 @@ class Controller_FilterEmails extends \AbstractController {
 			// if yes
 			if($ticket->loaded()){
 				// create a new comment to that support .. add $email->id as its communication_id
-				$ticket->createComment($email);
+				$ticket->createCommentOnly($email);
 			// if no
 			}else{
 				// create a new ticket with communication_id = this email id
 				$ticket->createTicket($email);
 				if(!$email['from_id']){
 					// this is junk, reply with : you are not supported
-					$ticket->replyRejection($email);
+					$ticket->replyRejection();
 					$ticket['status']="Rejected";
 					$ticket->save();
 				}else{
-					$ticket->autoReply($email);
+					$ticket->autoReply();
 				}
 			}
 		}
