@@ -108,8 +108,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['status']='Assigned';
 
 		$this->app->employee
-			->addActivity("Converted Supportticket", $this->id, $this['ticket_id'])
-			->notifyWhoCan('assign,convert,open','Converted');
+			->addActivity("Supportticket '".$this['name']."' has assigned to '".$this['to_id']."'", $this->id, $this['ticket_id'])
+			->notifyWhoCan('closed','reject','Assigned');
 
 		$this->saveAndUnload();
 	}
@@ -117,8 +117,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function reject(){
 		$this['status']='Rejected';
 		$this->app->employee
-			->addActivity("Rejected Supportticket", $this->id, $this['ticket_id'])
-			->notifyWhoCan('reject,convert,open','Converted');
+			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['ticket_id'])
+			->notifyWhoCan('edit,delete','Rejected');
 		$this->saveAndUnload();
 	}
 
@@ -198,7 +198,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$this['status']='Closed';
 			$this->save();
 			$this->app->employee
-				->addActivity("Closed Supportticket", $this->id, $this['ticket_id'])
+				->addActivity("Issues solved against support ticket : '".$this['name']."' ", $this->id, $this['ticket_id'])
 				->notifyWhoCan('reject,convert,open','Converted');
 			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
 		}

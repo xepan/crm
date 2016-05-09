@@ -1,7 +1,7 @@
 <?php
 namespace xepan\crm;
 
-class page_supportticket extends \Page{
+class page_supportticket extends \xepan\base\Page{
 	public $title="Support Ticket";
 	function init(){
 		parent::init();
