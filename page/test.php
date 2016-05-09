@@ -3,7 +3,7 @@
 
 namespace xepan\crm;
 
-class page_test extends \Page {
+class page_test extends \xepan\base\Page {
 	function init(){
 		parent::init();
 
