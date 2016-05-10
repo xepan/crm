@@ -91,6 +91,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		});
 
 		$this->addHook('beforeDelete',[$this,'deleteComments']);
+		$this->addHook('beforeSave',[$this,'updateSearchString']);
 
 	}
 
@@ -374,7 +375,26 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 				$send_setting=null,
 				$send_also=true
 				);
+	}
 
+	function updateSearchString($m){
 
+		$search_string = ' ';
+		$search_string .=" ". $this['name'];
+		$search_string .=" ". $this['uid'];
+		$search_string .=" ". $this['from_email'];
+		$search_string .=" ". $this['from_name'];
+		$search_string .=" ". $this['from_raw'];
+		$search_string .=" ". $this['from_id'];
+		$search_string .=" ". $this['to_id'];
+		$search_string .=" ". $this['to_raw'];
+		$search_string .=" ". $this['cc_raw'];
+		$search_string .=" ". $this['bcc_raw'];
+		$search_string .=" ". $this['subject'];
+		$search_string .=" ". $this['message'];
+		$search_string .=" ". $this['priority'];
+
+		$this['search_string'] = $search_string;
+		
 	}
 }
