@@ -12,7 +12,7 @@ class page_config extends \xepan\base\Page{
 		$form=$this->add('Form',null,'auto-reply');
 		$form->addField('line','subject')->set($auto_subject)->setFieldHint('{$ticket_id}, {$title}');
 		$form->addField('xepan\base\RichText','body')->set($auto_body)->setFieldHint('{$contact_name}, {$ticket_id}, {$sender_email_id}');
-		$form->addSubmit('Update');
+		$form->addSubmit('Update')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
 			$auto_config->setConfig('TICKET_GENERATED_EMAIL_SUBJECT',$form['subject'],'crm');
@@ -29,7 +29,7 @@ class page_config extends \xepan\base\Page{
 		$form=$this->add('Form',null,'reject-reply');
 		$form->addField('line','subject')->set($reject_subject);
 		$form->addField('xepan\base\RichText','body')->set($reject_body)->setFieldHint('{{sender_email_id}}');
-		$form->addSubmit('Update');
+		$form->addSubmit('Update')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
 			$reject_config->setConfig('SUPPORT_EMAIL_DENIED_SUBJECT',$form['subject'],'crm');
@@ -45,7 +45,7 @@ class page_config extends \xepan\base\Page{
 		$form=$this->add('Form',null,'close-reply');
 		$form->addField('line','subject')->set($close_subject);
 		$form->addField('xepan\base\RichText','body')->set($close_body)->setFieldHint('{$sender_email_id} {$ticket_id} {$title}');
-		$form->addSubmit('Update');
+		$form->addSubmit('Update')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
 			$close_config->setConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT',$form['subject'],'crm');
