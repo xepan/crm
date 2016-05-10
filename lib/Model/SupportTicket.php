@@ -91,6 +91,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		});
 
 		$this->addHook('beforeDelete',[$this,'deleteComments']);
+		$this->addHook('beforeSave',[$this,'updateSearchString']);
 
 	}
 
@@ -108,8 +109,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['status']='Assigned';
 
 		$this->app->employee
-			->addActivity("Converted Supportticket", $this->id, $this['ticket_id'])
-			->notifyWhoCan('assign,convert,open','Converted');
+			->addActivity("Supportticket '".$this['name']."' has assigned to '".$this['to_id']."'", $this->id, $this['ticket_id'])
+			->notifyWhoCan('closed','reject','Assigned');
 
 		$this->saveAndUnload();
 	}
@@ -117,8 +118,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function reject(){
 		$this['status']='Rejected';
 		$this->app->employee
-			->addActivity("Rejected Supportticket", $this->id, $this['ticket_id'])
-			->notifyWhoCan('reject,convert,open','Converted');
+			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['ticket_id'])
+			->notifyWhoCan('edit,delete','Rejected');
 		$this->saveAndUnload();
 	}
 
@@ -198,7 +199,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$this['status']='Closed';
 			$this->save();
 			$this->app->employee
-				->addActivity("Closed Supportticket", $this->id, $this['ticket_id'])
+				->addActivity("Issues solved against support ticket : '".$this['name']."' ", $this->id, $this['ticket_id'])
 				->notifyWhoCan('reject,convert,open','Converted');
 			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
 		}
@@ -374,7 +375,26 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 				$send_setting=null,
 				$send_also=true
 				);
+	}
 
+	function updateSearchString($m){
 
+		$search_string = ' ';
+		$search_string .=" ". $this['name'];
+		$search_string .=" ". $this['uid'];
+		$search_string .=" ". $this['from_email'];
+		$search_string .=" ". $this['from_name'];
+		$search_string .=" ". $this['from_raw'];
+		$search_string .=" ". $this['from_id'];
+		$search_string .=" ". $this['to_id'];
+		$search_string .=" ". $this['to_raw'];
+		$search_string .=" ". $this['cc_raw'];
+		$search_string .=" ". $this['bcc_raw'];
+		$search_string .=" ". $this['subject'];
+		$search_string .=" ". $this['message'];
+		$search_string .=" ". $this['priority'];
+
+		$this['search_string'] = $search_string;
+		
 	}
 }
