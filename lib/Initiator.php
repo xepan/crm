@@ -22,6 +22,9 @@ class Initiator extends \Controller_Addon {
             $pending=$this->add('xepan\crm\Model_SupportTicket')->addCondition('status',['Pending','Assigned'])->count()->getOne();
 
             $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $pending ."</span>")->_selector('a:contains(Crm)');
+
+            $this->app->status_icon = [
+                        "xepan\crm\Model_SupportTicket"=>['All'=>'fa fa-globe','Pending'=>"fa fa-clock-o xepan-effect-warinig",'Assigned'=>'fa fa-male xepan-effect-blue','Closed'=>'fa fa-times-circle-o xepan-effect-green','Rejected'=>'fa fa-times xepan-effect-red']];
         }
                 
         return $this;  
