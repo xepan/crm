@@ -397,4 +397,17 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['search_string'] = $search_string;
 		
 	}
+
+	function quickSearch($app,$search_string,$view){
+		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
+		$this->addCondition('Relevance','>',0);
+ 		$this->setOrder('Relevance','Desc');
+ 		if($this->count()->getOne()){
+ 			$lc = $view->add('Completelister',null,null,['view/grid/quicksearch-crm-grid']);
+ 			$lc->setModel($this);
+    		$lc->addHook('formatRow',function($g){
+    			$g->current_row_html['url'] = $this->app->url('xepan_crm_ticketdetails',['ticket_id'=>$g->model->id]);	
+     		});	
+		}
+	}	
 }
