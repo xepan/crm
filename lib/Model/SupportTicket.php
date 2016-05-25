@@ -146,7 +146,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$subject=$this->add('GiTemplate');
 		$subject->loadTemplateFromString($email_subject);
 		$subject->trySetHTML('token',$this->getToken());
-		$subject->trySetHTML('title', $communication['title']);
+		// $subject->trySetHTML('title', $communication['title']);
+		$subject->trySetHTML('related_email_subject', $communication['title']);
 
 		$temp=$this->add('GiTemplate');
 		$temp->loadTemplateFromString($email_body);
@@ -155,12 +156,26 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$temp->trySetHTML('token',$this->getToken());
 		$temp->trySetHTML('title', $communication['title']);
 
+		$emails_to =[];		
+		foreach ($this->getReplyEmailFromTo()['to'] as $flipped) {
+			$emails_to [] = $flipped['email'];
+		}
+
+		$emails_cc =[];		
+		foreach ($this->getReplyEmailFromTo()['cc'] as $flipped) {
+			$emails_cc [] = $flipped['email'];
+		}
+
+		$emails_bcc =[];		
+		foreach ($this->getReplyEmailFromTo()['bcc'] as $flipped) {
+			$emails_bcc [] = $flipped['email'];
+		}
 
 		$form=$p->add('Form');
-		$form->addField('Checkbox','send_email');
-		$form->addField('line','to')->set($this['from_email']);
-		$form->addField('line','cc');
-		$form->addField('line','bcc');
+		$form->addField('Checkbox','send_email')->set(true);
+		$form->addField('line','to')->set(implode(", ", $emails_to));
+		$form->addField('line','cc')->set(implode(", ", $emails_cc));
+		$form->addField('line','bcc')->set(implode(", ", $emails_bcc));
 		$form->addField('line','subject')->set($subject->render());
 		$form->addField('xepan\base\RichText','email_body')->set($temp->render());
 
