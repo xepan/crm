@@ -8,15 +8,15 @@
                     i(class="fa fa-search search-icon")
     {/Pannel}
     .main-box-body.clearfix.table-responsive
-        table.table.user-list.table-hover(style="width:100%")
+        table.table.user-list.table-hover.footable.toggle-circle-filled(style="width:100%")
             {header}
             thead.xepan-hover-hand
                 {cols}{col}
                 th(id="{$name_sortid}")
                     span Ticket Name {$name_sort}
-                th(id="{$created_at_sortid}")
+                th(id="{$created_at_sortid}" data-hide="phone")
                     span Created On {$created_at_sort}
-                th(id="{$last_comment_sortid}")
+                th(id="{$last_comment_sortid}" data-hide="phone")
                     span Last Comment On {$last_comment_sort}
                 th
                     span Email
