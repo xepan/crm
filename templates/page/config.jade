@@ -1,6 +1,6 @@
 .main-box.clearfix
       .tabs-wrapper.profile-tabs
-        ul.nav.nav-tabs
+        ul.nav.nav-tabs.responsive-tabs
           //- li.active
           //-   a(data-toggle='tab', href='#tab-user') User Managment 
           li.active
@@ -10,9 +10,9 @@
           li
             a(data-toggle='tab', href='#close-reply') Closed Ticket Mail Content
         .tab-content
-          #auto-reply.tab-pane.fade.in.active
+          #auto-reply.tab-pane.active
             {$auto-reply}                       
-          #reject-reply.tab-pane.fade
+          #reject-reply.tab-pane
             {$reject-reply}                       
-          #close-reply.tab-pane.fade
+          #close-reply.tab-pane
             {$close-reply}                       
