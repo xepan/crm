@@ -96,7 +96,10 @@ class page_ticketdetails extends \xepan\base\Page{
 		if($form->isSubmitted()){
 			$comm = $form->process();
 			$ticket_model->createCommentOnly($comm);
-			$form->js(true,$form->js()->reload())->univ()->successMessage('Done')->execute();
+			$js=[];
+			$js[]=$form->js()->reload();
+			$js[]=$comment_lister->js()->reload();
+			$form->js(true,$js)->univ()->successMessage('Done')->execute();
 		}
 	}
 }
