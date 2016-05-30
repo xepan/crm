@@ -17,5 +17,12 @@ class Model_Ticket_Comments extends \xepan\base\Model_Table{
 		$this->addField('type');
 
 		$this->addField('created_at')->type('datetime')->defaultValue($this->app->now);
+		
+		$this->add('misc/Field_Callback','callback_date')->set(function($m){
+			if(date('Y-m-d',strtotime($m['created_at']))==date('Y-m-d',strtotime($this->app->now))){
+				return date('h:i a',strtotime($m['created_at']));	
+			}
+			return date('M d',strtotime($m['created_at']));
+		});		
 	}
 }
