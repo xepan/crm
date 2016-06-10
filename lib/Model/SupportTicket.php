@@ -52,7 +52,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->hasMany('xepan\crm\Ticket_Attachment','ticket_id',null,'TicketAttachments');
 
 		$this->getElement('status')->defaultValue('Pending');
-		$this->getElement('created_at')->defaultValue($this->app->now)->sortable(true);
+		// $this->getElement('created_at')->defaultValue($this->app->now)->sortable(true);
 
 		$this->add('misc/Field_Callback','callback_date')->set(function($m){
 			if(date('Y-m-d',strtotime($m['created_at']))==date('Y-m-d',strtotime($this->app->now))){
@@ -308,6 +308,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['subject'] = $communication['title'];
 		$this['message'] = $communication['description'];
 		$this['contact_id'] = $communication['from_id'];
+		$this['created_at'] = $communication['created_at'];
 		$this['status'] = "Pending";
 		$this->save();
 		// foreach ($this->attachment() as $attach) {
