@@ -13,7 +13,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	public $actions=[
 		'Pending'=>['view','edit','delete','reject','assign','closed'],
 		'Assigned'=>['view','edit','delete','closed','reject'],
-		'Closed'=>['view','edit','delete'],
+		'Closed'=>['view','edit','delete','open'],
 		'Rejected'=>['view','edit','delete']
 
 
@@ -123,6 +123,13 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this->saveAndUnload();
 	}
 
+	function open(){
+		$this['status']='Pending';
+		$this->app->employee
+			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['ticket_id'])
+			->notifyWhoCan('edit,delete,close','Pending');
+		$this->save();
+	}
 
 	function page_closed($p){
 		if(!$this->loaded()){
