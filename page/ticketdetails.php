@@ -27,6 +27,12 @@ class page_ticketdetails extends \xepan\base\Page{
 		$comment_join->addField('status');
 		// $comment_join->addField('communication_type');
 
+		$m_comment->addExpression('from')->set(function($m,$q){
+			return $m->refSQL('communication_id')->fieldQuery('from');
+		});
+		$m_comment->addExpression('attach_count')->set(function($m,$q){
+					return $m->refSQL('communication_id')->fieldQuery('attachment_count');
+		});
 
 		$m_comment->addExpression('title_expression')->set(function ($m,$q){
 			return $q->expr("IF([0] is null or [0]='',[1],[2])",[
@@ -46,6 +52,18 @@ class page_ticketdetails extends \xepan\base\Page{
 
 		$comment_lister=$this->add('xepan/hr/Grid',null,null,['view/grid/ticketdetail-comment-grid']);
 		$comment_lister->setModel($m_comment)->setOrder('created_at','desc');
+		
+		$comment_lister->addHook('formatRow',function($g){
+			$g->current_row_html['attachment_count']=$g->model['attach_count'];
+			if(!$g->model['attach_count']){
+				$g->current_row_html['check_attach']=" ";
+			}
+			$attach=$g->add('xepan\communication\View_Lister_Attachment',null,'attachments');
+			$attach->setModel('xepan\communication\Communication_Attachment')
+					->addCondition('communication_id',$g->model['communication_id']);
+			$g->current_row_html['attachments']=$attach->getHtml();
+		});
+
 
 		$comment_lister->addMethod('format_message_expression',function($g,$f){
 			$g->current_row_html[$f]= strip_tags($g->model['message_expression']);
@@ -56,7 +74,7 @@ class page_ticketdetails extends \xepan\base\Page{
 
 		$comment_lister->removeColumn('description');
 
-		$comment_lister->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
+		$comment_lister->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'from','default_value'=>'']);
 
 		$contact = $ticket_model->ref('contact_id');
 		
