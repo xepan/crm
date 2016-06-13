@@ -46,7 +46,7 @@ class page_ticketdetails extends \xepan\base\Page{
 
 		$comment_lister=$this->add('xepan/hr/Grid',null,null,['view/grid/ticketdetail-comment-grid']);
 		$comment_lister->setModel($m_comment)->setOrder('created_at','desc');
-		$comment_lister->add('xepan\base\Controller_Avatar',['options'=>['size'=>50,'border'=>['width'=>0]],'name_field'=>'from','default_value'=>'','image_field','contact_image']);
+		$comment_lister->add('xepan\base\Controller_Avatar',['options'=>['size'=>50,'margin'=>0,'border'=>['width'=>0]],'name_field'=>'from','default_value'=>'','image_field','contact_image']);
 		
 		$comment_lister->addHook('formatRow',function($g){
 			$g->current_row_html['attachment_count']=$g->model['attach_count'];
