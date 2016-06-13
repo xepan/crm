@@ -212,11 +212,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$mail->setBody($form['email_body']);
 			$mail['to_id']=$this['contact_id'];
 
-			$this->createCommentOnly($mail);
 			if($form['send_email']){
 				$mail->send($support_email);
 			}
 	
+			$this->createCommentOnly($mail);
 
 			$this['status']='Closed';
 			$this->save();
@@ -228,6 +228,9 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function createCommentOnly($related_mail){
+		if($this['status']=='Closed')
+			$this->open();
+		
 		$comment = $this->add('xepan\crm\Model_Ticket_Comments');
 		$comment['ticket_id'] = $this->id;
 		$comment['communication_id'] = $related_mail->id;
