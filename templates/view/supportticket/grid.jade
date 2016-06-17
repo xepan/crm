@@ -36,7 +36,8 @@
                         {/}
                         a.user-link(href = '{url}?page=xepan_crm_ticketdetails&ticket_id={$id}{/}')
                             {$id}
-                        a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
+                        //- a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
+                        a.do-view-ticket-customer(href='#' data-contact-id="{$contact_id}")
                             span.user-subhead{$contact}
                     td
                         {$created_at}
