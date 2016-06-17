@@ -437,6 +437,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
  					'title'=>$data['name'],
  					'relevency'=>$data['Relevance'],
  					'url'=>$this->app->url('xepan_crm_ticketdetails',['ticket_id'=>$data['id']])->getURL(),
+ 					'type_status'=>$data['type'].' '.'['.$data['status'].']',
  				];
  			}
 		}
