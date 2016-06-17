@@ -30,6 +30,10 @@ class page_supportticket extends \xepan\base\Page{
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['name']);
+
+		if(!$crud->isEditing()){
+			$crud->grid->js('click')->_selector('.do-view-ticket-customer')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
+		}		
 		
 	}
 }
