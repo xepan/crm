@@ -424,8 +424,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		
 	}
 
-	function quickSearch($app,$search_string,&$result_array){
-		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" IN NATURAL LANGUAGE MODE)');
+	function quickSearch($app,$search_string,&$result_array,$relevency_mode){
+		$this->addExpression('Relevance')->set('MATCH(search_string) AGAINST ("'.$search_string.'" '.$relevency_mode.')');
 		$this->addCondition('Relevance','>',0);
  		$this->setOrder('Relevance','Desc');
  		
