@@ -11,7 +11,7 @@ class Initiator extends \Controller_Addon {
         $this->routePages('xepan_crm');
         $this->addLocation(array('template'=>'templates'));
 
-        if($this->app->is_admin){
+        if($this->app->is_admin && !$this->app->isAjaxOutput()){
 	        $m = $this->app->top_menu->addMenu('Crm');
             $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
 	        $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_crm_config');
