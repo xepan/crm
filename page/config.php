@@ -10,8 +10,8 @@ class page_config extends \xepan\base\Page{
 		$auto_subject = $auto_config->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
 		$auto_body = $auto_config->getConfig('TICKET_GENERATED_EMAIL_BODY');
 		$form=$this->add('Form',null,'auto-reply');
-		$form->addField('line','subject')->set($auto_subject)->setFieldHint('{$ticket_id}, {$title}');
-		$form->addField('xepan\base\RichText','body')->set($auto_body)->setFieldHint('{$contact_name}, {$ticket_id}, {$sender_email_id}');
+		$form->addField('line','subject')->set($auto_subject)->setFieldHint('{$token}, {$title}');
+		$form->addField('xepan\base\RichText','body')->set($auto_body)->setFieldHint('{$contact_name}, {$token}, {$sender_email_id}');
 		$form->addSubmit('Update')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
@@ -43,8 +43,8 @@ class page_config extends \xepan\base\Page{
 		$close_subject = $close_config->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT');
 		$close_body = $close_config->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
 		$form=$this->add('Form',null,'close-reply');
-		$form->addField('line','subject')->set($close_subject);
-		$form->addField('xepan\base\RichText','body')->set($close_body)->setFieldHint('{$sender_email_id} {$ticket_id} {$title}');
+		$form->addField('line','subject')->set($close_subject)->setFieldHint('{$token}, {$title}');
+		$form->addField('xepan\base\RichText','body')->set($close_body)->setFieldHint('{$sender_email_id} {$token} {$title}');
 		$form->addSubmit('Update')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
