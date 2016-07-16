@@ -28,7 +28,7 @@ class page_config extends \xepan\base\Page{
 		$reject_body = $reject_config->getConfig('SUPPORT_EMAIL_DENIED_BODY');
 		$form=$this->add('Form',null,'reject-reply');
 		$form->addField('line','subject')->set($reject_subject);
-		$form->addField('xepan\base\RichText','body')->set($reject_body)->setFieldHint('{{sender_email_id}}');
+		$form->addField('xepan\base\RichText','body')->set($reject_body)->setFieldHint('{$sender_email_id}');
 		$form->addSubmit('Update')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
