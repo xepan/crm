@@ -109,7 +109,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['status']='Assigned';
 
 		$this->app->employee
-			->addActivity("Supportticket '".$this['name']."' has assigned to '".$this['to_id']."'", $this->id, $this['ticket_id'])
+			->addActivity("Supportticket '".$this['name']."' has assigned to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyWhoCan('closed','reject','Assigned');
 
 		$this->saveAndUnload();
@@ -118,7 +118,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function reject(){
 		$this['status']='Rejected';
 		$this->app->employee
-			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['ticket_id'])
+			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyWhoCan('edit,delete','Rejected');
 		$this->saveAndUnload();
 	}
@@ -126,7 +126,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function open(){
 		$this['status']='Pending';
 		$this->app->employee
-			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['ticket_id'])
+			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyWhoCan('edit,delete,close','Pending');
 		$this->save();
 	}
@@ -221,7 +221,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$this['status']='Closed';
 			$this->save();
 			$this->app->employee
-				->addActivity("Issues solved against support ticket : '".$this['name']."' ", $this->id, $this['ticket_id'])
+				->addActivity("Issues solved against support ticket : '".$this['name']."' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 				->notifyWhoCan('reject,convert,open','Converted');
 			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
 		}
