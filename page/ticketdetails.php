@@ -3,19 +3,20 @@
 namespace xepan\crm;
 
 class page_ticketdetails extends \xepan\base\Page{
-	public $title='Ticket-Detail';
+	public $title='';
 	public $breadcrumb=['Home'=>'index','Support Ticket'=>'xepan_crm_supportticket&status=Pending,Assigned','Details'=>'#'];
 
 	function init(){
 		parent::init();
 		$ticket_id=$this->app->stickyGET('ticket_id');
+		$this->title="Ticket-Detail [" .$ticket_id. "]";
 
 		$ticket_model=$this->add('xepan\crm\Model_SupportTicket')->load($ticket_id);
 
 		$td_view=$this->add('xepan/crm/View_TicketDetail');
 		$td_view->setModel($ticket_model);
 		$td_view->add('xepan\base\Controller_Avatar',['options'=>['size'=>40,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
-		
+		$td_view->add('xepan\hr\Controller_ACL');
 		$m_comment=$this->add('xepan\crm\Model_Ticket_Comments');			
 		$m_comment->addCondition('ticket_id',$ticket_id);
 		
