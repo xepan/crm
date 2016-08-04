@@ -269,7 +269,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		foreach ($bcc as $_bcc) {
 			$comm->addBcc($_bcc['email'],$_bcc['name']);
 		}
-
+		$comm['direction']='Out';
 		$comm->save();
 
 		if($send_also)
