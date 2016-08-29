@@ -14,7 +14,7 @@ class page_dashboard extends \xepan\base\Page{
 		$ticket->addExpression('count','count(*)');
 		$ticket->setOrder('count','desc');
 
-		$grid = $this->add('xepan\base\Grid',null,null,['view\grid\dashboard']);
+		$grid = $this->add('xepan\base\Grid',null,null,['view\grid\crmdashboard']);
 		$grid->setModel($ticket);
 		$grid->addPaginator(5);
 	}
