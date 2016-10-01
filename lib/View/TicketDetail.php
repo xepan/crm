@@ -74,14 +74,14 @@ class View_TicketDetail extends \View{
 		if($form->isSubmitted()){
 			$comm = $form->process();
 			$this->model->createCommentOnly($comm);
-			$js=[];
-			$js[]=$form->js()->reload();
-			$js[]=$comment_lister->js()->reload();
-			// $js = [
-			// 	// $form->js()->reload(),
-			// 	// $form->js()->toggleClass('xepan-crm-reply-tool-closed'),
-			// 	// $comment_view->js()->reload()
-			// 	];
+			// $js=[];
+			// $js[]=$form->js()->reload();
+			// $js[]=$comment_lister->js()->reload();
+			$js = [
+				$form->js()->reload(),
+				$this->js()->find('.xepan-crm-reply-tool')->toggleClass('xepan-crm-reply-tool-closed'),
+				$comment_view->js()->reload()
+				];
 			$form->js(true,$js)->univ()->successMessage('Done')->execute();
 		}
 

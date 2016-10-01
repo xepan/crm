@@ -50,7 +50,7 @@ class page_supportticket extends \xepan\base\Page{
 
 
 
-			if($_GET['ticket_id']){
+			if($this->app->stickyGET('ticket_id')){
 				$ticket_model=$this->add('xepan\crm\Model_SupportTicket')->load($_GET['ticket_id']);
 				$td_view->setModel($ticket_model);
 			}
