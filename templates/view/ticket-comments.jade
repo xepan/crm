@@ -1,0 +1,59 @@
+.xepan-crm-ticket-comments
+  {rows}{row}
+  div
+    .conversation-wrapper
+      .conversation-content
+        .slimScrollDiv(style='position: relative; overflow: hidden; width: auto;')
+          .conversation-inner(style='overflow: hidden; width: auto;')
+            .conversation-item.item-left.clearfix
+              .conversation-user
+                {$avatar}
+              .conversation-body
+                .name(style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap; margin-bottom:5px; width:85%") {$title}
+                span.label.label-success.pull-right{$type} / {$status}
+                .time.hidden-xs.xepan-padding-horizontal-small  {$callback_date}
+                #accordion.panel-group(role='tablist', aria-multiselectable='true')
+                  .panel.panel-default
+                    #headingOne.panel-heading.ticket-heading(role='tab')
+                      h4.panel-title
+                        a(role='button', data-toggle='collapse', data-parent='#accordion', href='#collapsed_{$id}', aria-expanded='true', aria-controls='collapseOne')
+                            .text(style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;") {$collapse_header}
+                    .panel-collapse.collapse(id="collapsed_{$id}" role='tabpanel', aria-labelledby='headingOne')
+                      .panel-body
+                        .text.xepan-push-large {$body} 
+                        #email-detail-attachments
+                            #email-attachments-header.clearfix
+                              .headline
+                                {check_attach}
+                                i.fa.fa-paperclip &nbsp;
+                                span Attachments : 
+                                b {attachment_count}{/}
+                                {/}
+                              .tools
+                        #email-attachments-content
+                          {$attachments}
+
+  {/}{/}
+style.
+        .ticket-heading a {
+            color: white!important;
+        }
+        .ticket-comment li {
+            background: #e7ebee none repeat scroll 0 0 padding-box;
+            border: 1px solid #e7ebee;
+            border-radius: 3px;
+            float: left;
+            font-size: 0.875em;
+            margin: 10px 10px 10px 0;
+            overflow: hidden;
+            padding: 0;
+        }
+        .ticket-comment li .img{
+            background-clip: padding-box;
+            border-radius: 3px 3px 0 0;
+            height: 87px;
+            overflow: hidden;
+            text-align: center;
+            width: 130px;
+        }
+          

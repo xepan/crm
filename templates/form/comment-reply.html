@@ -1,0 +1,79 @@
+
+<div style="{$style}" id="{$_name}" class="atk-form {$class}">
+  <form action="{$form_action}" method="{form_method}post{/}" {$enctype}="" {$attributes}="" class="{$form_class}">
+    <div tabindex="0" style="right: -12px; " class="email-new-nano-content">
+      <div class="header btn-primary">Reply To {$to_email}<i class="fa fa-close pull-right close-compose-email-popup"> </i><i class="fa fa-expand pull-right compose-email-resizeable"> </i><i class="fa fa-minus pull-right minimize-compose-email-popup"></i></div>
+      <div id="email-new-inner" class="compose-email-inner">
+        <div id="email-new-header">
+          <div class="row form-group">
+            <div class="col-md-12">
+              <lable class="xepan-push-small">From : </lable>
+              <div id="exampleInpFrom" type="text" placeholder="Enter recepients" class="form-control-s2 email-recepients atk-form-row atk-form-field xepan-padding-top-xsmall">{$from_email}</div>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-11">
+              <lable>To : </lable>
+              <div id="exampleInpTo" type="text" placeholder="Enter recepients" class="form-control-s2 email-recepients atk-form-row atk-form-field xepan-padding-top-xsmall">{$email_to}</div>
+            </div>
+            <label class="col-md-1"><a class="cc-field pull-left xepan-padding-horizontal-small">Cc</a><a class="bcc-field pull-left">Bcc  </a></label>
+          </div>
+          <div id="cc-field" style="display:none" class="row form-group">
+            <div class="col-md-12">
+              <lable>Cc : </lable>
+              <div id="exampleInpCc" type="text" placeholder="Enter recepients" class="form-control-s2 email-recepients atk-form-row atk-form-field xepan-padding-top-xsmall">{$cc_emails}</div>
+            </div>
+          </div>
+          <div id="bcc-field" style="display:none" class="row form-group">
+            <div class="col-md-12">
+              <lable>Bcc : </lable>
+              <div id="exampleInpBcc" type="text" placeholder="Enter recepients" class="form-control-s2 email-recepients atk-form-row atk-form-field xepan-padding-top-xsmall">{$bcc_emails}</div>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-md-12">
+              <div id="exampleInpSubject" type="text" placeholder="Enter subject" class="form-control atk-form-row atk-form-field">{$title}</div>
+              <div class="atk-cell atk-actions {$buttons_class}">{$form_buttons}</div>
+            </div>
+          </div>
+        </div>
+        <div id="email-new-body">
+          {$email_body}
+          {$signature}
+        </div>
+        <div id="email-new-title" class="clearfix"><span class="subject">Attachment :</span>
+          <div id="email-attachment">{$attachment}</div>
+        </div>
+        <div id="email-new-footer">
+          <div class="row">
+            <div class="col-xs-12 col-md-10 col-md-offset-2">
+              <div class="pull-right">
+                <div class="btn-group">
+                  <button type="submit" class="btn btn-success"><i class="fa fa-send xepan-padding-horizontal-xsmall"></i><span class="xepan-padding-horizontal-xsmall">Send  </span></button>{$FormButtons}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  jQuery(document).ready(function(){
+    jQuery('.cc-field').on('click', function(event) {        
+         jQuery('#cc-field').toggle('hide');
+    });
+  });
+  jQuery(document).ready(function(){
+    jQuery('.bcc-field').on('click', function(event) {        
+         jQuery('#bcc-field').toggle('hide');
+    });
+  });
+  
+</script>
+<style>
+  .email-new-nano-content .select2{
+    width:100%!important;
+  }
+</style>

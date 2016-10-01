@@ -1,5 +1,7 @@
 div(id="{$_name}")
   #email-box.email-detail-nano.has-scrollbar(style='margin-left:0px')
+          button.btn.btn-success.back-to-support-ticket(title="Back to Support Ticket")
+            i.fa.fa-arrow-left
           .email-detail-nano-content(tabindex='0', style='right: -13px;')
             #email-detail-inner
               #email-detail-subject.clearfix
@@ -80,9 +82,29 @@ div(id="{$_name}")
                                   a(href='{$file}' download) Download
                                   {/}
                               {/}{/}
-              
+          {$comment_view}    
+          .xepan-crm-reply-tool.xepan-crm-reply-tool-closed
+            a.xepan-crm-reply-tool-cog.btn-success
+              |Reply
+              //- i.fa.fa-filter.fa-2x.hidden-md.hidden-lg
+            .xepan-crm-communication-reply-view
+              .header.btn-primary
+                  |Reply To {$to_email}
+                  i.fa.fa-close.pull-right.close-reply-comment-popup 
+                  //- i.fa.fa-expand.pull-right.compose-email-resizeable 
+                  //- i.fa.fa-minus.pull-right.minimize-comment-popup
+              .xepan-crm-form-inner
+                {$reply_form}    
           //- .nano-pane
           //-   .nano-slider(style='height: 502px; transform: translate(0px, 60px);')
 style.
     .accordion .panel-title > a::after {
         top: 18%;
+    }
+    .email-detail-nano .xepan-crm-communication-reply-view .col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6 {
+      width:100%!important;
+    }  
+script.
+    $(".xepan-crm-reply-tool-cog").click(function(){
+        $(this).parent('div.xepan-crm-reply-tool').toggleClass("xepan-crm-reply-tool-closed");
+    });
