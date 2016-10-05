@@ -45,18 +45,18 @@ class Initiator extends \Controller_Addon {
     }
 
     function resetDB(){
-        if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
-        if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
+        // if(!isset($this->app->old_epan)) $this->app->old_epan = $this->app->epan;
+        // if(!isset($this->app->new_epan)) $this->app->new_epan = $this->app->epan;
         
-        $this->app->epan=$this->app->old_epan;
-        $truncate_model = ['Ticket_Comments','Ticket_Attachment','SupportTicket'];
-        foreach ($truncate_model as $t) {
-            $m=$this->add('xepan\crm\Model_'.$t);
-            foreach ($m as $mt) {
-                $mt->delete();
-            }
-        }
+        // $this->app->epan=$this->app->old_epan;
+        // $truncate_model = ['Ticket_Comments','Ticket_Attachment','SupportTicket'];
+        // foreach ($truncate_model as $t) {
+        //     $m=$this->add('xepan\crm\Model_'.$t);
+        //     foreach ($m as $mt) {
+        //         $mt->delete();
+        //     }
+        // }
         
-        $this->app->epan=$this->app->new_epan;
+        // $this->app->epan=$this->app->new_epan;
     }
 }
