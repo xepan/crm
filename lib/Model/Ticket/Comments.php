@@ -23,6 +23,23 @@ class Model_Ticket_Comments extends \xepan\base\Model_Table{
 				return date('h:i a',strtotime($m['created_at']));	
 			}
 			return date('M d',strtotime($m['created_at']));
-		});		
+		});
+
+		$this->addExpression('collapse_header')->set(function ($m,$q){
+			return $q->expr("IF([0] is null or [0]='',[1],[2])",[$m->getElement('description'),$m->refSQL('communication_id')->fieldQuery('description'),$m->getElement('description')]);
+		});	
+
+		$this->addExpression('from')->set(function($m,$q){
+			return $m->refSQL('communication_id')->fieldQuery('from');
+		});
+		$this->addExpression('image')->set(function($m,$q){
+			return $m->add('xepan\base\Model_Contact')
+				->addCondition('id',$m->refSQL('communication_id')->fieldQuery('from_id'))
+				->fieldQuery('image');
+		});
+
+		$this->addExpression('attach_count')->set(function($m,$q){
+			return $m->refSQL('communication_id')->fieldQuery('attachment_count');
+		});	
 	}
 }

@@ -1,0 +1,64 @@
+
+<div class="xepan-crm-ticket-comments">{rows}{row}
+  <div>
+    <div class="conversation-wrapper">
+      <div class="conversation-content">
+        <div style="position: relative; overflow: hidden; width: auto;" class="slimScrollDiv">
+          <div style="overflow: hidden; width: auto;" class="conversation-inner">
+            <div class="conversation-item item-left clearfix">
+              <div class="conversation-user">{$avatar}</div>
+              <div class="conversation-body">
+                <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap; margin-bottom:5px; width:85%" class="name">{$title}</div><span class="label label-success pull-right">{$type} / {$status}</span>
+                <div class="time hidden-xs xepan-padding-horizontal-small"> {$callback_date}</div>
+                <div id="accordion" role="tablist" aria-multiselectable="true" class="panel-group">
+                  <div class="panel panel-default">
+                    <div id="headingOne" role="tab" class="panel-heading ticket-heading">
+                      <h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsed_{$id}" aria-expanded="true" aria-controls="collapseOne">
+                          <div style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" class="text">{$collapse_header}</div></a></h4>
+                    </div>
+                    <div id="collapsed_{$id}" role="tabpanel" aria-labelledby="headingOne" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <div class="text xepan-push-large">{$body} </div>
+                        <div id="email-detail-attachments">
+                          <div id="email-attachments-header" class="clearfix">
+                            <div class="headline">{check_attach}<i class="fa fa-paperclip">&nbsp;</i><span>Attachments : </span><b>{attachment_count}{/}</b>{/}</div>
+                            <div class="tools"></div>
+                          </div>
+                        </div>
+                        <div id="email-attachments-content">{$attachments}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>{/}{/}
+</div>
+<style>
+  .ticket-heading a {
+      color: white!important;
+  }
+  .ticket-comment li {
+      background: #e7ebee none repeat scroll 0 0 padding-box;
+      border: 1px solid #e7ebee;
+      border-radius: 3px;
+      float: left;
+      font-size: 0.875em;
+      margin: 10px 10px 10px 0;
+      overflow: hidden;
+      padding: 0;
+  }
+  .ticket-comment li .img{
+      background-clip: padding-box;
+      border-radius: 3px 3px 0 0;
+      height: 87px;
+      overflow: hidden;
+      text-align: center;
+      width: 130px;
+  }
+    
+</style>
