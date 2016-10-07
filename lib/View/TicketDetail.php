@@ -14,7 +14,7 @@ class View_TicketDetail extends \View{
 			$cc_lister->setSource($m['cc_raw']);
 		}
 
-		$this->template->setHTML('collapse_header',strip_tags(substr($model['message'], 0,100)));
+		$this->template->setHTML('collapse_header',strip_tags(substr($model['message'], 0,100))?:"No Subject");
 		$this->template->setHTML('email_body',$model['message']);
 
 		$attach=$this->add('xepan\communication\View_Lister_Attachment',null,'Attachments');
