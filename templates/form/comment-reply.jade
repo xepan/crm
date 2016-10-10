@@ -1,0 +1,80 @@
+.atk-form(style='{$style}', id='{$_name}', class='{$class}')
+  form(class='{$form_class}', action='{$form_action}', method='{form_method}post{/}', {$enctype}='', {$attributes}='')
+    //- #email-new-nano.has-scrollbar(style='height: 478px;')
+    .email-new-nano-content(tabindex='0', style='right: -12px; ')
+      div.header.btn-primary
+        |Reply To {$to_email}
+        i.fa.fa-close.pull-right.close-compose-email-popup 
+        i.fa.fa-expand.pull-right.compose-email-resizeable 
+        i.fa.fa-minus.pull-right.minimize-compose-email-popup
+      #email-new-inner.compose-email-inner
+        #email-new-header
+          .row.form-group
+            //- label.col-md-1(for='exampleInpFrom') From:
+            .col-md-12
+              lable.xepan-push-small From : 
+              #exampleInpFrom.form-control-s2.email-recepients.atk-form-row.atk-form-field.xepan-padding-top-xsmall(type='text', placeholder='Enter recepients') {$from_email}
+          .row.form-group
+            //- label.col-md-1(for='exampleInpTo') To:
+            .col-md-11
+              lable To : 
+              #exampleInpTo.form-control-s2.email-recepients.atk-form-row.atk-form-field.xepan-padding-top-xsmall(type='text', placeholder='Enter recepients') {$email_to}
+            label.col-md-1
+              a.cc-field.pull-left.xepan-padding-horizontal-small Cc
+              a.bcc-field.pull-left Bcc  
+          .row.form-group(id="cc-field" style="display:none")
+            //- label.col-md-1( for='exampleInpCc') Cc:
+            .col-md-12
+              lable Cc : 
+              #exampleInpCc.form-control-s2.email-recepients.atk-form-row.atk-form-field.xepan-padding-top-xsmall(type='text', placeholder='Enter recepients') {$cc_emails}
+          .row.form-group(id="bcc-field"  style="display:none")
+            //- label.col-md-1(for='exampleInpBcc') Bcc:
+            .col-md-12
+              lable Bcc : 
+              #exampleInpBcc.form-control-s2.email-recepients.atk-form-row.atk-form-field.xepan-padding-top-xsmall(type='text', placeholder='Enter recepients') {$bcc_emails}
+          .row.form-group
+            //- label.col-md-1(for='exampleInpSubject') Subject:
+            .col-md-12
+              //- lable Subject : 
+              #exampleInpSubject.form-control.atk-form-row.atk-form-field(type='text', placeholder='Enter subject') {$title}
+              div(class="atk-cell atk-actions {$buttons_class}"){$form_buttons}
+        #email-new-body
+          {$email_body}
+          {$signature}
+        #email-new-title.clearfix
+          span.subject Attachment :
+          #email-attachment
+            {$attachment}
+          //- {$field_input}
+        #email-new-footer
+          .row
+            .col-xs-12.col-md-10.col-md-offset-2
+              .pull-right
+                //- .btn-group
+                    //- button.btn.btn-default.xepan-padding-small(type='button')
+                    //- i.fa.fa-times
+                    //- |  {$Cancel}
+                .btn-group
+                  button.btn.btn-success(type='submit')
+                    i.fa.fa-send.xepan-padding-horizontal-xsmall
+                    span.xepan-padding-horizontal-xsmall|Send  
+                  {$FormButtons}
+    //- .nano-pane
+    //-   .nano-slider(style='height: 344px; transform: translate(0px, 0px);')
+
+script.
+        jQuery(document).ready(function(){
+          jQuery('.cc-field').on('click', function(event) {        
+               jQuery('#cc-field').toggle('hide');
+          });
+        });
+        jQuery(document).ready(function(){
+          jQuery('.bcc-field').on('click', function(event) {        
+               jQuery('#bcc-field').toggle('hide');
+          });
+        });
+
+style.
+  .email-new-nano-content .select2{
+    width:100%!important;
+  }

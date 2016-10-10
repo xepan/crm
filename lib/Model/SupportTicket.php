@@ -144,11 +144,32 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		}
 
 		$mail = $this->add('xepan\communication\Model_Communication_Email');
+		$communication = $this->ref('communication_id');
+		if(!$this->loaded()){
+			return false;	
+		}
 
-		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
-		$config_model->addCondition('application','crm');
-		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT');
-		$email_body=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
+		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		[
+			'fields'=>[
+						'auto_reply_subject'=>'Line',
+						'auto_reply_body'=>'xepan\base\RichText',
+						'denied_email_subject'=>'Line',
+						'denied_email_body'=>'xepan\base\RichText',
+						'closed_email_subject'=>'Line',
+						'closed_email_body'=>'xepan\base\RichText',
+						],
+				'config_key'=>'SUPPORT_SYSTEM_CONFIG',
+				'application'=>'crm'
+		]);
+		$config_m->tryLoadAny();
+
+		$email_subject = $config_m['closed_email_subject'];
+		$email_body = $config_m['closed_email_body'];
+		// $config_model=$this->add('xepan\base\Model_Epan_Configuration');
+		// $config_model->addCondition('application','crm');
+		// $email_subject=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT');
+		// $email_body=$config_model->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
 		
 		$subject=$this->add('GiTemplate');
 		$subject->loadTemplateFromString($email_subject);
@@ -345,11 +366,26 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			return false;	
 		}
 		
-		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
-		$config_model->addCondition('application','crm');
+		// $config_model=$this->add('xepan\base\Model_Epan_Configuration');
+		// $config_model->addCondition('application','crm');
 
-		$email_subject=$config_model->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
-		$email_body=$config_model->getConfig('TICKET_GENERATED_EMAIL_BODY');
+		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		[
+			'fields'=>[
+						'auto_reply_subject'=>'Line',
+						'auto_reply_body'=>'xepan\base\RichText',
+						'denied_email_subject'=>'Line',
+						'denied_email_body'=>'xepan\base\RichText',
+						'closed_email_subject'=>'Line',
+						'closed_email_body'=>'xepan\base\RichText',
+						],
+				'config_key'=>'SUPPORT_SYSTEM_CONFIG',
+				'application'=>'crm'
+		]);
+		$config_m->tryLoadAny();
+
+		$email_subject=$config_m['auto_reply_subject'];
+		$email_body=$config_m['auto_reply_body'];
 		
 		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
 		$subject->setHTML('token',$this->getToken());
@@ -380,10 +416,23 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			return false;	
 		}
 
-		$config_model=$this->add('xepan\base\Model_Epan_Configuration');
-		$config_model->addCondition('application','crm');
-		$email_subject=$config_model->getConfig('SUPPORT_EMAIL_DENIED_SUBJECT');
-		$email_body=$config_model->getConfig('SUPPORT_EMAIL_DENIED_BODY');
+		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		[
+			'fields'=>[
+						'auto_reply_subject'=>'Line',
+						'auto_reply_body'=>'xepan\base\RichText',
+						'denied_email_subject'=>'Line',
+						'denied_email_body'=>'xepan\base\RichText',
+						'closed_email_subject'=>'Line',
+						'closed_email_body'=>'xepan\base\RichText',
+						],
+				'config_key'=>'SUPPORT_SYSTEM_CONFIG',
+				'application'=>'crm'
+		]);
+		$config_m->tryLoadAny();
+
+		$email_subject = $config_m['denied_email_subject'];
+		$email_body = $config_m['denied_email_body'];
 
 		$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
 		$message=$this->add('GiTemplate')->loadTemplateFromString($email_body);

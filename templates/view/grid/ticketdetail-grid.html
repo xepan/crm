@@ -1,6 +1,7 @@
 
 <div id="{$_name}">
   <div id="email-box" style="margin-left:0px" class="email-detail-nano has-scrollbar">
+    <button title="Back to Support Ticket" class="btn btn-success back-to-support-ticket"><i class="fa fa-arrow-left"></i></button>
     <div tabindex="0" style="right: -13px;" class="email-detail-nano-content">
       <div id="email-detail-inner">
         <div id="email-detail-subject" class="clearfix"><span class="subject">{subject}FW: Like your new movie{/}</span><span class="label label-success">{status}Work{/}</span>
@@ -66,10 +67,26 @@
           </div>
         </div>
       </div>
+    </div>{$comment_view}    
+    <div class="xepan-crm-reply-tool xepan-crm-reply-tool-closed"><a class="xepan-crm-reply-tool-cog btn-success">Reply</a>
+      <div class="xepan-crm-communication-reply-view">
+        <div class="header btn-primary">Reply To {$to_email}<i class="fa fa-close pull-right close-reply-comment-popup"> </i>
+        </div>
+        <div class="xepan-crm-form-inner">{$reply_form}    </div>
+      </div>
     </div>
   </div>
 </div>
 <style>
   .accordion .panel-title > a::after {
       top: 18%;
+  }
+  .email-detail-nano .xepan-crm-communication-reply-view .col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6 {
+    width:100%!important;
+  }  
 </style>
+<script>
+  $(".xepan-crm-reply-tool-cog").click(function(){
+      $(this).parent('div.xepan-crm-reply-tool').toggleClass("xepan-crm-reply-tool-closed");
+  });
+</script>
