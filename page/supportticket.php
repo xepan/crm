@@ -39,7 +39,7 @@ class page_supportticket extends \xepan\base\Page{
 			$crud->grid->js('click',
 				[
 					$td_view->js()
-						->html('<div style="width:100%"><img style="width:20%;display:block;margin:auto;" src="vendor\xepan\communication\templates\images\email-loader.gif"/></div>')
+						->html('<div style="width:100%"><img style="width:20%;display:block;margin:auto;" src="vendor/xepan/communication/templates/images/email-loader.gif"/></div>')
 						->reload(['ticket_id'=>$this->js()->_selectorThis()->data('id')]),
 					$td_view->js()->show(),
 					$crud->js()->hide()])
