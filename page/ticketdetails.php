@@ -13,106 +13,67 @@ class page_ticketdetails extends \xepan\base\Page{
 
 		$ticket_model=$this->add('xepan\crm\Model_SupportTicket')->load($ticket_id);
 
-		$td_view=$this->add('xepan/crm/View_TicketDetail');
-		$td_view->setModel($ticket_model);
-		$td_view->add('xepan\base\Controller_Avatar',['options'=>['size'=>40,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
-		$td_view->add('xepan\hr\Controller_ACL');
-		$m_comment=$this->add('xepan\crm\Model_Ticket_Comments');			
+		// $td_view=$this->add('xepan/crm/View_TicketDetail');
+		// $td_view->setModel($ticket_model);
+		// $td_view->add('xepan\base\Controller_Avatar',['options'=>['size'=>40,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
+		// $td_view->add('xepan\hr\Controller_ACL');
+		/*$m_comment=$this->add('xepan\crm\Model_Ticket_Comments');			
 		$m_comment->addCondition('ticket_id',$ticket_id);
 		
 		$ticket_j = $m_comment->join('support_ticket.document_id','ticket_id');
 
 		$comment_join = $m_comment->leftJoin('communication.id','communication_id');
 		$comment_join->addField('status');
-		$m_comment->addExpression('from')->set(function($m,$q){
-			return $m->refSQL('communication_id')->fieldQuery('from');
-		});
-		$m_comment->addExpression('image')->set(function($m,$q){
-			return $m->add('xepan\base\Model_Contact')
-				->addCondition('id',$m->refSQL('communication_id')->fieldQuery('from_id'))
-				->fieldQuery('image');
-		});
 
-		$m_comment->addExpression('attach_count')->set(function($m,$q){
-			return $m->refSQL('communication_id')->fieldQuery('attachment_count');
-		});
+		$m_comment->setOrder('created_at','desc');
+		$comment_view = $this->add('xepan\crm\View_Lister_TicketComments');
+		$comment_view->setModel($m_comment);
+		$comment_view->add('xepan\base\Controller_Avatar',['options'=>['size'=>50,'margin'=>0,'border'=>['width'=>0]],'name_field'=>'from','default_value'=>'','image_field','contact_image']);
+*/
 
-		$m_comment->addExpression('title_expression')->set(function ($m,$q){
-			return $q->expr("IF([0] is null or [0]='',[1],[2])",[$m->getElement('title'),$m->refSQL('communication_id')->fieldQuery('title'),$m->getElement('title')]);
-		});
-
-		$m_comment->addExpression('message_expression')->set(function ($m,$q){
-			return $q->expr("IF([0] is null or [0]='',[1],[2])",[$m->getElement('description'),$m->refSQL('communication_id')->fieldQuery('description'),$m->getElement('description')]);
-		});
-
-		$comment_lister=$this->add('xepan/hr/Grid',null,null,['view/grid/ticketdetail-comment-grid']);
-		$comment_lister->setModel($m_comment)->setOrder('created_at','desc');
-		$comment_lister->add('xepan\base\Controller_Avatar',['options'=>['size'=>50,'margin'=>0,'border'=>['width'=>0]],'name_field'=>'from','default_value'=>'','image_field','contact_image']);
+		// $contact = $ticket_model->ref('contact_id');
 		
-		$comment_lister->addHook('formatRow',function($g){
-			$g->current_row_html['attachment_count']=$g->model['attach_count'];
-			if(!$g->model['attach_count'])
-				$g->current_row_html['check_attach']=" ";
-			
-			$attach=$g->add('xepan\communication\View_Lister_Attachment',null,'attachments');
-			$attach->setModel('xepan\communication\Communication_Attachment')
-					->addCondition('communication_id',$g->model['communication_id']);
-			$g->current_row_html['attachments']=$attach->getHtml();
-		});
-
-
-		$comment_lister->addMethod('format_message_expression',function($g,$f){
-			$g->current_row_html[$f]= strip_tags($g->model['message_expression']);
-		});
-
-		$comment_lister->addFormatter('message_expression','message_expression');
+		// $member_phones = array_reverse($contact->getPhones());
 		
-
-		$comment_lister->removeColumn('description');
-
-
-		$contact = $ticket_model->ref('contact_id');
+		// $form = $this->add('xepan\communication\Form_Communication');
+		// // $form->setLayout(['form/comment-reply']);
+		// $form->setContact($contact);
 		
-		$member_phones = array_reverse($contact->getPhones());
+		// // $form->getElement('email_to')->set(implode(", ", $ticket_model->ref('contact_id')->getEmails()));
+		// $emails_to =[];		
+		// foreach ($ticket_model->getReplyEmailFromTo()['to'] as $flipped) {
+		// 	$emails_to [] = $flipped['email'];
+		// }
+
+		// $emails_cc =[];		
+		// foreach ($ticket_model->getReplyEmailFromTo()['cc'] as $flipped) {
+		// 	$emails_cc [] = $flipped['email'];
+		// }
+
+		// $emails_bcc =[];		
+		// foreach ($ticket_model->getReplyEmailFromTo()['bcc'] as $flipped) {
+		// 	$emails_bcc [] = $flipped['email'];
+		// }
+
+		// $form->getElement('email_to')->set(implode(", ", $emails_to));
+		// $form->getElement('cc_mails')->set(implode(", ", $emails_cc));
+		// $form->getElement('bcc_mails')->set(implode(", ", $emails_bcc));
+		// $form->getElement('called_to')->set(array_pop($member_phones));
+		// $form->getElement('title')->set("Re: Ticket ".$ticket_model->getToken()." ".$ticket_model['subject']);
 		
-		$form = $this->add('xepan\communication\Form_Communication');
-		$form->setContact($contact);
-		
-		// $form->getElement('email_to')->set(implode(", ", $ticket_model->ref('contact_id')->getEmails()));
-		$emails_to =[];		
-		foreach ($ticket_model->getReplyEmailFromTo()['to'] as $flipped) {
-			$emails_to [] = $flipped['email'];
-		}
+		// $from_email = $form->getElement('from_email');
+		// $from_email->getModel()->addcondition('is_support_email',true);
+		// $from_email->set($ticket_model->supportEmail()->id);
 
-		$emails_cc =[];		
-		foreach ($ticket_model->getReplyEmailFromTo()['cc'] as $flipped) {
-			$emails_cc [] = $flipped['email'];
-		}
+		// $form->addSubmit('Save')->addClass('pull-right btn btn-primary');
 
-		$emails_bcc =[];		
-		foreach ($ticket_model->getReplyEmailFromTo()['bcc'] as $flipped) {
-			$emails_bcc [] = $flipped['email'];
-		}
-
-		$form->getElement('email_to')->set(implode(", ", $emails_to));
-		$form->getElement('cc_mails')->set(implode(", ", $emails_cc));
-		$form->getElement('bcc_mails')->set(implode(", ", $emails_bcc));
-		$form->getElement('called_to')->set(array_pop($member_phones));
-		$form->getElement('title')->set("Re: Ticket ".$ticket_model->getToken()." ".$ticket_model['subject']);
-		
-		$from_email = $form->getElement('from_email');
-		$from_email->getModel()->addcondition('is_support_email',true);
-		$from_email->set($ticket_model->supportEmail()->id);
-
-		$form->addSubmit('Save')->addClass('pull-right btn btn-primary');
-
-		if($form->isSubmitted()){
-			$comm = $form->process();
-			$ticket_model->createCommentOnly($comm);
-			$js=[];
-			$js[]=$form->js()->reload();
-			$js[]=$comment_lister->js()->reload();
-			$form->js(true,$js)->univ()->successMessage('Done')->execute();
-		}
+		// if($form->isSubmitted()){
+		// 	$comm = $form->process();
+		// 	$ticket_model->createCommentOnly($comm);
+		// 	$js=[];
+		// 	$js[]=$form->js()->reload();
+		// 	$js[]=$comment_lister->js()->reload();
+		// 	$form->js(true,$js)->univ()->successMessage('Done')->execute();
+		// }
 	}
 }
