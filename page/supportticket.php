@@ -14,7 +14,8 @@ class page_supportticket extends \xepan\base\Page{
 		$st->setOrder(['last_comment desc','created_at desc']);
 
 		$crud=$this->add('xepan\hr\CRUD',null,null,['view/supportticket/grid']);
-		$crud->setModel($st);
+		$crud->setModel($st,['contact_id','subject','message','priority'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id']);
+		
 		if(!$crud->isEditing())
 			$crud->grid->controller->importField('created_at');
 		

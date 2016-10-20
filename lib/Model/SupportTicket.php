@@ -24,7 +24,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		
 		$st_j=$this->join('support_ticket.document_id');
 
-		$st_j->hasOne('xepan\base\Contact','contact_id');
+		$st_j->hasOne('xepan\base\Contact','contact_id')->display(['form'=>'xepan\base\Basic']);
 		$st_j->hasOne('xepan\communication\Communication','communication_id');
 		
 		$st_j->addField('name')->defaultValue(rand(999,999999))->sortable(true);
