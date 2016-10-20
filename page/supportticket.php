@@ -5,6 +5,10 @@ class page_supportticket extends \xepan\base\Page{
 	public $title="Support Ticket";
 	function init(){
 		parent::init();
+
+
+
+
 		$st=$this->add('xepan\crm\Model_SupportTicket');
 		$st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
@@ -32,6 +36,16 @@ class page_supportticket extends \xepan\base\Page{
 
 		
 		if(!$crud->isEditing()){
+			$this->app->stickyGET('ticket_id');
+			$this->vp = $this->add('VirtualPage')->set(function($p){
+				$tst=$this->add('xepan\crm\Model_SupportTicket')->load($_GET['ticket_id']);	
+				$task = $this->add('xepan\projects\Model_Task');
+				$task->load($tst['task_id']);
+				$detail = $p->add('xepan\projects\View_Detail',['task_id'=>$tst['task_id']]);//,null,null,['view\task_form']);
+				$detail->setModel($task);
+			});
+
+			$crud->grid->js('click')->_selector('.view-related-task')->univ()->frameURL('Related Task',[$this->api->url($this->vp->getURL()),'ticket_id'=>$this->js()->_selectorThis()->closest('[data-id]')->data('id')]);
 			
 			$td_view=$this->add('xepan/crm/View_TicketDetail');//->addClass('xepan-crm-ticket-detail-view');
 			$this->js(true,$td_view->js()->hide());
