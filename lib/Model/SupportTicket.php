@@ -24,7 +24,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		
 		$st_j=$this->join('support_ticket.document_id');
 
-		$st_j->hasOne('xepan\base\Contact','contact_id');
+		$st_j->hasOne('xepan\base\Contact','contact_id')->display(['form'=>'xepan\base\Basic']);
 		$st_j->hasOne('xepan\communication\Communication','communication_id');
 		
 		$st_j->addField('name')->defaultValue(rand(999,999999))->sortable(true);
@@ -46,6 +46,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->addField('subject');
 		$st_j->addField('message')->type('text');
 
+		$st_j->addField('task_id');
 		$st_j->addField('priority')->enum(array('Low','Medium','High','Urgent'))->defaultValue('Medium')->mandatory(true);
 
 		$st_j->hasMany('xepan\crm\Ticket_Comments','ticket_id',null,'Comments');
@@ -65,7 +66,16 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			return $m->refSQL('Comments')->setLimit(1)->setOrder('created_at','desc')->fieldQuery('created_at');
 		})->sortable(true);
 
+
+
 		$this->addExpression('ticket_attachment')->set($this->refSQL('communication_id')->fieldQuery('attachment_count'));
+		
+		$this->addExpression('task_status')->set(function($m,$q){
+			return $task = $m->add('xepan\projects\Model_Task')
+					->addCondition('id',$m->getField('task_id'))
+					->fieldQuery('status');
+
+		});
 
 		$this->addHook('afterLoad',function($m){
 			$this['from_raw'] = json_decode($m['from_raw'],true);
@@ -105,14 +115,41 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		return "# [ ".$this->id." ]";
 	}
 
-	function assign(){
-		$this['status']='Assigned';
+	function page_assign($page){
+		$task = $this->add('xepan\projects\Model_Task');
+		$form  = $page->add('Form');
+		$assign_field = $form->addField('xepan\base\DropDown','assign_to')->setEmptyText('Please Select Employee')->validate('required');
+		$assign_field->setModel('xepan\hr\Employee');
+		$form->addField('DateTimePicker','starting_date');
+		$form->addField('DateTimePicker','deadline');
+		$form->addField('xepan\base\DropDown','priority')
+			->setValueList(['25'=>'Low','50'=>'Medium','75'=>'High','90'=>'Critical'])->setEmptyText('Select Priority');
+		$form->addField('text','narration');
 
-		$this->app->employee
-			->addActivity("Supportticket '".$this['name']."' has assigned to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyWhoCan('closed','reject','Assigned');
+		$form->addSubmit('Assign')->addClass('btn btn-primary');
 
-		$this->saveAndUnload();
+		if($form->isSubmitted()){
+			$task['task_name'] = $this['name'];
+			$task['assign_to_id'] = $form['assign_to'];
+			$task['starting_date'] = $form['starting_date'];
+			$task['deadline'] = $form['deadline'];
+			$task['status'] = "Assigned";
+			$task['priority'] = $form['priority'];
+			$task['description'] = $form['narration'];
+			$task->save();
+			
+			$this['task_id']=$task->id;
+			$this['status']='Assigned';
+
+			// $this->app->employee
+			// 	->addActivity("Supportticket '".$this['name']."' has assigned to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			// 	->notifyWhoCan('closed','reject','Assigned');
+
+			$this->saveAndUnload();
+
+			$this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Ticket Assigned SuccessFully');
+		}
+
 	}
 
 	function reject(){
