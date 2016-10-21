@@ -1,0 +1,80 @@
+.xepan-grid.main-box.clearfix.atk-table.atk-table-zebra.atk-table-bordered(id="{$_name}" class="{$class}")
+    {Pannel}
+    header.main-box-header.clearfix.atk-actions(class=" {$class} ")
+        div.filter-block( style="100%")
+            .pull-right {$grid_buttons} 
+            .form-group.pull-right.xepan-filter-form
+                span(class="form-control pull-left")|{$quick_search}
+                    i(class="fa fa-search search-icon")
+    {/Pannel}
+    .main-box-body.clearfix.table-responsive
+        table.table.user-list.table-hover.footable.toggle-circle-filled(style="width:100%")
+            {header}
+            thead.xepan-hover-hand
+                {cols}{col}
+                th(id="{$name_sortid}")
+                    span Ticket Name {$name_sort}
+                th(id="{$created_at_sortid}" data-hide="phone")
+                    span Created On {$created_at_sort}
+                th(id="{$last_comment_sortid}" data-hide="phone")
+                    span Last Comment On {$last_comment_sort}
+                th
+                    span Email
+                th 
+                {/}{/}
+            {/}
+            {$subheader}
+
+            tbody
+                {rows}{row}
+                tr(class="{$odd_even}" data-id="{$id}")
+                    {cols}
+                    
+                    td
+                        {avatar}
+                        img(src='img/samples/scarlet-159.png', alt='')
+                        {/}
+                        //- a.user-link(href = '{url}?page=xepan_crm_ticketdetails&ticket_id={$id}{/}')
+                        a.user-link.support-ticket-view(href = '#' data-id="{$id}")
+                            {$id}
+                        //- a(href='?page=xepan_commerce_customerdetail&contact_id={$contact_id}')
+                        a.do-view-ticket-customer(href='#' data-contact-id="{$contact_id}")
+                            span.user-subhead{$contact}
+                    td
+                        {$created_at}
+                        br
+                        span.user-subhead(style="overflow: hidden;position: absolute;text-overflow: ellipsis;white-space: nowrap;width: 200px;"){$subject}
+                    td
+                      | {$last_comment}
+                    td
+                      a(href='#') {$from_email}
+                    td  
+                        | {$ticket_attachment}
+                    td  
+                        | {$action}
+                        br
+                        a.view-related-task(href="#" data-id="{$id}")    
+                            {$task_id}&nbsp;
+                        small {$task_status}     
+                    td(style="width: 15%;")
+                        {$edit}
+                        {$delete}
+                    
+                {/}
+                {/}{/}
+                {not_found}
+                div.row
+                    .col-md-12.text-center.alert.alert-warning(role="alert")
+                        span.icon-attention.fa.fa-exclamation-triangle  &nbsp;{$not_found_message}
+                {/}
+
+            {totals}
+            tfoot
+                tr(class="totals")
+                    {cols}{col}
+                    <td {$tdparam}>
+                    {$content}
+                    </td>
+                    {/}{/}
+            {/}
+        {$Paginator}

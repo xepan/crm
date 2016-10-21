@@ -9,7 +9,7 @@ class page_supportticket extends \xepan\base\Page{
 
 
 
-		$st=$this->add('xepan\crm\Model_SupportTicket');
+		$st=$this->add('xepan\crm\Model_SupportTicket')->addCondition('status','<>','Draft');
 		$st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
 
