@@ -45,7 +45,7 @@ class page_solution extends \xepan\base\Page{
 
 		$crud->setModel($my_ticket,['contact_id','subject','message','priority'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id']);
 
-		$f = $crud->grid->addQuickSearch(['contact','id']);
+		$f = $crud->grid->addQuickSearch(['title','contact','id']);
 
 		$s_f =$f->addField('xepan\base\DropDown','status')->setEmptyText("All Status");
 		$s_f->setValueList(['Draft'=>'Draft','Pending'=>'Pending','Assigned'=>'Assigned','Closed'=>'Closed','Rejected'=>"Rejected"]);
