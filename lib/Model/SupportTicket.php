@@ -4,6 +4,7 @@ namespace xepan\crm;
 
 class Model_SupportTicket extends \xepan\hr\Model_Document{
 	public $status=[
+		'Draft',
 		'Pending',
 		'Assigned',
 		'Closed',
@@ -11,10 +12,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	];
 	// 'draft','submitted','solved','canceled','assigned','junk'
 	public $actions=[
-		'Pending'=>['view','edit','delete','reject','assign','closed'],
-		'Assigned'=>['view','edit','delete','closed','reject'],
-		'Closed'=>['view','edit','delete','open'],
-		'Rejected'=>['view','edit','delete']
+		'Draft'=>['view','edit','delete','submitted'],
+		'Pending'=>['view','edit','delete','reject','assign','closed','comment'],
+		'Assigned'=>['view','edit','delete','closed','reject','comment'],
+		'Closed'=>['view','edit','delete','open','comment'],
+		'Rejected'=>['view','edit','delete','comment']
 
 
 	];
@@ -113,6 +115,25 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	function getToken(){
 		return "# [ ".$this->id." ]";
+	}
+
+	function submitted(){
+		$this['status'] = "Pending";
+		// $this->app->employee
+		// 		->addActivity("Supportticket '".$this['name']."' has Submitted to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+		// 		->notifyWhoCan('closed','reject','Assigned');
+
+			$this->saveAndUnload();
+	}
+
+	function page_comment($page){
+		// $page->add('View')->set($this->id);
+		$comment=$page->add('xepan\crm\Model_Ticket_Comments');			
+		$comment->addCondition('ticket_id',$this->id);
+
+		// $comment_view = $page->add('xepan\crm\View_Lister_TicketComments');
+		$comment_view = $page->add('xepan\hr\CRUD');
+		$comment_view->setModel($comment,['title','description']);
 	}
 
 	function page_assign($page){
