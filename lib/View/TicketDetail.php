@@ -5,10 +5,11 @@ class View_TicketDetail extends \View{
 	function setModel($model){
 		$m=parent::setModel($model);
 		// throw new \Exception($this->ticket_id, 1);
-		
+		if($m['to_raw']){
 		$to_lister=$this->add('CompleteLister',null,'to_lister',['view/grid/ticketdetail-grid','to_lister']);
 		$to_lister->setSource($m['to_raw']);
-		
+		}
+
 		if($m['cc_raw']){			
 			$cc_lister=$this->add('CompleteLister',null,'cc_lister',['view/grid/ticketdetail-grid','cc_lister']);
 			$cc_lister->setSource($m['cc_raw']);
@@ -32,7 +33,8 @@ class View_TicketDetail extends \View{
 		$m_comment->setOrder('created_at','desc');
 		$comment_view = $this->add('xepan\crm\View_Lister_TicketComments',null,'comment_view');
 		$comment_view->setModel($m_comment);
-		$comment_view->add('xepan\base\Controller_Avatar',['options'=>['size'=>50,'margin'=>0,'border'=>['width'=>0]],'name_field'=>'from','default_value'=>'','image_field','contact_image']);
+		// $comment_view->add('xepan\base\Controller_Avatar',['name_field'=>'contact','image_field'=>'contact_image','options'=>['size'=>50,'display'=>'block','margin'=>'auto'],'float'=>null,'model'=>$m_comment]);
+		// $comment_view->add('xepan\base\Controller_Avatar',['options'=>['size'=>50,'margin'=>0,'border'=>['width'=>0]],'name_field'=>'from','default_value'=>'','image_field','contact_image']);
 		
 		$contact = $this->model->ref('contact_id');
 		
