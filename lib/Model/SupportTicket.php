@@ -80,7 +80,6 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		});
 
 		$this->addExpression('image_avtar')->set(function($m,$q){
-			return "'123'";
 				return $q->expr('[0]',[$m->refSQL('contact_id')->fieldQuery('image')]);
 			});
 
