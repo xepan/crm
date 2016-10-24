@@ -150,7 +150,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addSubmit('Assign')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
-			$task['task_name'] = $this['name'];
+			$task['task_name'] = "Ticket: ".$this['subject'];
 			$task['assign_to_id'] = $form['assign_to'];
 			$task['starting_date'] = $form['starting_date'];
 			$task['deadline'] = $form['deadline'];
