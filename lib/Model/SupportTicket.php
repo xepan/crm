@@ -15,8 +15,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		'Draft'=>['view','edit','delete','submit'],
 		'Pending'=>['view','edit','delete','reject','assign','closed','comment'],
 		'Assigned'=>['view','edit','delete','closed','reject','comment'],
-		'Closed'=>['view','edit','delete','open','comment'],
-		'Rejected'=>['view','edit','delete','comment']
+		'Closed'=>['view','edit','delete','open'],
+		'Rejected'=>['view','edit','delete']
 
 
 	];
@@ -46,7 +46,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->addField('bcc_raw');//->type('text');
 
 		$st_j->addField('subject');
-		$st_j->addField('message')->type('text');
+		$st_j->addField('message')->type('text')->display(array('form'=>'xepan\base\RichText'));
 
 		$st_j->addField('task_id');
 		$st_j->addField('priority')->enum(array('Low','Medium','High','Urgent'))->defaultValue('Medium')->mandatory(true);
@@ -133,11 +133,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function page_comment($page){
 		// $page->add('View')->set($this->id);
 		$comment=$page->add('xepan\crm\Model_Ticket_Comments');			
+		$comment->addCondition('created_by_id',$this->app->employee->id);
 		$comment->addCondition('ticket_id',$this->id);
 
 		// $comment_view = $page->add('xepan\crm\View_Lister_TicketComments');
-		$comment_view = $page->add('xepan\hr\CRUD');
-		$comment_view->setModel($comment,['title','description']);
+		$comment_view = $page->add('xepan\hr\CRUD',null,null,['view/solution-comment-grid']);
+		$comment_view->setModel($comment,['title','description'],['title','description','created_by','callback_date','created_at']);
 	}
 
 	function page_assign($page){
@@ -149,7 +150,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addField('DateTimePicker','deadline');
 		$form->addField('xepan\base\DropDown','priority')
 			->setValueList(['25'=>'Low','50'=>'Medium','75'=>'High','90'=>'Critical'])->setEmptyText('Select Priority');
-		$form->addField('text','narration');
+		$form->addField('xepan\base\RichText','narration')->set($this['message']);
 
 		$form->addSubmit('Assign')->addClass('btn btn-primary');
 
