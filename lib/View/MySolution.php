@@ -9,6 +9,8 @@ class View_MySolution extends \View{
 	public $title="";
 	function init(){
 		parent::init();
+		$status = $this->app->stickyGET('status');
+
 		$crud = $this->add('xepan\hr\CRUD',['allow_add'=>false],null,['view/supportticket/mysolution']);
 		$crud->grid->add('Button',null,'grid_buttons')->set('Submit A Issue')->addClass('btn btn-primary solution-add-form');		
 		$crud->grid->addClass('trigger-reload');
@@ -54,6 +56,9 @@ class View_MySolution extends \View{
 			->univ()->frameURL('Create Issue',[$vp->getURL()]);
 		
 		$my_ticket = $this->add('xepan\crm\Model_SupportTicket');
+		if($status){
+			$my_ticket->addCondition('status',$status);
+		}
 		$my_ticket->add('xepan\crm\Controller_SideBarStatusFilter');
 		$my_ticket->setOrder('id','desc');
 		$crud->setModel($my_ticket,['contact_id','subject','message','priority'],['id','contact','created_at','subject','last_comment','from_email','task_status','task_id']);
