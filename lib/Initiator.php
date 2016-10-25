@@ -26,7 +26,7 @@ class Initiator extends \Controller_Addon {
 
             $this->app->status_icon["xepan\crm\Model_SupportTicket"] = ['All'=>'fa fa-globe','Pending'=>"fa fa-clock-o xepan-effect-warinig",'Assigned'=>'fa fa-male text-primary','Closed'=>'fa fa-times-circle-o text-success','Rejected'=>'fa fa-times text-danger'];
 
-            $this->app->user_menu->addItem(['My Solutions','icon'=>'fa fa-edit'],'xepan_crm_solution&status=Draft');            
+            $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-edit'],'xepan_crm_solution&status=Draft');            
         }
 
         $search_supportticket = $this->add('xepan\crm\Model_SupportTicket');
