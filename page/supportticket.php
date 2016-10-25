@@ -6,15 +6,14 @@ class page_supportticket extends \xepan\base\Page{
 	function init(){
 		parent::init();
 
-
-
-
 		$st=$this->add('xepan\crm\Model_SupportTicket')->addCondition('status','<>','Draft');
 		$st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
 
+		// $st->add('xepan\hr\Controller_ACL');
 		$crud=$this->add('xepan\hr\CRUD',null,null,['view/supportticket/grid']);
-		$crud->setModel($st,['contact_id','subject','message','priority'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id']);
+		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
+		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field','image_avtar']);
 		
 		if(!$crud->isEditing())
 			$crud->grid->controller->importField('created_at');
@@ -30,8 +29,6 @@ class page_supportticket extends \xepan\base\Page{
 
 		$g->addFormatter('ticket_attachment','ticket_attachment');
 
-
-		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'']);
 		$crud->grid->addPaginator(10);
 		$frm=$crud->grid->addQuickSearch(['document_id']);
 
@@ -68,6 +65,7 @@ class page_supportticket extends \xepan\base\Page{
 			if($this->app->stickyGET('ticket_id')){
 				$ticket_model=$this->add('xepan\crm\Model_SupportTicket')->load($_GET['ticket_id']);
 				$td_view->setModel($ticket_model);
+				// $td_view->add('xepan\base\Controller_Avatar',['name_field'=>'contact','image_field'=>'contact_image','options'=>['size'=>50,'display'=>'block','margin'=>'auto'],'float'=>null,'model'=>$ticket_model]);
 			}
 
 		}		

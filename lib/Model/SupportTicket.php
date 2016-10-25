@@ -12,7 +12,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	];
 	// 'draft','submitted','solved','canceled','assigned','junk'
 	public $actions=[
-		'Draft'=>['view','edit','delete','submitted'],
+		'Draft'=>['view','edit','delete','submit'],
 		'Pending'=>['view','edit','delete','reject','assign','closed','comment'],
 		'Assigned'=>['view','edit','delete','closed','reject','comment'],
 		'Closed'=>['view','edit','delete','open','comment'],
@@ -79,6 +79,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 		});
 
+		$this->addExpression('image_avtar')->set(function($m,$q){
+				return $q->expr('[0]',[$m->refSQL('contact_id')->fieldQuery('image')]);
+			});
+
 		$this->addHook('afterLoad',function($m){
 			$this['from_raw'] = json_decode($m['from_raw'],true);
 
@@ -117,7 +121,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		return "# [ ".$this->id." ]";
 	}
 
-	function submitted(){
+	function submit(){
 		$this['status'] = "Pending";
 		// $this->app->employee
 		// 		->addActivity("Supportticket '".$this['name']."' has Submitted to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
@@ -150,7 +154,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addSubmit('Assign')->addClass('btn btn-primary');
 
 		if($form->isSubmitted()){
-			$task['task_name'] = $this['name'];
+			$task['task_name'] = "Ticket: ".$this['subject'];
 			$task['assign_to_id'] = $form['assign_to'];
 			$task['starting_date'] = $form['starting_date'];
 			$task['deadline'] = $form['deadline'];

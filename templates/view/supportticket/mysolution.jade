@@ -18,8 +18,8 @@
                     span Created On {$created_at_sort}
                 th(id="{$last_comment_sortid}" data-hide="phone")
                     span Last Comment On {$last_comment_sort}
-                th
-                    span Email
+                //- th
+                //-     span Email
                 th 
                 {/}{/}
             {/}
@@ -43,11 +43,11 @@
                     td
                         {$created_at}
                         br
-                        span.user-subhead(style="overflow: hidden;position: absolute;text-overflow: ellipsis;white-space: nowrap;width: 200px;"){$subject}
+                        span.user-subhead(style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 200px;"){$subject}
                     td
                       | {$last_comment}
-                    td
-                      a(href='#') {$from_email}
+                    //- td
+                    //-   a(href='#') {$from_email}
                     td  
                         | {$ticket_attachment}
                     td  
