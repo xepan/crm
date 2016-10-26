@@ -6,6 +6,7 @@ class page_supportticket extends \xepan\base\Page{
 	function init(){
 		parent::init();
 		$st=$this->add('xepan\crm\Model_SupportTicket');
+		// $st->app->muteACL= true;
 		$st->addCondition(
 					$st->dsql()->orExpr()
 						->where('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()))
@@ -18,9 +19,9 @@ class page_supportticket extends \xepan\base\Page{
 		unset($st->actions['Assigned'][5]);
 		unset($st->actions['Pending'][6]);
 
-		// $st->add('xepan\hr\Controller_ACL');
-		$crud=$this->add('xepan\hr\CRUD',null,null,['view/supportticket/grid']);
+		$crud=$this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
+		$crud->add('xepan\hr\Controller_ACL',['action_allowed'=>[],'permissive_acl'=>true]);
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field','image_avtar']);
 		
 		if(!$crud->isEditing())
