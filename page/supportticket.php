@@ -11,6 +11,7 @@ class page_supportticket extends \xepan\base\Page{
 						->where('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()))
 						->where('to_id',null)
 				);
+		unset($st->status[0]);
 		$st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
 		

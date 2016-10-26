@@ -18,6 +18,12 @@ class View_MySolution extends \View{
 		$vp = $this->add('VirtualPage')->set(function($page)use($crud){
 			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 			$email_setting->addCondition('is_support_email',true);
+			$email_setting->addCondition('is_active',true);
+			// if($this->app->employee->getAllowSupportEmail()){
+			// 	$email_setting->addCondition('id',$this->app->employee->getAllowSupportEmail());
+			// }else{
+			// 	$email_setting->addCondition('id',-1);
+			// }
 			$form = $page->add('Form');
 			$complain_field = $form->addField('xepan\base\DropDown','complain_to')->validate('required');
 			$complain_field->setEmptyText("Please Select");
@@ -56,7 +62,7 @@ class View_MySolution extends \View{
 			->univ()->frameURL('Create Issue',[$vp->getURL()]);
 		
 		$my_ticket = $this->add('xepan\crm\Model_SupportTicket');
-		$my_ticket->addCondition('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()));
+		// $my_ticket->addCondition('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()));
 		
 		if($status){
 			$my_ticket->addCondition('status',$status);
