@@ -11,7 +11,7 @@ class page_solution extends \xepan\base\Page{
 		parent::init();
 		$ticket_id = $this->app->stickyGET('ticket_id');
 		$solution_view = $this->add('xepan\crm\View_MySolution'/*,null,'solution_view'*/);
-
+		// $this->app->employee->getAllowSupportEmail();
 		// $comment_view = $this->add('View',null,'comment_view');
 		// if($ticket_id){
 		// 	$comment_view->add('H1')->set('Ticket No : ' . $ticket_id)->addClass('text-center alert alert-success xepan-push');

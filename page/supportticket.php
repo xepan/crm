@@ -5,10 +5,17 @@ class page_supportticket extends \xepan\base\Page{
 	public $title="Support Ticket";
 	function init(){
 		parent::init();
-
-		$st=$this->add('xepan\crm\Model_SupportTicket')->addCondition('status','<>','Draft');
+		$st=$this->add('xepan\crm\Model_SupportTicket');
+		$st->addCondition(
+					$st->dsql()->orExpr()
+						->where('to_id',$this->app->employee->getAllowSupportEmail())
+						->where('to_id',null)
+				);
 		$st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
+		
+		unset($st->actions['Assigned'][5]);
+		unset($st->actions['Pending'][6]);
 
 		// $st->add('xepan\hr\Controller_ACL');
 		$crud=$this->add('xepan\hr\CRUD',null,null,['view/supportticket/grid']);
