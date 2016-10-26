@@ -8,7 +8,7 @@ class page_supportticket extends \xepan\base\Page{
 		$st=$this->add('xepan\crm\Model_SupportTicket');
 		$st->addCondition(
 					$st->dsql()->orExpr()
-						->where('to_id',$this->app->employee->getAllowSupportEmail())
+						->where('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()))
 						->where('to_id',null)
 				);
 		$st->add('xepan\crm\Controller_SideBarStatusFilter');
