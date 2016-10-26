@@ -67,7 +67,6 @@ class View_MySolution extends \View{
 		if($status){
 			$my_ticket->addCondition('status',$status);
 		}
-		$my_ticket->add('xepan\crm\Controller_SideBarStatusFilter');
 
 		$my_ticket->setOrder('id','desc');
 		$crud->setModel($my_ticket,['contact_id','subject','message','priority'],['id','contact','created_at','subject','last_comment','from_email','task_status','task_id']);

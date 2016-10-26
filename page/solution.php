@@ -5,12 +5,43 @@ namespace xepan\crm;
 /**
 * 
 */
+// class page_solution extends \xepan\crm\page_sidebarmystauts{
 class page_solution extends \xepan\base\Page{
 	public $title="My Solutions";
+	public $add_all=true;
 	function init(){
 		parent::init();
 		$ticket_id = $this->app->stickyGET('ticket_id');
 		$solution_view = $this->add('xepan\crm\View_MySolution'/*,null,'solution_view'*/);
+		
+		// $emp_emails = $this->app->employee->getAllowSupportEmail();
+		// $email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+		// $email_setting->addCondition('is_active',true);
+		// $email_setting->addCondition('id',$emp_emails);
+		// $allow_email=[];
+		// foreach ($emp_emails as  $email) {
+		// 	$allow_email[] = $email;
+		// }
+		// var_dump($allow_email);
+		$st = $this->add('xepan\crm\Model_SupportTicket');
+		$st->addCondition('contact_id',$this->app->employee->id);
+		$icon_array = $this->app->status_icon;
+		$model_class=get_class($st);
+		// throw new \Exception($model_class, 1);
+		$counts = $st->_dsql()->del('fields')->field('status')->field('count(*) counts')->group('Status')->get();
+		$counts_redefined =[];
+		$total=0;
+		foreach ($counts as $cnt) {
+			$counts_redefined[$cnt['status']] = $cnt['counts'];
+			$total += $cnt['counts'];
+		}
+		if($this->add_all){
+			$this->app->side_menu->addItem(['All','icon'=>$icon_array[$model_class]['All'],'badge'=>[$total,'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>null]),['status'])->setAttr(['title'=>'All']);
+		}
+		foreach ($st->status as $s) {
+			// echo $s."</br>";
+			$this->app->side_menu->addItem([$s,'icon'=>$icon_array[$model_class][$s],'badge'=>[$counts_redefined[$s],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>$s]),['status'])->setAttr(['title'=>$s]);
+		}
 		// $this->app->employee->getAllowSupportEmail();
 		// $comment_view = $this->add('View',null,'comment_view');
 		// if($ticket_id){

@@ -1,19 +1,24 @@
 <?php
 namespace xepan\crm;
 
-class page_supportticket extends \xepan\base\Page{
+// class page_supportticket extends \xepan\base\Page{
+class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 	public $title="Support Ticket";
 	function init(){
 		parent::init();
+		$status = $this->app->stickyGET('status');
 		$st=$this->add('xepan\crm\Model_SupportTicket');
+		$st->addCondition('status','<>','Draft');
 		// $st->app->muteACL= true;
+		if($status)
+			$st->addCondition('status',$status);
 		$st->addCondition(
 					$st->dsql()->orExpr()
 						->where('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()))
 						->where('to_id',null)
 				);
 		unset($st->status[0]);
-		$st->add('xepan\crm\Controller_SideBarStatusFilter');
+		// $st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
 		
 		unset($st->actions['Assigned'][5]);

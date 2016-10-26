@@ -395,7 +395,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['from_raw'] = $communication['from_raw'];
 		$this['from_email'] = $communication['from_raw']['email'];
 		$this['from_name'] = $communication['from_raw']['name'];
-		$this['to_id'] = $communication['to_id'];
+		$this['to_id'] = $this->supportEmail()->id;
 		$this['to_raw'] = $communication['to_raw'];
 		$this['cc_raw'] = $communication['cc_raw'];
 		$this['bcc_raw'] = $communication['bcc_raw'];
