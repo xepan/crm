@@ -67,14 +67,15 @@
           </div>
         </div>
       </div>
-    </div>{$comment_view}    
+    </div>{$comment_view}
+    {reply_wrapper}    
     <div class="xepan-crm-reply-tool xepan-crm-reply-tool-closed"><a class="xepan-crm-reply-tool-cog btn-success">Reply</a>
       <div class="xepan-crm-communication-reply-view">
         <div class="header btn-primary">Reply To {$to_email}<i class="fa fa-close pull-right close-reply-comment-popup"> </i>
         </div>
         <div class="xepan-crm-form-inner">{$reply_form}    </div>
       </div>
-    </div>
+    </div>{/reply_wrapper}    
   </div>
 </div>
 <style>

@@ -27,9 +27,7 @@
           </td>
           <td>
              
-            {$action}<br/><a href="#" data-id="{$id}" class="view-related-task">
-                 
-              {$task_id}&nbsp;</a><small>{$task_status}     </small>
+            {$action}
           </td>
           <td style="width: 15%;">
             {$edit}
@@ -54,3 +52,8 @@
     </table>{$Paginator}
   </div>
 </div>
+<script>
+  $(document).ready(function() {
+     $('.xepan-crm-reply-tool').hide();
+   });   
+</script>

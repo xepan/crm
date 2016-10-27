@@ -6,6 +6,8 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 	public $title="Support Ticket";
 	function init(){
 		parent::init();
+		$this->js(true)->_selector('.xepan-crm-reply-tool')->hide();
+		
 		$status = $this->app->stickyGET('status');
 		$st=$this->add('xepan\crm\Model_SupportTicket');
 		$st->addCondition('status','<>','Draft');
