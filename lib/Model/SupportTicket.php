@@ -123,11 +123,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	function submit(){
 		$this['status'] = "Pending";
-		// $this->app->employee
-		// 		->addActivity("Supportticket '".$this['name']."' has Submitted to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-		// 		->notifyWhoCan('closed','reject','Assigned');
-
-			$this->saveAndUnload();
+		$this->app->employee
+			->addActivity(" Supportticket '".$this->id."'  has Submitted to", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan('edit,delete,Pending,close','Assigned');
+		$this->save();
 	}
 
 	function page_comment($page){
@@ -166,10 +165,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			
 			$this['task_id']=$task->id;
 			$this['status']='Assigned';
-
+			$this->app->employee
+			->addActivity(" Supportticket '".$this['name']."'  has assigned to", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan('edit,delete,Pending,close','Assigned');
 			// $this->app->employee
-			// 	->addActivity("Supportticket '".$this['name']."' has assigned to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			// 	->notifyWhoCan('closed','reject','Assigned');
+			// 	->addActivity("Support Ticket '".$this['name']."' has assigned to", $this['to_id'] Related Document ID,$this['contact'] ." [ ".$this['contact_id']. " ]" /*Related Contact ID*/,null,null,null)
+			// 	->notifyWhoCan('Assigned','Draft',$this);
 
 			$this->saveAndUnload();
 

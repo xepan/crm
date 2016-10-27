@@ -47,6 +47,11 @@ class View_MySolution extends \View{
 				$ticket['message'] = $form['message'];	
 				$ticket['status'] = 'Draft';
 				$ticket->save();
+				$this->app->employee
+				->addActivity(" Supportticket Ticket '".$ticket->id."'  proceed for draft", $ticket->id, $ticket['contact'] ." [ ".$ticket['contact_id']. " ]",null,null,"xepan_crm_ticketdetails&ticket_id=".$ticket->id."")
+				->notifyWhoCan('edit,delete,Pending,close','Assigned');
+
+
 
 				$js = [
 						$form->js()->closest('.dialog')->dialog('close')->univ()->successMessage('Ticket Created SuccessFully'),
