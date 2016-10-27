@@ -11,7 +11,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$st->addCondition('status','<>','Draft');
 		// $st->app->muteACL= true;
 		if($status)
-			$st->addCondition('status',$status);
+			$st->addCondition('status',explode(",",$status));
 		$st->addCondition(
 					$st->dsql()->orExpr()
 						->where('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()))
