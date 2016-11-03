@@ -21,21 +21,22 @@ class Initiator extends \Controller_Addon {
             $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
 
             $emp_emails = $this->app->employee->getAllowSupportEmail();
-            $email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
-            $email_setting->addCondition('is_active',true);
-            $email_setting->addCondition('id',array_merge([0],$this->app->employee->getAllowSupportEmail()));
-            $allow_email=[];
-            foreach ($emp_emails as  $email) {
-                $allow_email[] = $email;
-            }
-            // var_dump($allow_email);
-            $st = $this->add('xepan\crm\Model_SupportTicket');
-            $st->addCondition('to_id',$allow_email);
-            $st->addCondition('status',['Pending','Assigned']);
-            // $pending=$this->add('xepan\crm\Model_SupportTicket')
-            $st_count= $st->count()->getOne();
+            if($emp_emails){
+                $email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+                $email_setting->addCondition('is_active',true);
+                $email_setting->addCondition('id',$emp_emails);
 
-            $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $st_count ."</span>")->_selector('a:contains(Crm)');
+                $allow_email=[];
+                foreach ($emp_emails as  $email) {
+                    $allow_email[] = $email;
+                }
+                $st = $this->add('xepan\crm\Model_SupportTicket');
+                $st->addCondition('to_id',$allow_email);
+                $st->addCondition('status',['Pending','Assigned']);
+                $st_count= $st->count()->getOne();
+
+                $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $st_count ."</span>")->_selector('a:contains(Crm)');
+            }            
 
             $this->app->status_icon["xepan\crm\Model_SupportTicket"] = ['All'=>'fa fa-globe','Pending'=>"fa fa-clock-o xepan-effect-warinig",'Assigned'=>'fa fa-male text-primary','Closed'=>'fa fa-times-circle-o text-success','Rejected'=>'fa fa-times text-danger'];
 
