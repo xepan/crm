@@ -23,7 +23,7 @@ class Initiator extends \Controller_Addon {
             $emp_emails = $this->app->employee->getAllowSupportEmail();
             $email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
             $email_setting->addCondition('is_active',true);
-            $email_setting->addCondition('id',$emp_emails);
+            $email_setting->addCondition('id',array_merge([0],$this->app->employee->getAllowSupportEmail()));
             $allow_email=[];
             foreach ($emp_emails as  $email) {
                 $allow_email[] = $email;
