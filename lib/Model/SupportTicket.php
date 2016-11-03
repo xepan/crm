@@ -406,6 +406,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['created_at'] = $communication['created_at'];
 		$this['status'] = "Pending";
 		$this->save();
+
+		$this->app->employee
+				->addActivity("Create support ticket : '".$this->id."' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+				->notifyWhoCan('reject,convert,open,Pending,Assigned,closed','Converted');
 		// foreach ($this->attachment() as $attach) {
 		// 	$ticket->addAttachment($attach['attachment_url_id'],$attach['file_id']);	
 		// }
@@ -534,6 +538,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$search_string .=" ". $this['priority'];
 
 		$this['search_string'] = $search_string;
+
+		$this->app->employee
+				->addActivity("Create support ticket : '".$this->id."' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+				->notifyWhoCan('reject,convert,open,Pending,Assigned,closed','Converted');
 		
 	}
 
