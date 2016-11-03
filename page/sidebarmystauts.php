@@ -20,7 +20,7 @@ class page_sidebarmystauts extends \xepan\base\Page{
 		}
 		// var_dump($allow_email);
 		$st = $this->add('xepan\crm\Model_SupportTicket');
-		$st->addCondition('to_id',$allow_email);
+		$st->addCondition('to_id',array_merge([0],$allow_email));
 		$st->addCondition('status','<>','Draft');
 		$icon_array = $this->app->status_icon;
 		$model_class=get_class($st);
