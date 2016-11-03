@@ -31,7 +31,6 @@ class Initiator extends \Controller_Addon {
             // var_dump($allow_email);
             $st = $this->add('xepan\crm\Model_SupportTicket');
             $st->addCondition('to_id',$allow_email);
-            $st->addCondition('status','<>','Draft');
             $st->addCondition('status',['Pending','Assigned']);
             // $pending=$this->add('xepan\crm\Model_SupportTicket')
             $st_count= $st->count()->getOne();
