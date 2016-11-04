@@ -48,8 +48,11 @@ class View_MySolution extends \View{
 				$ticket['status'] = 'Draft';
 				$ticket->save();
 				$this->app->employee
-				->addActivity(" Supportticket Ticket '".$ticket->id."'  proceed for draft", $ticket->id, $ticket['contact'] ." [ ".$ticket['contact_id']. " ]",null,null,"xepan_crm_ticketdetails&ticket_id=".$ticket->id."")
+				->addActivity("Create New Support Ticket : From '".$ticket['contact_name']. "ticket no'", $ticket->id, $ticket['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$ticket->id."")
 				->notifyWhoCan('edit,delete,Pending,close','Assigned');
+				// $this->app->employee
+				// ->addActivity(" Supportticket Ticket '".$ticket->id."'  proceed for draft", $ticket->id, $ticket['contact'] ." [ ".$ticket['contact_id']. " ]",null,null,"xepan_crm_ticketdetails&ticket_id=".$ticket->id."")
+				// ->notifyWhoCan('edit,delete,Pending,close','Assigned');
 
 
 

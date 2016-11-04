@@ -106,6 +106,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$m['subject'] = $m['subject']?:("(no subject)");
 		});
 
+		$this->addExpression('contact_name')->set($this->refSQL('contact_id')->fieldQuery('name'));
+
 		$this->addHook('beforeDelete',[$this,'deleteComments']);
 		$this->addHook('beforeSave',[$this,'updateSearchString']);
 
@@ -408,7 +410,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this->save();
 
 		$this->app->employee
-				->addActivity("Create support ticket : '".$this->id."' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+				->addActivity("Create New Support Ticket : From '".$this['contact_name']. "ticket no'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 				->notifyWhoCan('reject,convert,open,Pending,Assigned,closed','Converted');
 		// foreach ($this->attachment() as $attach) {
 		// 	$ticket->addAttachment($attach['attachment_url_id'],$attach['file_id']);	
@@ -538,10 +540,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$search_string .=" ". $this['priority'];
 
 		$this['search_string'] = $search_string;
-
-		$this->app->employee
-				->addActivity("Create support ticket : '".$this->id."' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-				->notifyWhoCan('reject,convert,open,Pending,Assigned,closed','Converted');
+		
 		
 	}
 

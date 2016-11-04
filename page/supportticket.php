@@ -27,10 +27,35 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		unset($st->actions['Pending'][6]);
 
 		$crud=$this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
+		$form = $crud->form;
+		if($crud->isEditing()){
+
+			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+			$email_setting->addCondition('is_support_email',true);
+			$email_setting->addCondition('is_active',true);
+			
+			$complain_field = $form->addField('xepan\base\DropDown','complain_to')->validate('required');
+			$complain_field->setEmptyText("Please Select");
+			$complain_field->setModel($email_setting,['name']);
+		}
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
 		$crud->add('xepan\hr\Controller_ACL',['action_allowed'=>[],'permissive_acl'=>true]);
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field','image_avtar']);
+		if($form->isSubmitted()){
+			$new_ticket = $this->add('xepan\crm\Model_SupportTicket');
+			$new_ticket->addCondition('id',$st->id);
+			$new_ticket->tryLoadAny();
+			if($new_ticket->loaded()){
+				$new_ticket['to_id'] = $form['complain_to'];
+				$new_ticket->save();
+			}
+		}
+		if($crud->isEditing()){
+			$complain_field->set($crud->model['to_id']);
+		}
 		
+
+
 		if(!$crud->isEditing())
 			$crud->grid->controller->importField('created_at');
 		
