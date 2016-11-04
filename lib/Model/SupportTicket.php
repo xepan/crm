@@ -68,6 +68,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			return $m->refSQL('Comments')->setLimit(1)->setOrder('created_at','desc')->fieldQuery('created_at');
 		})->sortable(true);
 
+		$this->addExpression('assign_to_id')->set(function($m,$q){
+			return $task = $m->add('xepan\projects\Model_Task',['table_alias'=>'sttiass'])
+				->addCondition('id',$m->getElement('task_id'))
+				->fieldQuery('assign_to_id'); 
+		});
+
 
 
 		$this->addExpression('ticket_attachment')->set($this->refSQL('communication_id')->fieldQuery('attachment_count'));

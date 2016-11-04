@@ -18,6 +18,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 					$st->dsql()->orExpr()
 						->where('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()))
 						->where('to_id',null)
+						->where($st->dsql()->expr('[0] = [1]',[$st->getElement('assign_to_id'),$this->app->employee->id]))
 				);
 		unset($st->status[0]);
 		// $st->add('xepan\crm\Controller_SideBarStatusFilter');
