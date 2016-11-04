@@ -409,12 +409,20 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['status'] = "Pending";
 		$this->save();
 
+		$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+		$my_emails->addCondition('id',$this['to_id']);
+		$my_emails->tryLoadAny();
+
+		$emp = $this->add('xepan\hr\Model_Employee');
+		$emp->addCondition('post_id',$my_emails['post_id']);
+		$post_employee=[];
+		foreach ($emp as  $employee) {
+			$post_employee[] = $employee->id;
+		}
 		$this->app->employee
-				->addActivity("Create New Support Ticket : From '".$this['contact_name']. "ticket no'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-				->notifyWhoCan('reject,convert,open,Pending,Assigned,closed','Converted');
-		// foreach ($this->attachment() as $attach) {
-		// 	$ticket->addAttachment($attach['attachment_url_id'],$attach['file_id']);	
-		// }
+			->addActivity("Create New Support Ticket : From '".$this['contact_name']. " ticket no ' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyto($post_employee,'Create New Ticket From : ' .$this['contact_name']. ' Ticket No:  ' .$this->id. "  to :  ".$my_emails['name']. "  " .  "  Related Message :: " .$this['subject']);
+
 	}
 
 	function supportEmail(){
