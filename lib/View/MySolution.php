@@ -61,7 +61,7 @@ class View_MySolution extends \View{
 				}
 				$this->app->employee
 					->addActivity("Create New Support Ticket : From '".$ticket['contact_name']. " ticket no ' ", $ticket->id, $ticket['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$ticket->id."")
-					->notifyto($post_employee,'Create New Ticket From : ' .$ticket['contact_name']. ' Ticket No:  ' .$ticket->id. "  to :  ".$my_emails['name']. "  " .  "  Related Message :: " .$ticket['subject']);
+					->notifyto($post_employee,'Create New Ticket From : ' .$ticket['contact_name']. ', Ticket No:  ' .$ticket->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$ticket['subject']);
 				
 				$js = [
 						$form->js()->closest('.dialog')->dialog('close')->univ()->successMessage('Ticket Created SuccessFully'),

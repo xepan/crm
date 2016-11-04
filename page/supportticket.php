@@ -62,7 +62,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 				}
 				$this->app->employee
 					->addActivity("Create New Support Ticket : From '".$new_ticket['contact_name']. " ticket no ' ", $new_ticket->id, $new_ticket['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$new_ticket->id."")
-					->notifyto($post_employee,'Create New Ticket From : ' .$new_ticket['contact_name']. ' Ticket No:  ' .$new_ticket->id. "  to :  ".$my_emails['name']. "  " .  "  Related Message :: " .$new_ticket['subject']);
+					->notifyto($post_employee,'Create New Ticket From : ' .$new_ticket['contact_name']. ', Ticket No:  ' .$new_ticket->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$new_ticket['subject']);
 			}
 		}
 		if($crud->isEditing()){

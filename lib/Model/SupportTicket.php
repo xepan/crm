@@ -421,8 +421,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		}
 		$this->app->employee
 			->addActivity("Create New Support Ticket : From '".$this['contact_name']. " ticket no ' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyto($post_employee,'Create New Ticket From : ' .$this['contact_name']. ' Ticket No:  ' .$this->id. "  to :  ".$my_emails['name']. "  " .  "  Related Message :: " .$this['subject']);
-
+			->notifyto($post_employee,'Create New Ticket From : ' .$this['contact_name']. ', Ticket No:  ' .$this->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$this['subject']);
 	}
 
 	function supportEmail(){
