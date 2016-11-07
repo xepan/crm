@@ -1,10 +1,12 @@
 <?php
 namespace xepan\crm;
 class View_TicketDetail extends \View{
-	public $ticket_id;	
+	public $ticket_id;
+	public $reply_view = true;
+
 	function setModel($model){
 		$m=parent::setModel($model);
-		// throw new \Exception($this->ticket_id, 1);
+		// throw new \Exception($this->reply_view, 1);
 		if($m['to_raw']){
 		$to_lister=$this->add('CompleteLister',null,'to_lister',['view/grid/ticketdetail-grid','to_lister']);
 		$to_lister->setSource($m['to_raw']);
@@ -40,55 +42,59 @@ class View_TicketDetail extends \View{
 		
 		$member_phones = array_reverse($contact->getPhones());
 		
-		$form = $this->add('xepan\communication\Form_Communication',null,'reply_form');
-		// $form->setLayout(['form/comment-reply']);
-		$form->setContact($contact);
-		
-		// $form->getElement('email_to')->set(implode(", ", $ticket_model->ref('contact_id')->getEmails()));
-		$emails_to =[];		
-		foreach ($this->model->getReplyEmailFromTo()['to'] as $flipped) {
-			$emails_to [] = $flipped['email'];
-		}
+		if($this->reply_view){
+			$form = $this->add('xepan\communication\Form_Communication',null,'reply_form');
+			// $form->setLayout(['form/comment-reply']);
+			$form->setContact($contact);
+			
+			// $form->getElement('email_to')->set(implode(", ", $ticket_model->ref('contact_id')->getEmails()));
+			$emails_to =[];		
+			foreach ($this->model->getReplyEmailFromTo()['to'] as $flipped) {
+				$emails_to [] = $flipped['email'];
+			}
 
-		$emails_cc =[];		
-		foreach ($this->model->getReplyEmailFromTo()['cc'] as $flipped) {
-			$emails_cc [] = $flipped['email'];
-		}
+			$emails_cc =[];		
+			foreach ($this->model->getReplyEmailFromTo()['cc'] as $flipped) {
+				$emails_cc [] = $flipped['email'];
+			}
 
-		$emails_bcc =[];		
-		foreach ($this->model->getReplyEmailFromTo()['bcc'] as $flipped) {
-			$emails_bcc [] = $flipped['email'];
-		}
+			$emails_bcc =[];		
+			foreach ($this->model->getReplyEmailFromTo()['bcc'] as $flipped) {
+				$emails_bcc [] = $flipped['email'];
+			}
 
-		$form->getElement('email_to')->set(implode(", ", $emails_to));
-		$form->getElement('cc_mails')->set(implode(", ", $emails_cc));
-		$form->getElement('bcc_mails')->set(implode(", ", $emails_bcc));
-		$form->getElement('called_to')->set(array_pop($member_phones));
-		$form->getElement('title')->set("Re: Ticket ".$this->model->getToken()." ".$this->model['subject']);
-		$body_field = $form->getElement('body');
-		$body_field->options = ['toolbar1'=>"styleselect | bold italic fontselect fontsizeselect | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor",'menubar'=>false];
-		$from_email = $form->getElement('from_email');
-		$from_email->getModel()->addcondition('is_support_email',true);
-		$from_email->set($this->model->supportEmail()->id);
+			$form->getElement('email_to')->set(implode(", ", $emails_to));
+			$form->getElement('cc_mails')->set(implode(", ", $emails_cc));
+			$form->getElement('bcc_mails')->set(implode(", ", $emails_bcc));
+			$form->getElement('called_to')->set(array_pop($member_phones));
+			$form->getElement('title')->set("Re: Ticket ".$this->model->getToken()." ".$this->model['subject']);
+			$body_field = $form->getElement('body');
+			$body_field->options = ['toolbar1'=>"styleselect | bold italic fontselect fontsizeselect | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor",'menubar'=>false];
+			$from_email = $form->getElement('from_email');
+			$from_email->getModel()->addcondition('is_support_email',true);
+			$from_email->set($this->model->supportEmail()->id);
 
-		$form->addSubmit('Save')->addClass('pull-right btn btn-primary');
+			$form->addSubmit('Save')->addClass('pull-right btn btn-primary');
 
-		if($form->isSubmitted()){
-			$comm = $form->process();
-			$this->model->createCommentOnly($comm);
-			// $js=[];
-			// $js[]=$form->js()->reload();
-			// $js[]=$comment_lister->js()->reload();
-			$js = [
-				$form->js()->reload(),
-				$this->js()->find('.xepan-crm-reply-tool')->toggleClass('xepan-crm-reply-tool-closed'),
-				$comment_view->js()->reload()
-				];
-			$form->js(true,$js)->univ()->successMessage('Done')->execute();
-		}
+			if($form->isSubmitted()){
+				$comm = $form->process();
+				$this->model->createCommentOnly($comm);
+				// $js=[];
+				// $js[]=$form->js()->reload();
+				// $js[]=$comment_lister->js()->reload();
+				$js = [
+					$form->js()->reload(),
+					$this->js()->find('.xepan-crm-reply-tool')->toggleClass('xepan-crm-reply-tool-closed'),
+					$comment_view->js()->reload()
+					];
+				$form->js(true,$js)->univ()->successMessage('Done')->execute();
+			}
 
-		$this->js('click',$this->js()->toggleClass('xepan-crm-reply-tool-closed')->_selector('.xepan-crm-reply-tool'))->_selector('.close-reply-comment-popup');
-		// $this->js('click',$this->js()->slideToggle()->_selector('.xepan-crm-reply-tool'))->_selector('.minimize-comment-popup');
+			$this->js('click',$this->js()->toggleClass('xepan-crm-reply-tool-closed')->_selector('.xepan-crm-reply-tool'))->_selector('.close-reply-comment-popup');
+			// $this->js('click',$this->js()->slideToggle()->_selector('.xepan-crm-reply-tool'))->_selector('.minimize-comment-popup');
+		}else{
+			$this->template->tryDel('reply_wrapper');
+		}		
 
 		return $m;
 

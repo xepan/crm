@@ -82,7 +82,8 @@ div(id="{$_name}")
                                   a(href='{$file}' download) Download
                                   {/}
                               {/}{/}
-          {$comment_view}    
+          {$comment_view}
+          {reply_wrapper}    
           .xepan-crm-reply-tool.xepan-crm-reply-tool-closed
             a.xepan-crm-reply-tool-cog.btn-success
               |Reply
@@ -95,6 +96,7 @@ div(id="{$_name}")
                   //- i.fa.fa-minus.pull-right.minimize-comment-popup
               .xepan-crm-form-inner
                 {$reply_form}    
+          {/reply_wrapper}    
           //- .nano-pane
           //-   .nano-slider(style='height: 502px; transform: translate(0px, 60px);')
 style.

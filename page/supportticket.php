@@ -1,29 +1,78 @@
 <?php
 namespace xepan\crm;
 
-class page_supportticket extends \xepan\base\Page{
+// class page_supportticket extends \xepan\base\Page{
+class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 	public $title="Support Ticket";
 	function init(){
 		parent::init();
+		$this->js(true)->_selector('.xepan-crm-reply-tool')->hide();
+		
+		$status = $this->app->stickyGET('status');
 		$st=$this->add('xepan\crm\Model_SupportTicket');
+		$st->addCondition('status','<>','Draft');
 		// $st->app->muteACL= true;
+		if($status)
+			$st->addCondition('status',explode(",",$status));
 		$st->addCondition(
 					$st->dsql()->orExpr()
 						->where('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()))
 						->where('to_id',null)
+						->where($st->dsql()->expr('[0] = [1]',[$st->getElement('assign_to_id'),$this->app->employee->id]))
 				);
 		unset($st->status[0]);
-		$st->add('xepan\crm\Controller_SideBarStatusFilter');
+		// $st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
 		
 		unset($st->actions['Assigned'][5]);
 		unset($st->actions['Pending'][6]);
 
 		$crud=$this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
+		$form = $crud->form;
+		if($crud->isEditing()){
+
+			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+			$email_setting->addCondition('is_support_email',true);
+			$email_setting->addCondition('is_active',true);
+			
+			$complain_field = $form->addField('xepan\base\DropDown','complain_to')->validate('required');
+			$complain_field->setEmptyText("Please Select");
+			$complain_field->setModel($email_setting,['name']);
+		}
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
 		$crud->add('xepan\hr\Controller_ACL',['action_allowed'=>[],'permissive_acl'=>true]);
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field','image_avtar']);
+		if($crud->isEditing()){
+			if($form->isSubmitted()){
+				$new_ticket = $this->add('xepan\crm\Model_SupportTicket');
+				$new_ticket->addCondition('id',$st->id);
+				$new_ticket->tryLoadAny();
+				if($new_ticket->loaded()){
+					$new_ticket['to_id'] = $form['complain_to'];
+					$new_ticket->save();
+				}
+				
+				$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+				$my_emails->addCondition('id',$new_ticket['to_id']);
+				$my_emails->tryLoadAny();
+				$emp = $this->add('xepan\hr\Model_Employee');
+				$emp->addCondition('post_id',$my_emails['post_id']);
+				$post_employee=[];
+				foreach ($emp as  $employee) {
+					$post_employee[] = $employee->id;
+				}
+				$this->app->employee
+					->addActivity("Create New Support Ticket : From '".$new_ticket['contact_name']. " ticket no ' ", $new_ticket->id, $new_ticket['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$new_ticket->id."")
+					->notifyto($post_employee,'Create New Ticket From : ' .$new_ticket['contact_name']. ', Ticket No:  ' .$new_ticket->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$new_ticket['subject']);
+			}
+		}
+		if($crud->isEditing()){
+			$complain_field->set($crud->model['to_id']);
+
+		}
 		
+
+
 		if(!$crud->isEditing())
 			$crud->grid->controller->importField('created_at');
 		

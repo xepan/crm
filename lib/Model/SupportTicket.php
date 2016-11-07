@@ -68,6 +68,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			return $m->refSQL('Comments')->setLimit(1)->setOrder('created_at','desc')->fieldQuery('created_at');
 		})->sortable(true);
 
+		$this->addExpression('assign_to_id')->set(function($m,$q){
+			return $task = $m->add('xepan\projects\Model_Task',['table_alias'=>'sttiass'])
+				->addCondition('id',$m->getElement('task_id'))
+				->fieldQuery('assign_to_id'); 
+		});
+
 
 
 		$this->addExpression('ticket_attachment')->set($this->refSQL('communication_id')->fieldQuery('attachment_count'));
@@ -106,6 +112,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$m['subject'] = $m['subject']?:("(no subject)");
 		});
 
+		$this->addExpression('contact_name')->set($this->refSQL('contact_id')->fieldQuery('name'));
+
 		$this->addHook('beforeDelete',[$this,'deleteComments']);
 		$this->addHook('beforeSave',[$this,'updateSearchString']);
 
@@ -123,11 +131,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	function submit(){
 		$this['status'] = "Pending";
-		// $this->app->employee
-		// 		->addActivity("Supportticket '".$this['name']."' has Submitted to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-		// 		->notifyWhoCan('closed','reject','Assigned');
-
-			$this->saveAndUnload();
+		$this->app->employee
+			->addActivity(" Supportticket '".$this->id."'  has Submitted to", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan('edit,delete,Pending,close','Assigned');
+		$this->save();
 	}
 
 	function page_comment($page){
@@ -166,10 +173,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			
 			$this['task_id']=$task->id;
 			$this['status']='Assigned';
-
+			$this->app->employee
+			->addActivity(" Supportticket '".$this['name']."'  has assigned to", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan('edit,delete,Pending,close','Assigned');
 			// $this->app->employee
-			// 	->addActivity("Supportticket '".$this['name']."' has assigned to '".$this['to_id']."'", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			// 	->notifyWhoCan('closed','reject','Assigned');
+			// 	->addActivity("Support Ticket '".$this['name']."' has assigned to", $this['to_id'] Related Document ID,$this['contact'] ." [ ".$this['contact_id']. " ]" /*Related Contact ID*/,null,null,null)
+			// 	->notifyWhoCan('Assigned','Draft',$this);
 
 			$this->saveAndUnload();
 
@@ -395,7 +404,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['from_raw'] = $communication['from_raw'];
 		$this['from_email'] = $communication['from_raw']['email'];
 		$this['from_name'] = $communication['from_raw']['name'];
-		$this['to_id'] = $communication['to_id'];
+		$this['to_id'] = $this->supportEmail()->id;
 		$this['to_raw'] = $communication['to_raw'];
 		$this['cc_raw'] = $communication['cc_raw'];
 		$this['bcc_raw'] = $communication['bcc_raw'];
@@ -405,9 +414,20 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['created_at'] = $communication['created_at'];
 		$this['status'] = "Pending";
 		$this->save();
-		// foreach ($this->attachment() as $attach) {
-		// 	$ticket->addAttachment($attach['attachment_url_id'],$attach['file_id']);	
-		// }
+
+		$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+		$my_emails->addCondition('id',$this['to_id']);
+		$my_emails->tryLoadAny();
+
+		$emp = $this->add('xepan\hr\Model_Employee');
+		$emp->addCondition('post_id',$my_emails['post_id']);
+		$post_employee=[];
+		foreach ($emp as  $employee) {
+			$post_employee[] = $employee->id;
+		}
+		$this->app->employee
+			->addActivity("Create New Support Ticket : From '".$this['contact_name']. " ticket no ' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyto($post_employee,'Create New Ticket From : ' .$this['contact_name']. ', Ticket No:  ' .$this->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$this['subject']);
 	}
 
 	function supportEmail(){
@@ -533,6 +553,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$search_string .=" ". $this['priority'];
 
 		$this['search_string'] = $search_string;
+		
 		
 	}
 

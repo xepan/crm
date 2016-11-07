@@ -52,10 +52,10 @@
                         | {$ticket_attachment}
                     td  
                         | {$action}
-                        br
-                        a.view-related-task(href="#" data-id="{$id}")    
-                            {$task_id}&nbsp;
-                        small {$task_status}     
+                        //- br
+                        //- a.view-related-task(href="#" data-id="{$id}")    
+                            //- {$task_id}&nbsp;
+                        //- small {$task_status}     
                     td(style="width: 15%;")
                         {$edit}
                         {$delete}
@@ -78,3 +78,9 @@
                     {/}{/}
             {/}
         {$Paginator}
+
+
+script.
+     $(document).ready(function() {
+        $('.xepan-crm-reply-tool').hide();
+      });   

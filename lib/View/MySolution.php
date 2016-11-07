@@ -48,6 +48,21 @@ class View_MySolution extends \View{
 				$ticket['status'] = 'Draft';
 				$ticket->save();
 
+				$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+				$my_emails->addCondition('id',$ticket['to_id']);
+				$my_emails->tryLoadAny();
+				
+				$emp = $this->add('xepan\hr\Model_Employee');
+				$emp->addCondition('post_id',$my_emails['post_id']);
+				
+				$post_employee=[];
+				foreach ($emp as  $employee) {
+					$post_employee[] = $employee->id;
+				}
+				$this->app->employee
+					->addActivity("Create New Support Ticket : From '".$ticket['contact_name']. " ticket no ' ", $ticket->id, $ticket['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$ticket->id."")
+					->notifyto($post_employee,'Create New Ticket From : ' .$ticket['contact_name']. ', Ticket No:  ' .$ticket->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$ticket['subject']);
+				
 				$js = [
 						$form->js()->closest('.dialog')->dialog('close')->univ()->successMessage('Ticket Created SuccessFully'),
 						$crud->grid->js()->trigger('reload')
@@ -67,7 +82,6 @@ class View_MySolution extends \View{
 		if($status){
 			$my_ticket->addCondition('status',$status);
 		}
-		$my_ticket->add('xepan\crm\Controller_SideBarStatusFilter');
 
 		$my_ticket->setOrder('id','desc');
 		$crud->setModel($my_ticket,['contact_id','subject','message','priority'],['id','contact','created_at','subject','last_comment','from_email','task_status','task_id']);
@@ -101,6 +115,29 @@ class View_MySolution extends \View{
 						break;
 				}
 		});
+
+		$td_view=$this->add('xepan/crm/View_TicketDetail',['reply_view'=>false]);//->addClass('xepan-crm-ticket-detail-view');
+			$this->js(true,$td_view->js()->hide());
+			// $crud->grid->js('click')->_selector('.do-view-ticket-customer')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
+			$crud->grid->js('click',
+				[
+					$td_view->js()
+						->html('<div style="width:100%"><img style="width:20%;display:block;margin:auto;" src="vendor/xepan/communication/templates/images/email-loader.gif"/></div>')
+						->reload(['ticket_id'=>$this->js()->_selectorThis()->data('id')]),
+					$td_view->js()->show(),
+					$crud->js()->hide()])
+			->_selector('.support-ticket-view');
+
+			$td_view->js('click',[$td_view->js()->hide(),$crud->js()->show()])
+				->_selector('.back-to-support-ticket');
+
+
+
+			if($this->app->stickyGET('ticket_id')){
+				$ticket_model=$this->add('xepan\crm\Model_SupportTicket')->load($_GET['ticket_id']);
+				$td_view->setModel($ticket_model);
+				// $td_view->add('xepan\base\Controller_Avatar',['name_field'=>'contact','image_field'=>'contact_image','options'=>['size'=>50,'display'=>'block','margin'=>'auto'],'float'=>null,'model'=>$ticket_model]);
+			}
 
 
 	}
