@@ -5,13 +5,13 @@ div(id="{$_name}")
           .email-detail-nano-content(tabindex='0', style='right: -13px;')
             #email-detail-inner
               #email-detail-subject.clearfix
-                span.subject {subject}FW: Like your new movie{/}
-                span.label.label-success {status}Work{/}
+                span.subject {$subject}
+                span.label.label-success {$status}
                 .pull-right(style="margin-right:7%"){$action}
               #email-detail-sender.clearfix(style="height:auto;")
                 .picture.hidden-xs
                   {avatar}
-                  img(alt='', src='{image}img/samples/scarlet-159.png{/}')
+                  //- img(alt='', src='{image}img/samples/scarlet-159.png{/}')
                   {/}
                 .users(style="width:88%")
                   .from.clearfix
@@ -37,7 +37,7 @@ div(id="{$_name}")
                     small {$bcc_name}
                 .tools
                   .date
-                    | {callback_date}Sep 12 (6 days ago){/}
+                    | {callback_date}{/}
                   
               #email-body
                 #accordion.panel-group.accordion
@@ -45,19 +45,19 @@ div(id="{$_name}")
                       .panel-heading
                         h4.panel-title(style="height: 20px;overflow: hidden;")
                           a.accordion-toggle.collapsed(href='#collapseTwo', data-parent='#accordion', data-toggle='collapse')
-                            | {collapse_header}Collapsible Group Item #2{/}
+                            | {collapse_header}{/}
                       #collapseTwo.panel-collapse.collapse(style='height: 2px;')
                         .panel-body
                           {email_body}  
-                          p
-                            | Hey Scarlett,
-                          p
-                            | Well, the way they make shows is, they make one show. That show's called a pilot. Then they
-                            | show that show to the people who make shows, and on the strength of that one show they decide
-                            | if they're going to make more shows. 
-                            a(href='#') Some pilots
-                            |  get picked and become television
-                            | programs. Some don't, become nothing. She starred in one of the ones that became nothing.
+                          //- p
+                          //-   | Hey Scarlett,
+                          //- p
+                          //-   | Well, the way they make shows is, they make one show. That show's called a pilot. Then they
+                          //-   | show that show to the people who make shows, and on the strength of that one show they decide
+                          //-   | if they're going to make more shows. 
+                          //-   a(href='#') Some pilots
+                          //-   |  get picked and become television
+                          //-   | programs. Some don't, become nothing. She starred in one of the ones that became nothing.
                           {/}
                           #email-detail-attachments
                             #email-attachments-header.clearfix
@@ -65,7 +65,7 @@ div(id="{$_name}")
                                 {check_attach}
                                 i.fa.fa-paperclip &nbsp;
                                 span Attachments : 
-                                b {ticket_attachment}( 3 ){/}
+                                b {ticket_attachment}{/}
                                 {/}
                               .tools
                                 //- a.all-Attachment-media(data-id="{$id}") Download all

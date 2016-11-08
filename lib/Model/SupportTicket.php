@@ -211,15 +211,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$mailbox=explode('#', $communication['mailbox']);
 		$support_email = $this->supportEmail($mailbox[0]);
 
-		if(!$this['from_email']){
-			return false;
-		}
-
 		$mail = $this->add('xepan\communication\Model_Communication_Email');
 		$communication = $this->ref('communication_id');
-		if(!$this->loaded()){
-			return false;	
-		}
 
 		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
 		[
@@ -272,7 +265,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		}
 
 		$form=$p->add('Form');
-		$form->addField('Checkbox','send_email')->set(true);
+		$send_email_field = $form->addField('Checkbox','send_email');
+		if($this['from_email']){
+			$send_email_field->set(true);
+		}else{
+			$send_email_field->set(false);
+		}
 		$form->addField('line','to')->set(implode(", ", $emails_to));
 		$form->addField('line','cc')->set(implode(", ", $emails_cc));
 		$form->addField('line','bcc')->set(implode(", ", $emails_bcc));

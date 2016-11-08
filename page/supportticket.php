@@ -123,7 +123,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 			if($this->app->stickyGET('ticket_id')){
 				$ticket_model=$this->add('xepan\crm\Model_SupportTicket')->load($_GET['ticket_id']);
 				$td_view->setModel($ticket_model);
-				// $td_view->add('xepan\base\Controller_Avatar',['name_field'=>'contact','image_field'=>'contact_image','options'=>['size'=>50,'display'=>'block','margin'=>'auto'],'float'=>null,'model'=>$ticket_model]);
+				$td_view->add('xepan\base\Controller_Avatar',['name_field'=>'contact','image_field'=>'contact_image','options'=>['size'=>50,'display'=>'block','margin'=>'auto'],'float'=>null,'model'=>$ticket_model]);
 			}
 
 		}		
