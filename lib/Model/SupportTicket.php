@@ -132,8 +132,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function submit(){
 		$this['status'] = "Pending";
 		$this->app->employee
-			->addActivity(" Supportticket '".$this->id."'  has Submitted to", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyWhoCan('edit,delete,Pending,close','Assigned');
+			->addActivity(" Support Ticket No :  '[#".$this->id."]'  has Submitted to ".$this['to']."", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan('reject','assign','closed','comment','Pending');
 		$this->save();
 	}
 
@@ -196,16 +196,16 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function reject(){
 		$this['status']='Rejected';
 		$this->app->employee
-			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyWhoCan('edit,delete','Rejected');
+			->addActivity(" Support Ticket No : '[#".$this->id."]' rejected", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan(' ','Rejected');
 		$this->saveAndUnload();
 	}
 
 	function open(){
 		$this['status']='Pending';
 		$this->app->employee
-			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyWhoCan('edit,delete,close','Pending');
+			->addActivity(" Support Ticket No : '[#".$this->id."]' reopened", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan('reject','assign','closed','comment','Pending');
 		$this->save();
 	}
 
