@@ -301,8 +301,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 		// $form->addSubmit('close');
 		if($form->isSubmitted()){
-				
-			$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			if($form['from_email']){
+				$mail->setfrom($email_setting['from_email'],$email_setting['from_name']);
+			}else{
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			}	
 			$to_emails=explode(',', trim($form['to']));
 			foreach ($to_emails as $to_mail) {
 				$mail->addTo($to_mail);
