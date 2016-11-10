@@ -167,6 +167,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$task['starting_date'] = $form['starting_date'];
 			$task['deadline'] = $form['deadline'];
 			$task['status'] = "Assigned";
+			$task['type'] = "Task";
 			$task['priority'] = $form['priority'];
 			$task['description'] = $form['narration'];
 			$task->save();
