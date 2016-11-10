@@ -302,7 +302,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		// $form->addSubmit('close');
 		if($form->isSubmitted()){
 			if($form['from_email']){
-				$mail->setfrom($email_setting['from_email'],$email_setting['from_name']);
+				$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting')->load($form['from_email']);
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
 			}else{
 				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
 			}	
