@@ -280,6 +280,17 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		}else{
 			$send_email_field->set(false);
 		}
+		if(!$support_email['from_email']){
+			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+			$email_setting->addCondition('is_support_email',true);
+			$email_setting->addCondition('is_active',true);
+			if($this->app->employee->getAllowSupportEmail()){
+				$email_setting->addCondition('id',$this->app->employee->getAllowSupportEmail());
+			}else{
+				$email_setting->addCondition('id',-1);
+			}
+			$form->addField('DropDown','from_email')->setModel($email_setting);
+		}
 		$form->addField('line','to')->set($this['from_email']?:str_replace("<br/>", ", ", $this->ref('contact_id')->get('emails_str')));
 		// $form->addField('line','to')->set(implode(", ", $emails_to));
 		$form->addField('line','cc')->set(implode(", ", $emails_cc));
@@ -290,8 +301,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 		// $form->addSubmit('close');
 		if($form->isSubmitted()){
-				
-			$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			if($form['from_email']){
+				$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting')->load($form['from_email']);
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			}else{
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			}	
 			$to_emails=explode(',', trim($form['to']));
 			foreach ($to_emails as $to_mail) {
 				$mail->addTo($to_mail);
