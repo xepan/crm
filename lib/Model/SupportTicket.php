@@ -196,7 +196,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function reject(){
 		$this['status']='Rejected';
 		$this->app->employee
-			->addActivity(" Support Ticket No : '[#".$this->id."]' rejected", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->addActivity(" Support Ticket No : '[#".$this->id."]' rejected", $this->id, $this['contact_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyWhoCan(' ','Rejected');
 		$this->saveAndUnload();
 	}
@@ -204,7 +204,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function open(){
 		$this['status']='Pending';
 		$this->app->employee
-			->addActivity(" Support Ticket No : '[#".$this->id."]' reopened", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->addActivity(" Support Ticket No : '[#".$this->id."]' reopened", $this->id, $this['contact_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyWhoCan('reject','assign','closed','comment','Pending');
 		$this->save();
 	}
@@ -461,7 +461,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$post_employee[] = $employee->id;
 		}
 		$this->app->employee
-			->addActivity("Create New Support Ticket : From '".$this['contact_name']. " ticket no ' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->addActivity("New Support Ticket Created: From '".$this['contact_name']. " ticket no ' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyto($post_employee,'Create New Ticket From : ' .$this['contact_name']. ', Ticket No:  ' .$this->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$this['subject']);
 	}
 
