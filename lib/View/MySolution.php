@@ -47,12 +47,22 @@ class View_MySolution extends \View{
 				$ticket['message'] = $form['message'];	
 				$ticket['status'] = 'Draft';
 				$ticket->save();
+
+				$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+				$my_emails->addCondition('id',$ticket['to_id']);
+				$my_emails->tryLoadAny();
+				
+				$emp = $this->add('xepan\hr\Model_Employee');
+				$emp->addCondition('post_id',$my_emails['post_id']);
+				
+				$post_employee=[];
+				foreach ($emp as  $employee) {
+					$post_employee[] = $employee->id;
+				}
 				$this->app->employee
-				->addActivity(" Supportticket Ticket '".$ticket->id."'  proceed for draft", $ticket->id, $ticket['contact'] ." [ ".$ticket['contact_id']. " ]",null,null,"xepan_crm_ticketdetails&ticket_id=".$ticket->id."")
-				->notifyWhoCan('edit,delete,Pending,close','Assigned');
-
-
-
+					->addActivity("Create New Support Ticket : From '".$ticket['contact_name']. " ticket no ' ", $ticket->id, $ticket['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$ticket->id."")
+					->notifyto($post_employee,'Create New Ticket From : ' .$ticket['contact_name']. ', Ticket No:  ' .$ticket->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$ticket['subject']);
+				
 				$js = [
 						$form->js()->closest('.dialog')->dialog('close')->univ()->successMessage('Ticket Created SuccessFully'),
 						$crud->grid->js()->trigger('reload')

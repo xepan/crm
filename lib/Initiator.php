@@ -31,8 +31,14 @@ class Initiator extends \Controller_Addon {
                     $allow_email[] = $email;
                 }
                 $st = $this->add('xepan\crm\Model_SupportTicket');
-                $st->addCondition('to_id',$allow_email);
                 $st->addCondition('status',['Pending','Assigned']);
+
+                $st->addCondition(
+                    $st->dsql()->orExpr()
+                        ->where('to_id',$allow_email)
+                        ->where($st->dsql()->expr('[0] = [1]',[$st->getElement('assign_to_id'),$this->app->employee->id]))
+                );    
+
                 $st_count= $st->count()->getOne();
 
                 $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $st_count ."</span>")->_selector('a:contains(Crm)');

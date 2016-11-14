@@ -68,6 +68,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			return $m->refSQL('Comments')->setLimit(1)->setOrder('created_at','desc')->fieldQuery('created_at');
 		})->sortable(true);
 
+		$this->addExpression('assign_to_id')->set(function($m,$q){
+			return $task = $m->add('xepan\projects\Model_Task',['table_alias'=>'sttiass'])
+				->addCondition('id',$m->getElement('task_id'))
+				->fieldQuery('assign_to_id'); 
+		});
+
 
 
 		$this->addExpression('ticket_attachment')->set($this->refSQL('communication_id')->fieldQuery('attachment_count'));
@@ -106,6 +112,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$m['subject'] = $m['subject']?:("(no subject)");
 		});
 
+		$this->addExpression('contact_name')->set($this->refSQL('contact_id')->fieldQuery('name'));
+
 		$this->addHook('beforeDelete',[$this,'deleteComments']);
 		$this->addHook('beforeSave',[$this,'updateSearchString']);
 
@@ -124,8 +132,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function submit(){
 		$this['status'] = "Pending";
 		$this->app->employee
-			->addActivity(" Supportticket '".$this->id."'  has Submitted to", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyWhoCan('edit,delete,Pending,close','Assigned');
+			->addActivity(" Support Ticket No :  '[#".$this->id."]'  has Submitted to ".$this['to']."", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan('reject','assign','closed','comment','Pending');
 		$this->save();
 	}
 
@@ -162,15 +170,21 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			$task['priority'] = $form['priority'];
 			$task['description'] = $form['narration'];
 			$task->save();
-			
+
 			$this['task_id']=$task->id;
 			$this['status']='Assigned';
+			
+			$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+			$my_emails->addCondition('id',$this['to_id']);
+			$my_emails->tryLoadAny();
+
+			$emp = $this->add('xepan\hr\Model_Employee');
+			$emp->addCondition('id',$form['assign_to']);
+			$emp->tryLoadAny();
+
 			$this->app->employee
-			->addActivity(" Supportticket '".$this['name']."'  has assigned to", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyWhoCan('edit,delete,Pending,close','Assigned');
-			// $this->app->employee
-			// 	->addActivity("Support Ticket '".$this['name']."' has assigned to", $this['to_id'] Related Document ID,$this['contact'] ." [ ".$this['contact_id']. " ]" /*Related Contact ID*/,null,null,null)
-			// 	->notifyWhoCan('Assigned','Draft',$this);
+			->addActivity("Support Ticket [#".$this->id."] From : '".$this['contact_name']." is Assign to You" , $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyto([$emp->id],"Support Ticket [#".$this->id."] From : '".$this['contact_name']." is Assign to You" );
 
 			$this->saveAndUnload();
 
@@ -182,16 +196,16 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function reject(){
 		$this['status']='Rejected';
 		$this->app->employee
-			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyWhoCan('edit,delete','Rejected');
+			->addActivity(" Support Ticket No : '[#".$this->id."]' rejected", $this->id, $this['contact_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan(' ','Rejected');
 		$this->saveAndUnload();
 	}
 
 	function open(){
 		$this['status']='Pending';
 		$this->app->employee
-			->addActivity(" Supportticket '".$this['name']."' rejected", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-			->notifyWhoCan('edit,delete,close','Pending');
+			->addActivity(" Support Ticket No : '[#".$this->id."]' reopened", $this->id, $this['contact_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyWhoCan('reject','assign','closed','comment','Pending');
 		$this->save();
 	}
 
@@ -203,15 +217,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$mailbox=explode('#', $communication['mailbox']);
 		$support_email = $this->supportEmail($mailbox[0]);
 
-		if(!$this['from_email']){
-			return false;
-		}
-
 		$mail = $this->add('xepan\communication\Model_Communication_Email');
 		$communication = $this->ref('communication_id');
-		if(!$this->loaded()){
-			return false;	
-		}
 
 		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
 		[
@@ -248,24 +255,44 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$temp->trySetHTML('token',$this->getToken());
 		$temp->trySetHTML('title', $communication['title']);
 
-		$emails_to =[];		
-		foreach ($this->getReplyEmailFromTo()['to'] as $flipped) {
-			$emails_to [] = $flipped['email'];
-		}
-
+		// $emails_to =[];		
+		// foreach ($this->getReplyEmailFromTo()['to'] as $flipped) {
+		// 	$emails_to [] = $flipped['email'];
+		// }
 		$emails_cc =[];		
-		foreach ($this->getReplyEmailFromTo()['cc'] as $flipped) {
-			$emails_cc [] = $flipped['email'];
+		if($this['cc_raw']){
+			foreach ($this['cc_raw'] as $flipped) {
+				$emails_cc [] = $flipped['email'];
+			}
 		}
 
 		$emails_bcc =[];		
-		foreach ($this->getReplyEmailFromTo()['bcc'] as $flipped) {
-			$emails_bcc [] = $flipped['email'];
+		if($this['bcc_raw']){
+			foreach ($this['bcc_raw'] as $flipped) {
+				$emails_bcc [] = $flipped['email'];
+			}
 		}
 
 		$form=$p->add('Form');
-		$form->addField('Checkbox','send_email')->set(true);
-		$form->addField('line','to')->set(implode(", ", $emails_to));
+		$send_email_field = $form->addField('Checkbox','send_email');
+		if($this['from_email']){
+			$send_email_field->set(true);
+		}else{
+			$send_email_field->set(false);
+		}
+		if(!$support_email['from_email']){
+			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+			$email_setting->addCondition('is_support_email',true);
+			$email_setting->addCondition('is_active',true);
+			if($this->app->employee->getAllowSupportEmail()){
+				$email_setting->addCondition('id',$this->app->employee->getAllowSupportEmail());
+			}else{
+				$email_setting->addCondition('id',-1);
+			}
+			$form->addField('DropDown','from_email')->setModel($email_setting);
+		}
+		$form->addField('line','to')->set($this['from_email']?:str_replace("<br/>", ", ", $this->ref('contact_id')->get('emails_str')));
+		// $form->addField('line','to')->set(implode(", ", $emails_to));
 		$form->addField('line','cc')->set(implode(", ", $emails_cc));
 		$form->addField('line','bcc')->set(implode(", ", $emails_bcc));
 		$form->addField('line','subject')->set($subject->render());
@@ -274,8 +301,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$form->addSubmit('Send')->addClass('btn btn-primary');
 		// $form->addSubmit('close');
 		if($form->isSubmitted()){
-				
-			$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			if($form['from_email']){
+				$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting')->load($form['from_email']);
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			}else{
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			}	
 			$to_emails=explode(',', trim($form['to']));
 			foreach ($to_emails as $to_mail) {
 				$mail->addTo($to_mail);
@@ -305,9 +336,21 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 			$this['status']='Closed';
 			$this->save();
+			$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+			$my_emails->addCondition('id',$this['to_id']);
+			$my_emails->tryLoadAny();
+
+			$emp = $this->add('xepan\hr\Model_Employee');
+			$emp->addCondition('post_id',$my_emails['post_id']);
+			$post_employee=[];
+			foreach ($emp as  $employee) {
+				$post_employee[] = $employee->id;
+			}
+
 			$this->app->employee
-				->addActivity("Issues solved against support ticket : '".$this['name']."' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-				->notifyWhoCan('reject,convert,open','Converted');
+			->addActivity("Support Ticket [#".$this->id."] Closed  by: '".$this->app->employee['name'], $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyto($post_employee,"Support Ticket [#".$this->id."] Closed  by: '".$this->app->employee['name']);
+
 			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
 		}
 	}
@@ -407,12 +450,19 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$this['status'] = "Pending";
 		$this->save();
 
+		$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+		$my_emails->addCondition('id',$this['to_id']);
+		$my_emails->tryLoadAny();
+
+		$emp = $this->add('xepan\hr\Model_Employee');
+		$emp->addCondition('post_id',$my_emails['post_id']);
+		$post_employee=[];
+		foreach ($emp as  $employee) {
+			$post_employee[] = $employee->id;
+		}
 		$this->app->employee
-				->addActivity("Create support ticket : '".$this->id."' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-				->notifyWhoCan('reject,convert,open,Pending,Assigned,closed','Converted');
-		// foreach ($this->attachment() as $attach) {
-		// 	$ticket->addAttachment($attach['attachment_url_id'],$attach['file_id']);	
-		// }
+			->addActivity("New Support Ticket Created: From '".$this['contact_name']. " ticket no ' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyto($post_employee,'Create New Ticket From : ' .$this['contact_name']. ', Ticket No:  ' .$this->id. ",  to :  ".$my_emails['name']. ",  " .  "  Related Message :: " .$this['subject']);
 	}
 
 	function supportEmail(){
@@ -538,10 +588,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$search_string .=" ". $this['priority'];
 
 		$this['search_string'] = $search_string;
-
-		$this->app->employee
-				->addActivity("Create support ticket : '".$this->id."' ", $this->id, $this['from_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
-				->notifyWhoCan('reject,convert,open,Pending,Assigned,closed','Converted');
+		
 		
 	}
 
