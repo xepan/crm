@@ -33,6 +33,9 @@ class Widget_PendingTickets extends \xepan\base\Widget{
         }else{
         	$this->view->template->trySet('st_count',0);
         }
-		return parent::recursiveRender();
+
+        $this->view->template->trySet('url',$this->app->url('xepan_crm_supportticket'));
+		
+        return parent::recursiveRender();
 	}
 }
