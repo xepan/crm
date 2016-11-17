@@ -132,7 +132,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function submit(){
 		$this['status'] = "Pending";
 		$this->app->employee
-			->addActivity(" Support Ticket No :  '[#".$this->id."]'  has Submitted to ".$this['to']."", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->addActivity(" Support Ticket No :  '[#".$this->id."]'  has Submitted", $this->id, $this['to_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyWhoCan('reject,assign,closed,comment','Pending');
 		$this->save();
 	}
