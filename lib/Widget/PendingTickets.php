@@ -6,7 +6,7 @@ class Widget_PendingTickets extends \xepan\base\Widget{
 	function init(){
 		parent::init();
 
-		$this->view = $this->add('View',null,null,['view\pending-widget']);;
+		$this->view = $this->add('View',null,null,['view\pending-widget']);
 	}
 
 	function recursiveRender(){
