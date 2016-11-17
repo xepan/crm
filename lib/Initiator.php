@@ -13,7 +13,7 @@ class Initiator extends \Controller_Addon {
 
         if($this->app->is_admin && !$this->app->isAjaxOutput()){
 	        $m = $this->app->top_menu->addMenu('Crm');
-            $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],$this->app->url('xepan_crm_dashboard'));
+            // $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],$this->app->url('xepan_crm_dashboard'));
             $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
 	        $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_crm_config');
             $cont = $this->add('xepan\crm\Controller_FilterEmails');
@@ -51,7 +51,9 @@ class Initiator extends \Controller_Addon {
 
         $search_supportticket = $this->add('xepan\crm\Model_SupportTicket');
         $this->app->addHook('quick_searched',[$search_supportticket,'quickSearch']);
-                
+        $this->app->addHook('widget_collection',[$this,'exportWidgets']);
+        $this->app->addHook('entity_collection',[$this,'exportEntities']);
+
         return $this;  
     }
 
@@ -63,6 +65,13 @@ class Initiator extends \Controller_Addon {
         $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
         
         return $this;
+    }
+
+    function exportWidgets($app,&$array){
+        $array[] = ['xepan\crm\Widget_PendingTickets','level'=>'Individual'];
+    }
+
+    function exportEntities($app,&$array){
     }
 
     function resetDB(){
