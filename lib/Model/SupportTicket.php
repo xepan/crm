@@ -193,12 +193,34 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 	}
 
-	function reject(){
+	function page_reject($p){
+		$form = $p->add('Form');
+		$form->addField('text','comment');
+		$form->addSubmit('Save');
+			
+		if($form->isSubmitted()){
+			$this->reject($form['comment']);
+			$this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Comment : '.$form['comment'].' On Support Ticket No . '.$this['id'].'');
+			
+		}
+	}
+
+	function reject($comment_text){
+
+		if($comment_text){
+			$comment=$this->add('xepan\crm\Model_Ticket_Comments');			
+			$comment['ticket_id'] = $this->id;
+			$comment['created_by_id'] = $this->app->employee->id;
+			$comment['communication_id'] = $this['communication_id'];
+			$comment['title'] = $this['name'];
+			$comment['description'] = $comment_text;
+			$comment->save();
+		}
 		$this['status']='Rejected';
 		$this->app->employee
 			->addActivity(" Support Ticket No : '[#".$this->id."]' rejected", $this->id, $this['contact_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyWhoCan(' ','Rejected');
-		$this->saveAndUnload();
+		$this->save();
 	}
 
 	function open(){
