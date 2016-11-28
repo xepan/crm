@@ -276,6 +276,9 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 			if($form['send_email']){
 				$mail->send($support_email);
+				$comment_msg = "Email Send SuccessFully";
+			}else{
+				$comment_msg = "Commented SuccessFully";
 			}
 	
 			$this->createCommentOnlyOnReject($mail);
@@ -292,11 +295,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 			foreach ($emp as  $employee) {
 				$post_employee[] = $employee->id;
 			}
+
 			$this->app->employee
 			->addActivity(" Support Ticket No : '[#".$this->id."]' rejected", $this->id, $this['contact_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
 			->notifyTo($post_employee,"Support Ticket [#".$this->id."] Rejected  by: '".$this->app->employee['name']);
 
-			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
+			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage($comment_msg);
 		}
 	}
 
