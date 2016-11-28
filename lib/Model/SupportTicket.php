@@ -138,12 +138,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function page_comment($page){
-		// $page->add('View')->set($this->id);
 		$comment=$page->add('xepan\crm\Model_Ticket_Comments');			
 		$comment->addCondition('created_by_id',$this->app->employee->id);
 		$comment->addCondition('ticket_id',$this->id);
 
-		// $comment_view = $page->add('xepan\crm\View_Lister_TicketComments');
 		$comment_view = $page->add('xepan\hr\CRUD',null,null,['view/solution-comment-grid']);
 		$comment_view->setModel($comment,['title','description'],['title','description','created_by','callback_date','created_at']);
 	}
@@ -194,28 +192,126 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function page_reject($p){
-		$form = $p->add('Form');
-		$form->addField('text','comment');
-		$form->addSubmit('Save');
-			
+		if(!$this->loaded()){
+			return false;	
+		}
+		$communication=$this->ref('communication_id');
+		$mailbox=explode('#', $communication['mailbox']);
+		$support_email = $this->supportEmail($mailbox[0]);
+
+		$mail = $this->add('xepan\communication\Model_Communication_Email');
+		$communication = $this->ref('communication_id');
+
+		$email_subject = "Support Ticket Rejected [#".$this->id."]";
+		
+		$subject=$this->add('GiTemplate');
+		$subject->loadTemplateFromString($email_subject);
+
+		$emails_cc =[];		
+		if($this['cc_raw']){
+			foreach ($this['cc_raw'] as $flipped) {
+				$emails_cc [] = $flipped['email'];
+			}
+		}
+
+		$emails_bcc =[];		
+		if($this['bcc_raw']){
+			foreach ($this['bcc_raw'] as $flipped) {
+				$emails_bcc [] = $flipped['email'];
+			}
+		}
+
+		$form=$p->add('Form');
+		$send_email_field = $form->addField('Checkbox','send_email');
+		if($this['from_email']){
+			$send_email_field->set(true);
+		}else{
+			$send_email_field->set(false);
+		}
+		if(!$support_email['from_email']){
+			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
+			$email_setting->addCondition('is_support_email',true);
+			$email_setting->addCondition('is_active',true);
+			if($this->app->employee->getAllowSupportEmail()){
+				$email_setting->addCondition('id',$this->app->employee->getAllowSupportEmail());
+			}else{
+				$email_setting->addCondition('id',-1);
+			}
+			$form->addField('DropDown','from_email')->setModel($email_setting);
+		}
+		$form->addField('line','to')->set($this['from_email']?:str_replace("<br/>", ", ", $this->ref('contact_id')->get('emails_str')));
+		$form->addField('line','cc')->set(implode(", ", $emails_cc));
+		$form->addField('line','bcc')->set(implode(", ", $emails_bcc));
+		$form->addField('line','subject')->set($subject->render());
+		$form->addField('xepan\base\RichText','email_body_or_comment')->set(' ');
+
+		$form->addSubmit('Send')->addClass('btn btn-primary');
 		if($form->isSubmitted()){
-			$this->reject($form['comment']);
-			$this->app->page_action_result = $form->js(null,$form->js()->closest('.dialog')->dialog('close'))->univ()->successMessage('Comment : '.$form['comment'].' On Support Ticket No . '.$this['id'].'');
-			
+			if($form['from_email']){
+				$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting')->load($form['from_email']);
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			}else{
+				$mail->setfrom($support_email['from_email'],$support_email['from_name']);
+			}	
+			$to_emails=explode(',', trim($form['to']));
+			foreach ($to_emails as $to_mail) {
+				$mail->addTo($to_mail);
+			}
+			if($form['cc']){
+				$cc_emails=explode(',', trim($form['cc']));
+				foreach ($cc_emails as $cc_mail) {
+						$mail->addCc($cc_mail);
+				}
+			}
+			if($form['bcc']){
+				$bcc_emails=explode(',', trim($form['bcc']));
+				foreach ($bcc_emails as $bcc_mail) {
+						$mail->addBcc($bcc_mail);
+				}
+			}
+
+			$mail->setSubject($form['subject']);
+			$mail->setBody($form['email_body_or_comment']);
+			$mail['to_id']=$this['contact_id'];
+
+			if($form['send_email']){
+				$mail->send($support_email);
+			}
+	
+			$this->createCommentOnlyOnReject($mail);
+
+			$this['status']='Rejected';
+			$this->save();
+			$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');
+			$my_emails->addCondition('id',$this['to_id']);
+			$my_emails->tryLoadAny();
+
+			$emp = $this->add('xepan\hr\Model_Employee');
+			$emp->addCondition('post_id',$my_emails['post_id']);
+			$post_employee=[];
+			foreach ($emp as  $employee) {
+				$post_employee[] = $employee->id;
+			}
+			$this->app->employee
+			->addActivity(" Support Ticket No : '[#".$this->id."]' rejected", $this->id, $this['contact_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
+			->notifyTo($post_employee,"Support Ticket [#".$this->id."] Rejected  by: '".$this->app->employee['name']);
+
+			return $form->js(null,$form->js()->univ()->closeDialog())->univ()->successMessage("Email Send SuccessFully");
 		}
 	}
 
-	function reject($comment_text){
+	function createCommentOnlyOnReject($related_mail){
+		$comment = $this->add('xepan\crm\Model_Ticket_Comments');
+		$comment['ticket_id'] = $this->id;
+		$comment['communication_id'] = $related_mail->id;
+		$comment['title'] = $related_mail['title'];
+		$comment['description'] = $related_mail['description'];
+		$comment['type'] = $related_mail['communication_type'];
+		$comment->save();
+		return $comment;
+	}
 
-		if($comment_text){
-			$comment=$this->add('xepan\crm\Model_Ticket_Comments');			
-			$comment['ticket_id'] = $this->id;
-			$comment['created_by_id'] = $this->app->employee->id;
-			$comment['communication_id'] = $this['communication_id'];
-			$comment['title'] = $this['name'];
-			$comment['description'] = $comment_text;
-			$comment->save();
-		}
+	function reject(){
 		$this['status']='Rejected';
 		$this->app->employee
 			->addActivity(" Support Ticket No : '[#".$this->id."]' rejected", $this->id, $this['contact_id'],null,null,"xepan_crm_ticketdetails&ticket_id=".$this->id."")
