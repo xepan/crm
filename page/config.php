@@ -79,6 +79,6 @@ class page_config extends \xepan\base\Page{
 	}
 	
 	function defaultTemplate(){
-		return ['page/config'];
+		return ['page/crm-config'];
 	}
 }

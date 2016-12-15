@@ -86,7 +86,7 @@ class View_MySolution extends \View{
 		$my_ticket->setOrder('id','desc');
 		$crud->setModel($my_ticket,['contact_id','subject','message','priority'],['id','contact','created_at','subject','last_comment','from_email','task_status','task_id']);
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field','image_avtar']);
-		$f = $crud->grid->addQuickSearch(['title','contact','id']);
+		$f = $crud->grid->addQuickSearch(['contact','id']);
 
 		$s_f =$f->addField('xepan\base\DropDown','status')->setEmptyText("All Status");
 		$s_f->setValueList(['Draft'=>'Draft','Pending'=>'Pending','Assigned'=>'Assigned','Closed'=>'Closed','Rejected'=>"Rejected"]);
