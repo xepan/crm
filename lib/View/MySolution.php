@@ -80,7 +80,7 @@ class View_MySolution extends \View{
 		// $my_ticket->addCondition('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()));
 		
 		if($status){
-			$my_ticket->addCondition('status',$status);
+			$my_ticket->addCondition('status',explode(",",$status));
 		}
 
 		$my_ticket->setOrder('id','desc');
@@ -116,7 +116,7 @@ class View_MySolution extends \View{
 				}
 		});
 
-		$td_view=$this->add('xepan/crm/View_TicketDetail',['reply_view'=>false]);//->addClass('xepan-crm-ticket-detail-view');
+		$td_view=$this->add('xepan/crm/View_TicketDetail'/*,['reply_view'=>false]*/);//->addClass('xepan-crm-ticket-detail-view');
 			$this->js(true,$td_view->js()->hide());
 			// $crud->grid->js('click')->_selector('.do-view-ticket-customer')->univ()->frameURL('Customer Details',[$this->api->url('xepan_commerce_customerdetail'),'contact_id'=>$this->js()->_selectorThis()->closest('[data-contact-id]')->data('contact-id')]);
 			$crud->grid->js('click',

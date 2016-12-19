@@ -42,7 +42,7 @@ class View_TicketDetail extends \View{
 		
 		$member_phones = array_reverse($contact->getPhones());
 		
-		if($this->reply_view){
+		if($this->reply_view And $this->model['status'] != "Draft"){
 			$form = $this->add('xepan\communication\Form_Communication',null,'reply_form');
 			// $form->setLayout(['form/comment-reply']);
 			$form->setContact($contact);

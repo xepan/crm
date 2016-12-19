@@ -15,7 +15,7 @@ class Initiator extends \Controller_Addon {
 	        $m = $this->app->top_menu->addMenu('Crm');
             // $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],$this->app->url('xepan_crm_dashboard'));
             $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
-	        $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_crm_config');
+            $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_crm_config');
             $cont = $this->add('xepan\crm\Controller_FilterEmails');
 
             $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
@@ -46,7 +46,8 @@ class Initiator extends \Controller_Addon {
 
             $this->app->status_icon["xepan\crm\Model_SupportTicket"] = ['All'=>'fa fa-globe','Pending'=>"fa fa-clock-o xepan-effect-warinig",'Assigned'=>'fa fa-male text-primary','Closed'=>'fa fa-times-circle-o text-success','Rejected'=>'fa fa-times text-danger'];
 
-            $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-edit'],'xepan_crm_solution&status=Draft');            
+            // $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-edit'],'xepan_crm_solution&status=Draft');            
+            $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_solution',['status'=>'Draft,Pending']));
         }
 
         $search_supportticket = $this->add('xepan\crm\Model_SupportTicket');
