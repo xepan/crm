@@ -368,7 +368,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$subject=$this->add('GiTemplate');
 		$subject->loadTemplateFromString($email_subject);
 		$subject->trySetHTML('token',$this->getToken());
-		// $subject->trySetHTML('title', $communication['title']);
+		$subject->trySetHTML('title', $communication['title']);
 		$subject->trySetHTML('related_email_subject', $communication['title']);
 
 		$temp=$this->add('GiTemplate');
