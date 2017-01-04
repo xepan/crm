@@ -142,6 +142,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$comment->addCondition('created_by_id',$this->app->employee->id);
 		$comment->addCondition('ticket_id',$this->id);
 
+		$comment->getElement('description')->display(['form'=>'xepan\base\RichText']);
+
 		$comment_view = $page->add('xepan\hr\CRUD',null,null,['view/solution-comment-grid']);
 		$comment_view->setModel($comment,['title','description'],['title','description','created_by','callback_date','created_at']);
 	}

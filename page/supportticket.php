@@ -24,8 +24,8 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		// $st->add('xepan\crm\Controller_SideBarStatusFilter');
 		$st->setOrder(['last_comment desc','created_at desc']);
 		
-		unset($st->actions['Assigned'][5]);
-		unset($st->actions['Pending'][6]);
+		// unset($st->actions['Assigned'][5]);
+		// unset($st->actions['Pending'][6]);
 
 		$crud=$this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
 		$form = $crud->form;
