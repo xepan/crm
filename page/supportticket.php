@@ -30,6 +30,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$crud=$this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
 		$form = $crud->form;
 
+		$c = $this->add('xepan\base\Model_Contact');
 		if($crud->isEditing()){
 
 			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
@@ -39,12 +40,33 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 			$complain_field = $form->addField('xepan\base\DropDown','complain_to')->validate('required');
 			$complain_field->setEmptyText("Please Select");
 			$complain_field->setModel($email_setting,['name']);
+			
+			if($this->app->stickyGET('contact_id')){
+				$c->load($_GET['contact_id']);
+			}
+
+			$email_to = $form->addField('email_to')->set(implode(",",$c->getEmails()))->validate('required');
+
 		}
 
-
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
-		$form->getElement('subject');//->set($sub_view->getHTML());
-		$form->getElement('message');//->set($body_view->getHTML());
+		if($crud->isEditing()){
+			$contact_field = $form->getElement('contact_id');
+
+			// $contact_field->other_field->js('change',$email_to->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$email_to->name]),'contact_id'=>$contact_field->js()->val()]));
+			$contact_field->other_field->js('change',$form->js()->atk4_form(
+						'reloadField','email_to',
+						[
+							$this->app->url(),
+							'contact_id'=>$contact_field->js()->val(),
+						]
+					));
+
+			$form->getElement('subject');//->set($sub_view->getHTML());
+			$form->getElement('message');//->set($body_view->getHTML());
+		}
+		
+
 
 		$crud->add('xepan\hr\Controller_ACL',['action_allowed'=>[],'permissive_acl'=>true]);
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field','image_avtar']);
@@ -93,6 +115,11 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 					$s = $sub_view->getHTML(). "". $form['subject'] ;
 					$body = $form['message']."<br/>".$body_view->getHTML() ;
 					
+					$to_array=[];
+					
+					foreach (explode(",",$form['email_to']) as $email) {
+						$to_array[]= ['name'=>null,'email'=>$email];
+					}
 					$new_ticket->createComment(
 								$s,
 								$body,
