@@ -124,7 +124,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 								$s,
 								$body_view->getHTML(),
 								"Email",
-								[$new_ticket['from_raw']],
+								$to_array,
 								null,
 								null,
 								$send_setting=$email_to_setting,
