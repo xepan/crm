@@ -29,6 +29,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 
 		$crud=$this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
 		$form = $crud->form;
+
 		if($crud->isEditing()){
 
 			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
@@ -39,7 +40,12 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 			$complain_field->setEmptyText("Please Select");
 			$complain_field->setModel($email_setting,['name']);
 		}
+
+
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
+		$form->getElement('subject');//->set($sub_view->getHTML());
+		$form->getElement('message');//->set($body_view->getHTML());
+
 		$crud->add('xepan\hr\Controller_ACL',['action_allowed'=>[],'permissive_acl'=>true]);
 		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field','image_avtar']);
 		if($crud->isEditing()){
@@ -48,8 +54,54 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 				$new_ticket->addCondition('id',$st->id);
 				$new_ticket->tryLoadAny();
 				if($new_ticket->loaded()){
+					$contact = $this->add('xepan\base\Model_Contact')->load($form['contact_id']);
+					$new_ticket['from_id'] = $form['contact_id'];
+					$new_ticket['from_raw'] = ['name'=>$contact['name'],'email'=>$contact->getEmails()[0]];
+					$new_ticket['from_name'] = $contact['name'];
+					$new_ticket['from_email'] = $contact->getEmails()[0];
 					$new_ticket['to_id'] = $form['complain_to'];
+					$email_to_setting = $this->add('xepan\communication\Model_Communication_EmailSetting')->load($form['complain_to']);
+					$new_ticket['to_raw'] = ['name'=>$email_to_setting['name'],'email'=>$email_to_setting['email_username']];
 					$new_ticket->save();
+					$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+									[
+										'fields'=>[
+													'auto_reply_subject'=>'Line',
+													'auto_reply_body'=>'xepan\base\RichText',
+													'denied_email_subject'=>'Line',
+													'denied_email_body'=>'xepan\base\RichText',
+													'closed_email_subject'=>'Line',
+													'closed_email_body'=>'xepan\base\RichText',
+													],
+											'config_key'=>'SUPPORT_SYSTEM_CONFIG',
+											'application'=>'crm'
+									]);
+					$config_m->tryLoadAny();
+					$email_subject=$config_m['auto_reply_subject'];
+					$email_body=$config_m['auto_reply_body'];
+					$subject=$this->add('GiTemplate')->loadTemplateFromString($email_subject);
+					$subject->setHTML('token',$new_ticket->getToken());
+					$subject->setHTML('title', $new_ticket['title']);
+
+					$message=$this->add('GiTemplate')->loadTemplateFromString($email_body);
+					$message->setHTML('contact_name',$new_ticket['contact']);
+					$message->setHTML('sender_email_id',$new_ticket['from_email']);
+					$message->setHTML('token',$new_ticket->getToken());
+
+					$sub_view = $this->add('View',null,null,$subject);
+					$body_view = $this->add('View',null,null,$message);
+					$s = $sub_view->getHTML(). "". $form['subject'] ;
+					$body = $form['message']."<br/>".$body_view->getHTML() ;
+					
+					$new_ticket->createComment(
+								$s,
+								$body,
+								"Email",
+								[$new_ticket['from_raw']],
+								null,
+								null,
+								$send_setting=$email_to_setting,
+								$send_also=true);
 				}
 				
 				$my_emails = $this->add('xepan\hr\Model_Post_Email_MyEmails');

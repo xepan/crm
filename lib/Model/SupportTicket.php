@@ -505,22 +505,27 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$ticket_comm = $this->ref('communication_id');
 
 		if($type=='Email' && !$send_setting) $send_setting = $this->supportEmail();
-
+		
 		$comm = $this->add('xepan\communication\Model_Communication_'.$type);
 		$comm->setSubject($subject);
 		$comm->setBody($message);
 		
 		$comm->setfrom($send_setting['from_email'],$send_setting['from_name']);
+		// throw new \Exception(var_dump($to), 1);
 		foreach ($to as $_to) {
+			// var_dump($_to);
 			$comm->addTo($_to['email'],$_to['name']);
 		}
-
-		foreach ($cc as $_cc) {
-			$comm->addCc($_cc['email'],$_cc['name']);
+		if($cc){
+			foreach ($cc as $_cc) {
+				$comm->addCc($_cc['email'],$_cc['name']);
+			}
 		}
 
-		foreach ($bcc as $_bcc) {
-			$comm->addBcc($_bcc['email'],$_bcc['name']);
+		if($bcc){
+			foreach ($bcc as $_bcc) {
+				$comm->addBcc($_bcc['email'],$_bcc['name']);
+			}
 		}
 		$comm['direction']='Out';
 		$comm->save();
@@ -596,7 +601,8 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$mail_box = $mail_box[0];
 
 		$support_email = $this->add('xepan\communication\Model_Communication_EmailSetting');
-		$support_email->addCondition('imap_email_username',$mail_box);
+		if($mail_box)
+			$support_email->addCondition('imap_email_username',$mail_box);
 		$support_email->addCondition('is_support_email',true);
 
 		return $support_email->tryLoadAny();
@@ -608,7 +614,6 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		if(!$this->loaded()){
 			return false;	
 		}
-		
 		// $config_model=$this->add('xepan\base\Model_Epan_Configuration');
 		// $config_model->addCondition('application','crm');
 
