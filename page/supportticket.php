@@ -122,7 +122,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 					}
 					$new_ticket->createComment(
 								$s,
-								$body,
+								$body_view->getHTML(),
 								"Email",
 								[$new_ticket['from_raw']],
 								null,
