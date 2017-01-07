@@ -11,10 +11,11 @@ class View_TicketDetail extends \View{
 		$to_lister=$this->add('CompleteLister',null,'to_lister',['view/grid/ticketdetail-grid','to_lister']);
 		$to_lister->setSource($m['to_raw']);
 		}
-
-		if($m['cc_raw']){			
+		if($m['cc_raw']){
 			$cc_lister=$this->add('CompleteLister',null,'cc_lister',['view/grid/ticketdetail-grid','cc_lister']);
 			$cc_lister->setSource($m['cc_raw']);
+		}else{
+			$this->template->trySet('cc_lister'," ");
 		}
 
 		$this->template->setHTML('collapse_header',strip_tags(substr($model['message'], 0,100))?:"No Subject");
