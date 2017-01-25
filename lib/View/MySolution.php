@@ -77,7 +77,7 @@ class View_MySolution extends \View{
 			->univ()->frameURL('Create Issue',[$vp->getURL()]);
 		
 		$my_ticket = $this->add('xepan\crm\Model_SupportTicket');
-		// $my_ticket->addCondition('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()));
+		$my_ticket->addCondition('contact_id',$this->app->employee->id);
 		
 		if($status){
 			$my_ticket->addCondition('status',explode(",",$status));
