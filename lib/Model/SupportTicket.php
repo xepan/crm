@@ -717,7 +717,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
  					'count'=>$st_count,
  				];
 
-		$cl = $report_view->add('CompleteLister',null,null,['view\marketingactivityreport']);
+		$cl = $report_view->add('CompleteLister',null,null,['view\crmactivityreport']);
 		$cl->setSource($result_array);		
 	}
 
