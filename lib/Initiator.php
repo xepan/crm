@@ -52,6 +52,7 @@ class Initiator extends \Controller_Addon {
 
         $search_supportticket = $this->add('xepan\crm\Model_SupportTicket');
         $this->app->addHook('quick_searched',[$search_supportticket,'quickSearch']);
+        $this->app->addHook('activity_report',[$search_supportticket,'activityReport']);
         $this->app->addHook('widget_collection',[$this,'exportWidgets']);
         $this->app->addHook('entity_collection',[$this,'exportEntities']);
 

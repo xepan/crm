@@ -700,6 +700,27 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 				);
 	}
 
+	function activityReport($app,$report_view,$emp,$start_date,$end_date){		
+		$employee = $this->add('xepan\hr\Model_Employee')->load($emp);
+							  					  
+		$st = $this->add('xepan\crm\Model_SupportTicket');
+		$st->addCondition('created_at','>=',$start_date);
+		$st->addCondition('created_at','<=',$this->app->nextDate($end_date));
+		$st->addCondition('assign_to_id',$emp);
+		$st_count = $st->count()->getOne();
+		
+		$result_array[] = [
+ 					'assign_to'=>$employee['name'],
+ 					'from_date'=>$start_date,
+ 					'to_date'=>$end_date,
+ 					'type'=> 'Support Ticket',
+ 					'count'=>$st_count,
+ 				];
+
+		$cl = $report_view->add('CompleteLister',null,null,['view\marketingactivityreport']);
+		$cl->setSource($result_array);		
+	}
+
 	function updateSearchString($m){
 
 		$search_string = ' ';
