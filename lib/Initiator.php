@@ -74,6 +74,8 @@ class Initiator extends \Controller_Addon {
     }
 
     function exportEntities($app,&$array){
+        $array['SupportTicket'] = ['caption'=>'SupportTicket','type'=>'DropDown','model'=>'xepan\crm\Model_SupportTicket'];
+        $array['SUPPORT_SYSTEM_CONFIG'] = ['caption'=>'SUPPORT_SYSTEM_CONFIG','type'=>'DropDown','model'=>'xepan\crm\Model_SUPPORT_SYSTEM_CONFIG'];
     }
 
     function resetDB(){
