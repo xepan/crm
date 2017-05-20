@@ -76,6 +76,40 @@ class page_config extends \xepan\base\Page{
 			$form->save();
 			$form->js(null,$form->js()->reload())->univ()->successMessage('Update Information')->execute();
 		}
+
+
+		/****New Customer Create Ticket Or Not***/
+
+		// $a_n_c_t = $tab->addTab('Allow New Customer Ticket');
+
+		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'new_customer'=>'DropDown'
+							],
+					'config_key'=>'CRM_Allow_New_Customer_Ticket',
+					'application'=>'crm'
+			]);
+		$config_m->add('xepan\hr\Controller_ACL');
+		$config_m->tryLoadAny();
+		
+		$f = $this->add('Form',null,'new_customer_section');
+		$f->setModel($config_m);
+		$f->getElement('new_customer')
+										->setValueList(
+											[
+												'Allowed'=>'Allowed New Customer Ticket',
+												'Denied' => 'Denied New Customer Ticket'
+											]
+										)->validate('required');
+		$f->addSubmit('save')->addClass('btn btn btn-primary');
+
+		if($f->isSubmitted()){
+			// $inv_config['invoice_schema'] = $f['invoice_schema'];
+			$f->save(); 
+
+			$f->js()->reload()->execute();
+		}
 	}
 	
 	function defaultTemplate(){

@@ -27,6 +27,17 @@ class Controller_FilterEmails extends \AbstractController {
 		$emails->addCondition('id','>=',$data['fetched_emails_from']);
 		$emails->addCondition($or);
 
+		/*Config Model */
+		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+			[
+				'fields'=>[
+							'new_customer'=>'DropDown'
+							],
+					'config_key'=>'CRM_Allow_New_Customer_Ticket',
+					'application'=>'crm'
+			]);
+		$config_m->tryLoadAny();
+
 		foreach ($emails as $email) {			
 			$ticket=$this->add('xepan\crm\Model_SupportTicket');
 			// check if this contains any past support number [SUP 1] like this
@@ -38,12 +49,16 @@ class Controller_FilterEmails extends \AbstractController {
 			// if no
 			}else{
 				// create a new ticket with communication_id = this email id
+				/*Check Config Value Allow New Customer Ticket Email Or Not*/
 				$ticket->createTicket($email);
-				if(!$email['from_id']){
+				if($config_m['new_customer'] == "Denied" OR !$email['from_id']){
+				// if(!$email['from_id']){
 					// this is junk, reply with : you are not supported
 					$ticket->replyRejection();
 					$ticket['status']="Rejected";
 					$ticket->save();
+					
+				// }
 				}else{
 					$ticket->autoReply();
 				}
