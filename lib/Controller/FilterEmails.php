@@ -51,16 +51,16 @@ class Controller_FilterEmails extends \AbstractController {
 				// create a new ticket with communication_id = this email id
 				/*Check Config Value Allow New Customer Ticket Email Or Not*/
 				$ticket->createTicket($email);
-				if($config_m['new_customer'] == "Denied" OR !$email['from_id']){
+				if($config_m['new_customer'] === "Allowed" OR $email['from_id']){
 				// if(!$email['from_id']){
 					// this is junk, reply with : you are not supported
-					$ticket->replyRejection();
-					$ticket['status']="Rejected";
-					$ticket->save();
+					$ticket->autoReply();
 					
 				// }
 				}else{
-					$ticket->autoReply();
+					$ticket->replyRejection();
+					$ticket['status']="Rejected";
+					$ticket->save();
 				}
 			}
 		}
