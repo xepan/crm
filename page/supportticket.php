@@ -69,7 +69,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 
 
 		$crud->add('xepan\hr\Controller_ACL',['action_allowed'=>[],'permissive_acl'=>true]);
-		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field','image_avtar']);
+		$crud->add('xepan\base\Controller_Avatar',['options'=>['size'=>45,'border'=>['width'=>0]],'name_field'=>'contact','default_value'=>'','image_field'=>'image_avtar']);
 		if($crud->isEditing()){
 			if($form->isSubmitted()){
 				$new_ticket = $this->add('xepan\crm\Model_SupportTicket');
