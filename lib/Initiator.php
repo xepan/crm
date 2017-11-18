@@ -12,7 +12,7 @@ class Initiator extends \Controller_Addon {
         $this->addLocation(array('template'=>'templates'));
 
         if($this->app->is_admin && !$this->app->isAjaxOutput() && !$this->app->getConfig('hidden_xepan_crm',false)){
-	        $m = $this->app->top_menu->addMenu('Crm');
+	        $m = $this->app->top_menu->addMenu('Support');
             // $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],$this->app->url('xepan_crm_dashboard'));
             $m->addItem(['Customers','icon'=>'fa fa-male'],'xepan_commerce_customer');
             $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
