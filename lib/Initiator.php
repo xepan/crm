@@ -56,6 +56,7 @@ class Initiator extends \Controller_Addon {
         $this->app->addHook('activity_report',[$search_supportticket,'activityReport']);
         $this->app->addHook('widget_collection',[$this,'exportWidgets']);
         $this->app->addHook('entity_collection',[$this,'exportEntities']);
+        $this->app->addHook('collect_shortcuts',[$this,'collect_shortcuts']);
 
         return $this;  
     }
@@ -77,6 +78,15 @@ class Initiator extends \Controller_Addon {
     function exportEntities($app,&$array){
         $array['SupportTicket'] = ['caption'=>'SupportTicket','type'=>'DropDown','model'=>'xepan\crm\Model_SupportTicket'];
         $array['SUPPORT_SYSTEM_CONFIG'] = ['caption'=>'SUPPORT_SYSTEM_CONFIG','type'=>'DropDown','model'=>'xepan\crm\Model_SUPPORT_SYSTEM_CONFIG'];
+    }
+
+    function collect_shortcuts($app,&$shortcuts){
+        $shortcuts[]=["title"=>"Open Support Tickets","keywords"=>"support tickets open","description"=>"Open Support Tickets","normal_access"=>"Support -> Support Ticket","url"=>$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']),'mode'=>'frame'];
+        $shortcuts[]=["title"=>"Pending Support Tickets","keywords"=>"support tickets pending","description"=>"Pending Support Tickets","normal_access"=>"Support -> Support Ticket / SideBar -> Pending","url"=>$this->app->url('xepan_crm_supportticket',['status'=>'Pending']),'mode'=>'frame'];
+        $shortcuts[]=["title"=>"Assigned Support Tickets","keywords"=>"support tickets assigned","description"=>"Assigned Support Tickets","normal_access"=>"Support -> Support Ticket / SideBar -> Assigned","url"=>$this->app->url('xepan_crm_supportticket',['status'=>'Assigned']),'mode'=>'frame'];
+        $shortcuts[]=["title"=>"Closed Support Tickets","keywords"=>"support tickets closed","description"=>"Closed Support Tickets","normal_access"=>"Support -> Support Ticket / SideBar -> Closed","url"=>$this->app->url('xepan_crm_supportticket',['status'=>'Closed']),'mode'=>'frame'];
+        $shortcuts[]=["title"=>"Rejected Support Tickets","keywords"=>"support tickets rejected","description"=>"Rejected Support Tickets","normal_access"=>"Support -> Support Ticket / SideBar -> Rejected","url"=>$this->app->url('xepan_crm_supportticket',['status'=>'Rejected']),'mode'=>'frame'];
+        $shortcuts[]=["title"=>"Support Tickets Email Contents","keywords"=>"support tickets email contents auto reply messages","description"=>"Manage Email contents for support tickets","normal_access"=>"Support -> Configuration","url"=>$this->app->url('xepan_crm_config'),'mode'=>'frame'];
     }
 
     function resetDB(){
