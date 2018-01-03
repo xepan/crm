@@ -29,7 +29,7 @@ class Widget_SupportTicketStatus extends \xepan\base\Widget{
         foreach ($counts as $key => $data) {
         	$total_ticket += $data['counts'];
 
-        	$v = $col->addColumn(3);
+        	$v = $col->addColumn(3)->addClass('xepan-hover-hand');
         	$view = $v->add('xepan\base\View_Widget_SingleInfo');
         	$view->setHeading($data['status']);
         	$view->setValue($data['counts']);
@@ -44,7 +44,7 @@ class Widget_SupportTicketStatus extends \xepan\base\Widget{
 			->setIcon("")
 			->setValue('Total Tickets: '.$total_ticket)
 			->setHeading("")
-			->setClass('text-center gray-bg');
+			->setClass('text-center gray-bg xepan-hover-hand');
 		
 		$v->js('click')->univ()->frameURL('All Tickets',$this->api->url($this->app->url('xepan/crm/supportticket')));
 
