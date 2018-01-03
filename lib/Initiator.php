@@ -73,6 +73,7 @@ class Initiator extends \Controller_Addon {
 
     function exportWidgets($app,&$array){
         $array[] = ['xepan\crm\Widget_PendingTickets','level'=>'Individual','title'=>'Pending Tickets'];
+        $array[] = ['xepan\crm\Widget_SupportTicketStatus','level'=>'Global','title'=>'Support Ticket Status'];
     }
 
     function exportEntities($app,&$array){
