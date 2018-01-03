@@ -8,6 +8,7 @@ class Widget_SupportTicketStatus extends \xepan\base\Widget{
 
 		$this->view = $this->add('View')->addClass('main-box main-box-body padding-10');
 		$this->view->add('View')->setElement('h1')->set('Support Ticket Status')->addClass('text-center');
+		
 	}
 
 	function recursiveRender(){
@@ -34,13 +35,18 @@ class Widget_SupportTicketStatus extends \xepan\base\Widget{
         	$view->setValue($data['counts']);
         	$view->setIcon("");
         	$view->setClass($class_array[$data['status']]);
+				
+			// digging
+			$view->js('click')->univ()->frameURL('All Tickets',$this->api->url('xepan/crm/supportticket',['status'=>$data['status']]));
         }
 
-		$this->view->add('xepan\base\View_Widget_SingleInfo')
+		$v = $this->view->add('xepan\base\View_Widget_SingleInfo')
 			->setIcon("")
 			->setValue('Total Tickets: '.$total_ticket)
 			->setHeading("")
 			->setClass('text-center gray-bg');
+		
+		$v->js('click')->univ()->frameURL('All Tickets',$this->api->url($this->app->url('xepan/crm/supportticket')));
 
 		parent::recursiveRender();
 	}
