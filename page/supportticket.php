@@ -47,10 +47,23 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 
 		$crud=$this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
 		$form = $crud->form;
+		// form layout
+		$form->add('xepan\base\Controller_FLC')
+			->showLables(true)
+			->addContentSpot()
+			->makePanelsCoppalsible(true)
+			->layout([
+					'complain_to~Complain to Support Department'=>'Support Ticket Management~c1~6',
+					'priority~Ticket Priority'=>'c2~6',
+					'contact~Customer Name'=>'Customer Detail~c3~12',
+					'email_to~Customer Email Ids'=>'c4~12',
+					'subject~Ticket Subject'=>'Ticket/ Complain Detail~c5~12',
+					'message~Ticket Message'=>'c6~12'
+				]);
+
 
 		$c = $this->add('xepan\base\Model_Contact');
 		if($crud->isEditing()){
-
 			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 			$email_setting->addCondition('is_support_email',true);
 			$email_setting->addCondition('is_active',true);
@@ -62,23 +75,23 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 			if($this->app->stickyGET('contact_id')){
 				$c->load($_GET['contact_id']);
 			}
-
-			$email_to = $form->addField('email_to')->set(implode(",",$c->getEmails()))->validate('required');
-
+			$email_to = $form->addField('email_to')->set(implode(",",$c->getEmails())?:"")->validate('required');
 		}
+
+
 
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
 		if($crud->isEditing()){
 			$contact_field = $form->getElement('contact_id');
 
-			// $contact_field->other_field->js('change',$email_to->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$email_to->name]),'contact_id'=>$contact_field->js()->val()]));
-			$contact_field->other_field->js('change',$form->js()->atk4_form(
-						'reloadField','email_to',
-						[
-							$this->app->url(),
-							'contact_id'=>$contact_field->js()->val(),
-						]
-					));
+			$contact_field->other_field->js('change',$email_to->js()->reload(null,null,[$this->app->url(null,['cut_object'=>$email_to->name]),'contact_id'=>$contact_field->js()->val()]));
+			// $contact_field->other_field->js('change',$form->js()->atk4_form(
+			// 			'reloadField','email_to',
+			// 			[
+			// 				$this->app->url(),
+			// 				'contact_id'=>$contact_field->js()->val(),
+			// 			]
+			// 		));
 
 			$form->getElement('subject');//->set($sub_view->getHTML());
 			$form->getElement('message');//->set($body_view->getHTML());
@@ -168,8 +181,6 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 
 		}
 		
-
-
 		if(!$crud->isEditing())
 			$crud->grid->controller->importField('created_at');
 		
