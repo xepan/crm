@@ -6,10 +6,44 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 	public $title="Support Ticket";
 	function init(){
 		parent::init();
-		$this->js(true)->_selector('.xepan-crm-reply-tool')->hide();
-		
+
 		$status = $this->app->stickyGET('status');
 		$duration = $this->app->stickyGET('duration');
+
+		$filter_form = $this->add('Form');
+		$filter_form->add('xepan\base\Controller_FLC')
+			->showLables(true)
+			->addContentSpot()
+			->makePanelsCoppalsible(true)
+			->layout([
+					'ticket'=>'Filter Form~c1~3',
+					'customer'=>'c2~3',
+					'from_date'=>'c3~2',
+					'to_date'=>'c4~2',
+					'FormButtons~'=>'c5~2'
+				]);
+
+		$st_m  = $this->add('xepan\crm\Model_SupportTicket',['title_field'=>'document_id'])
+					->addCondition('status',explode(",",$status));
+
+		$ticket_field = $filter_form->addField('DropDown','ticket');
+		$model = $ticket_field->setModel($st_m);
+		$ticket_field->setEmptyText('Please Select Ticket');
+		
+
+		$customer_field = $filter_form->addField('DropDown','customer');
+		$cm = $this->add('xepan\commerce\Model_Customer',['title_field'=>'unique_name'])
+					->addCondition('status','Active');
+		$customer_field->setModel($cm);
+		$customer_field->setEmptyText('Please Select Customer');
+
+		$from_date = $filter_form->addField('DateTimePicker','from_date')->set($this->app->now);
+		$to_date = $filter_form->addField('DateTimePicker','to_date')->set($this->app->now);
+		$filter_form->addSubmit('Filter')->addClass('btn btn-primary');
+			
+
+		// ----------
+		$this->js(true)->_selector('.xepan-crm-reply-tool')->hide();
 
 		$st = $this->add('xepan\crm\Model_SupportTicket');
 		if($duration){
@@ -79,6 +113,20 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		}
 
 
+		if($_GET['filter_ticket_id']){
+			$st->addCondition('id',$_GET['filter_ticket_id']);
+		}else{
+
+			if($_GET['filter_from_date']){
+				$st->addCondition('created_at','>=',$_GET['filter_from_date']);
+			}
+			if($_GET['filter_to_date']){
+				$st->addCondition('created_at','<',$_GET['filter_to_date']);
+			}
+			if($_GET['filter_customer_id']){
+				$st->addCondition('contact_id','<',$_GET['filter_customer_id']);
+			}
+		}
 
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
 		if($crud->isEditing()){
@@ -196,8 +244,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$g->addFormatter('ticket_attachment','ticket_attachment');
 
 		$crud->grid->addPaginator(10);
-		$frm=$crud->grid->addQuickSearch(['document_id']);
-
+		$crud->grid->addQuickSearch(['document_id','contact_id','contact']);
 		
 		if(!$crud->isEditing()){
 			$this->app->stickyGET('ticket_id');
@@ -234,6 +281,15 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 				$td_view->add('xepan\base\Controller_Avatar',['name_field'=>'contact','image_field'=>'contact_image','options'=>['size'=>50,'display'=>'block','margin'=>'auto'],'float'=>null,'model'=>$ticket_model]);
 			}
 
+		}
+
+		if($filter_form->isSubmitted()){
+			$crud->js()->reload([
+					'filter_ticket_id'=>$filter_form['ticket'],
+					'filter_customer_id'=>$filter_form['customer'],
+					'filter_from_date'=>$filter_form['from_date'],
+					'filter_to_date'=>$filter_form['to_date'],
+				])->execute();
 		}		
 		
 	}
