@@ -74,7 +74,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 				->fieldQuery('assign_to_id'); 
 		});
 
-
+		$this->addExpression('assign_to_employee')->set(function($m,$q){
+			return $task = $m->add('xepan\projects\Model_Task',['table_alias'=>'sttiass'])
+				->addCondition('id',$m->getElement('task_id'))
+				->fieldQuery('assign_to'); 
+		});
 
 		$this->addExpression('ticket_attachment')->set($this->refSQL('communication_id')->fieldQuery('attachment_count'));
 		

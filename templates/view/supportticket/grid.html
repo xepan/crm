@@ -29,9 +29,11 @@
           </td>
           <td>
              
-            {$action}<br/><a href="#" data-id="{$id}" class="view-related-task">
-                 
-              {$task_id}&nbsp;</a><small>{$task_status}     </small>
+            {$action}<br/>
+            <a href="#" data-id="{$id}" class="view-related-task">
+              <small>{$task_status} {$assign_to_employee}</small>   
+              <!-- {$task_id}&nbsp; -->
+            </a>
           </td>
           <td style="width: 15%;">
             {$edit}

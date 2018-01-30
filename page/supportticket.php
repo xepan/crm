@@ -135,7 +135,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 			}
 		}
 
-		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar']);
+		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar','assign_to_employee']);
 		if($crud->isEditing()){
 			$contact_field = $form->getElement('contact_id');
 
