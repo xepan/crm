@@ -7,8 +7,13 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 	function init(){
 		parent::init();
 
+
 		$status = $this->app->stickyGET('status');
 		$duration = $this->app->stickyGET('duration');
+		$this->app->stickyGET('filter_ticket_id');
+		$this->app->stickyGET('filter_from_date');
+		$this->app->stickyGET('filter_to_date');
+		$this->app->stickyGET('filter_customer_id');
 
 		$filter_form = $this->add('Form');
 		$filter_form->add('xepan\base\Controller_FLC')
@@ -79,7 +84,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		// unset($st->actions['Assigned'][5]);
 		// unset($st->actions['Pending'][6]);
 
-		$crud=$this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
+		$crud = $this->add('xepan\base\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
 		$form = $crud->form;
 		// form layout
 		$form->add('xepan\base\Controller_FLC')
@@ -120,11 +125,13 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 			if($_GET['filter_from_date']){
 				$st->addCondition('created_at','>=',$_GET['filter_from_date']);
 			}
+
 			if($_GET['filter_to_date']){
-				$st->addCondition('created_at','<',$_GET['filter_to_date']);
+				$st->addCondition('created_at','<',$this->app->nextDate($_GET['filter_to_date']));
 			}
-			if($_GET['filter_customer_id']){
-				$st->addCondition('contact_id','<',$_GET['filter_customer_id']);
+
+			if($cid = $_GET['filter_customer_id']){				
+				$st->addCondition('contact_id',$cid);
 			}
 		}
 
