@@ -8,7 +8,6 @@ class View_SupportTicketStatus extends \View{
 
 		$this->view = $this->add('View')->addClass('main-box main-box-body padding-10');
 		$this->view->add('View')->setElement('h1')->set('Support Ticket Status')->addClass('text-center');
-		
 	}
 
 	function recursiveRender(){
