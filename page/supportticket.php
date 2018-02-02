@@ -162,11 +162,23 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 				$new_ticket->addCondition('id',$st->id);
 				$new_ticket->tryLoadAny();
 				if($new_ticket->loaded()){
+
 					$contact = $this->add('xepan\base\Model_Contact')->load($form['contact_id']);
+
+					if($form['email_to']){
+						$to_email_ids = explode(",",$form['email_to']);
+						foreach ($to_email_ids as $key => $value) {
+							if(!filter_var(trim($value), FILTER_VALIDATE_EMAIL)){
+								$form->error('email_to','email must be valid emai address');
+							}
+						}
+					}else
+						$to_email_ids = $contact->getEmails();
+
 					$new_ticket['from_id'] = $form['contact_id'];
-					$new_ticket['from_raw'] = ['name'=>$contact['name'],'email'=>$contact->getEmails()[0]];
+					$new_ticket['from_raw'] = ['name'=>$contact['name'],'email'=>$to_email_ids[0]];
 					$new_ticket['from_name'] = $contact['name'];
-					$new_ticket['from_email'] = $contact->getEmails()[0];
+					$new_ticket['from_email'] = $to_email_ids[0];
 					$new_ticket['to_id'] = $form['complain_to'];
 					$email_to_setting = $this->add('xepan\communication\Model_Communication_EmailSetting')->load($form['complain_to']);
 					$new_ticket['to_raw'] = ['name'=>$email_to_setting['name'],'email'=>$email_to_setting['email_username']];
@@ -206,6 +218,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 					foreach (explode(",",$form['email_to']) as $email) {
 						$to_array[]= ['name'=>null,'email'=>$email];
 					}
+					
 					$new_ticket->createComment(
 								$s,
 								$body_view->getHTML(),

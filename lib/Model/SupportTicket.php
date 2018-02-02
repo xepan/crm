@@ -51,6 +51,11 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		$st_j->addField('task_id');
 		$st_j->addField('priority')->enum(array('Low','Medium','High','Urgent'))->defaultValue('Medium')->mandatory(true);
 
+		$st_j->addField('assigned_at')->type('datetime');
+		$st_j->addField('closed_at')->type('datetime');
+		$st_j->addField('rejected_at')->type('datetime');
+		$st_j->addField('pending_at')->type('datetime');
+
 		$st_j->hasMany('xepan\crm\Ticket_Comments','ticket_id',null,'Comments');
 		$st_j->hasMany('xepan\crm\Ticket_Attachment','ticket_id',null,'TicketAttachments');
 
@@ -120,7 +125,12 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 
 		$this->addHook('beforeDelete',[$this,'deleteComments']);
 		$this->addHook('beforeSave',[$this,'updateSearchString']);
+		$this->addHook('beforeSave',[$this,'updateDates']);
 
+	}
+
+	function updateDates(){
+		$this[strtolower($this['status'])."_at"] = $this->app->now;
 	}
 
 	function deleteComments(){
