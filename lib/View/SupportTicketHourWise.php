@@ -2,7 +2,7 @@
 
 namespace xepan\crm;
 
-class View_SupportTicketDayWise extends \View{
+class View_SupportTicketHourWise extends \View{
 
 	function init(){
 		parent::init();
