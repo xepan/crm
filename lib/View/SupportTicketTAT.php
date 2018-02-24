@@ -4,6 +4,9 @@ namespace xepan\crm;
 
 class View_SupportTicketTAT extends \View{
   public $tat_array = [];
+
+  public $tat_of_status = "Closed";
+
 	function init(){
 		parent::init();
 
@@ -33,15 +36,17 @@ class View_SupportTicketTAT extends \View{
         $min_minute = $min_hour * 60;
         $max_minute = $max_hour * 60;
 
-        $model = $this->add('xepan\crm\Model_SupportTicketData');
-        if($min_minute >= 0){
-          $model->addCondition('closed_duration','>=',$min_minute);
-        }
-        if($max_minute){
-          $model->addCondition('closed_duration','<',$max_minute);
-        }
+        $duration_variable = strtolower($this->tat_of_status)."_duration";
 
-        //$model->addCondition('closed_duration','<>',null);
+        $model = $this->add('xepan\crm\Model_SupportTicketData');
+        // if($min_minute >= 0){
+        //   $model->addCondition($duration_variable,'>=',$min_minute);
+        // }
+        // if($max_minute){
+        //   $model->addCondition($duration_variable,'<',$max_minute);
+        // }
+        $model->addCondition($duration_variable,'<>',null);
+        $this->view->add('Grid')->setModel($model,[$duration_variable,'created_at','closed_at']);
         $count = $model->count()->getOne();
         $total_ticket += $count;
 
@@ -53,16 +58,15 @@ class View_SupportTicketTAT extends \View{
         $view->setClass($data['css_class']);
         
         // digging
-        $view->js('click')->univ()->frameURL('All Tickets',$this->api->url('xepan/crm/supportticket',['status'=>$data['status']]));
+        $view->js('click')->univ()->frameURL($data['heading']." ".strtolower($this->tat_of_status).' Tickets',$this->api->url('xepan/crm/supportticket',['status'=>$this->tat_of_status]));
     }
 
 		$v = $this->view->add('xepan\base\View_Widget_SingleInfo')
 			->setIcon("")
-			->setValue('Total Tickets: '.$total_ticket)
+			->setValue('Total '.$this->tat_of_status.' Tickets: '.$total_ticket)
 			->setHeading("")
-			->setClass('text-center gray-bg xepan-hover-hand');
-			
-		$v->js('click')->univ()->frameURL('All Tickets',$this->api->url($this->app->url('xepan/crm/supportticket')));
+			->setClass('text-center gray-bg xepan-hover-hand');			
+		$v->js('click')->univ()->frameURL('All Tickets',$this->api->url($this->app->url('xepan/crm/supportticket',['status'=>$this->tat_of_status])));
 
 		parent::recursiveRender();
 	}

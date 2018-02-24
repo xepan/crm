@@ -9,7 +9,9 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 
 
 		$status = $this->app->stickyGET('status');
+		$tat_status = $this->app->stickyGET('tat_status');
 		$duration = $this->app->stickyGET('duration');
+
 		$this->app->stickyGET('filter_ticket_id');
 		$this->app->stickyGET('filter_from_date');
 		$this->app->stickyGET('filter_to_date');
@@ -51,14 +53,17 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$this->js(true)->_selector('.xepan-crm-reply-tool')->hide();
 
 		$st = $this->add('xepan\crm\Model_SupportTicket');
+		// used for support ticket status
 		if($duration){
+			
 			$st->addExpression('duration',function($m,$q){
 				return $q->expr('TIMESTAMPDIFF(HOUR,[0],"[1]")',[$m->getElement('created_at'),$this->app->now]);
 			});
-
+			
 			$temp = explode("-", $duration);
 	   		$min_hour = $temp[0]?:0;
 	   		$max_hour = $temp[1]?:0;
+
 			if($min_hour)
 				$st->addCondition('duration','>=',$min_hour);
 			if($max_hour)
