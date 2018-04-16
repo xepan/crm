@@ -6,10 +6,12 @@ class View_SupportTicketTAT extends \View{
   public $tat_array = [];
 
   public $tat_of_status = "Closed";
+  public $from_date;
+  public $to_date;
 
 	function init(){
 		parent::init();
-
+        
 		$this->view = $this->add('View')->addClass('main-box main-box-body padding-10');
 		$this->view->add('View')->setElement('h1')->set('Closed Support Ticket TAT')->addClass('text-center');
 	}
