@@ -12,10 +12,10 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$tat_status = $this->app->stickyGET('tat_status');
 		$duration = $this->app->stickyGET('duration');
 
-		$this->app->stickyGET('filter_ticket_id');
-		$this->app->stickyGET('filter_from_date');
-		$this->app->stickyGET('filter_to_date');
-		$this->app->stickyGET('filter_customer_id');
+		$filter_ticket_id = $this->app->stickyGET('filter_ticket_id');
+		$filter_from_date = $this->app->stickyGET('filter_from_date')?:$this->app->now;
+		$filter_to_date = $this->app->stickyGET('filter_to_date')?:$this->app->now;
+		$filter_customer_id = $this->app->stickyGET('filter_customer_id');
 
 		$filter_form = $this->add('Form');
 		$filter_form->add('xepan\base\Controller_FLC')
@@ -30,8 +30,9 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 					'FormButtons~'=>'c5~2'
 				]);
 
-		$st_m  = $this->add('xepan\crm\Model_SupportTicket',['title_field'=>'document_id'])
-					->addCondition('status',explode(",",$status));
+		$st_m  = $this->add('xepan\crm\Model_SupportTicket');
+		// $st_m->addExpression('title_field')->set($st_m->dsql()->expr('CONCAT([0],"::",[1])',[$st_m->getElement('name'),$st_m->getElement('contact_name')]));
+		$st_m->addCondition('status',explode(",",$status));
 
 		$ticket_field = $filter_form->addField('DropDown','ticket');
 		$model = $ticket_field->setModel($st_m);
@@ -44,18 +45,17 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$customer_field->setModel($cm);
 		$customer_field->setEmptyText('Please Select Customer');
 
-		$from_date = $filter_form->addField('DateTimePicker','from_date')->set($this->app->now);
-		$to_date = $filter_form->addField('DateTimePicker','to_date')->set($this->app->now);
+		$from_date = $filter_form->addField('DateTimePicker','from_date')->set($filter_from_date);
+		$to_date = $filter_form->addField('DateTimePicker','to_date')->set($filter_to_date);
 		$filter_form->addSubmit('Filter')->addClass('btn btn-primary');
 			
 
 		// ----------
 		$this->js(true)->_selector('.xepan-crm-reply-tool')->hide();
 
-		$st = $this->add('xepan\crm\Model_SupportTicket');
-		// used for support ticket status
+		$st = $this->add('xepan\crm\Model_SupportTicketData');
+		// used for support ticket tat status
 		if($duration){
-			
 			$st->addExpression('duration',function($m,$q){
 				return $q->expr('TIMESTAMPDIFF(HOUR,[0],"[1]")',[$m->getElement('created_at'),$this->app->now]);
 			});
@@ -68,13 +68,13 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 				$st->addCondition('duration','>=',$min_hour);
 			if($max_hour)
 				$st->addCondition('duration','<',$max_hour);
-		}
+		}else{
 
+		}
 
 		$st->addCondition('status','<>','Draft');
 		if($status)
 			$st->addCondition('status',explode(",",$status));
-
 
 		$st->addCondition(
 					$st->dsql()->orExpr()

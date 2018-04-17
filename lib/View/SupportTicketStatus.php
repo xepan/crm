@@ -37,14 +37,15 @@ class View_SupportTicketStatus extends \View{
         foreach ($data_array as $status => $data) {
         	$total_ticket += $data['counts'];
 
+        	$ticket_count = $data['counts']?:"0";
         	$v = $col->addColumn(3)->addClass('xepan-hover-hand');
         	$view = $v->add('xepan\base\View_Widget_SingleInfo');
         	$view->setHeading($status);
-        	$view->setValue($data['counts']?:"0");
+        	$view->setValue($ticket_count);
         	$view->setIcon("");
         	$view->setClass($data['css_class']);
 			// digging
-			$view->js('click')->univ()->frameURL('All Tickets',$this->api->url('xepan/crm/supportticket',['status'=>$status]));
+			$view->js('click')->univ()->frameURL($ticket_count." ".$status." Tickets (".(date('d-M-Y',strtotime($this->from_date)))." to ".(date('d-M-Y',strtotime($this->to_date))).")",$this->api->url('xepan/crm/supportticket',['status'=>$status,'filter_from_date'=>$this->from_date,'filter_to_date'=>$this->to_date]));
         }
 
 		$v = $this->view->add('xepan\base\View_Widget_SingleInfo')
@@ -53,7 +54,7 @@ class View_SupportTicketStatus extends \View{
 			->setHeading("")
 			->setClass('text-center gray-bg xepan-hover-hand');
 		
-		$v->js('click')->univ()->frameURL('All Tickets',$this->api->url($this->app->url('xepan/crm/supportticket')));
+		$v->js('click')->univ()->frameURL('All Tickets',$this->app->url('xepan/crm/supportticket',['filter_from_date'=>$this->from_date,'filter_to_date'=>$this->to_date]));
 
 		parent::recursiveRender();
 	}
