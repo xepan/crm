@@ -8,7 +8,6 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 	function init(){
 		parent::init();
 
-
 		$status = $this->app->stickyGET('status');
 		$duration = $this->app->stickyGET('duration');
 
@@ -16,6 +15,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$filter_from_date = $this->app->stickyGET('filter_from_date')?:$this->app->now;
 		$filter_to_date = $this->app->stickyGET('filter_to_date')?:$this->app->now;
 		$filter_customer_id = $this->app->stickyGET('filter_customer_id');
+		// apply from date and to date condition on field like closed_at, 
 		$apply_date_filter_on_field = $this->app->stickyGET('apply_date_filter_on_field')?:'created_at';
 
 		$filter_form = $this->add('Form');
@@ -145,7 +145,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 
 		$st->setOrder(['last_comment desc','created_at desc']);
 	
-		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar','assign_to_employee']);
+		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar','assign_to_employee','assigned_at','closed_at','rejected_at','pending_at']);
 		if($crud->isEditing()){
 			$contact_field = $form->getElement('contact_id');
 
