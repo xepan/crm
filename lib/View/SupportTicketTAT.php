@@ -46,10 +46,10 @@ class View_SupportTicketTAT extends \View{
         $model->addCondition('closed_at','<',$this->app->nextDate($this->to_date));
 
         if($min_minute >= 0){
-          $model->addCondition($duration_variable,'>=',$min_minute);
+            $model->addCondition($duration_variable,'>=',$min_minute);
         }
         if($max_minute){
-          $model->addCondition($duration_variable,'<',$max_minute);
+            $model->addCondition($duration_variable,'<',$max_minute);
         }
         $model->addCondition($duration_variable,'<>',null);
             
@@ -66,7 +66,7 @@ class View_SupportTicketTAT extends \View{
         $view->setClass($data['css_class']);
         
         // digging
-        $view->js('click')->univ()->frameURL($data['heading']." ".strtolower($this->tat_of_status).' Tickets',$this->api->url('xepan/crm/supportticket',['status'=>$this->tat_of_status]));
+        $view->js('click')->univ()->frameURL($data['heading']." ".strtolower($this->tat_of_status).' Tickets',$this->api->url('xepan/crm/supportticket',['status'=>$this->tat_of_status,'duration'=>$duration,'filter_from_date'=>$this->from_date,'filter_to_date'=>$this->to_date]));
     }
 
 		$v = $this->view->add('xepan\base\View_Widget_SingleInfo')

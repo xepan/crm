@@ -9,7 +9,6 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 
 
 		$status = $this->app->stickyGET('status');
-		$tat_status = $this->app->stickyGET('tat_status');
 		$duration = $this->app->stickyGET('duration');
 
 		$filter_ticket_id = $this->app->stickyGET('filter_ticket_id');
@@ -56,22 +55,30 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$st = $this->add('xepan\crm\Model_SupportTicketData');
 		// used for support ticket tat status
 		if($duration){
-			$st->addExpression('duration',function($m,$q){
-				return $q->expr('TIMESTAMPDIFF(HOUR,[0],"[1]")',[$m->getElement('created_at'),$this->app->now]);
-			});
-			
 			$temp = explode("-", $duration);
-	   		$min_hour = $temp[0]?:0;
-	   		$max_hour = $temp[1]?:0;
+	        $min_hour = $temp[0]?:0;
+	        $max_hour = $temp[1]?:0;
 
-			if($min_hour)
-				$st->addCondition('duration','>=',$min_hour);
-			if($max_hour)
-				$st->addCondition('duration','<',$max_hour);
+	        $min_minute = $min_hour * 60;
+	        $max_minute = $max_hour * 60;
+
+	        
+	        $duration_variable = strtolower($status)."_duration";
+	        if($min_minute >= 0){
+				$st->addCondition($duration_variable,'>=',$min_minute);
+	        }
+	        if($max_minute){
+				$st->addCondition($duration_variable,'<',$max_minute);
+	        }
+	        $st->addCondition($duration_variable,'<>',null);
+
 		}else{
-
+			$st->getElement('pending_duration')->destroy();
+			$st->getElement('assigned_duration')->destroy();
+			$st->getElement('closed_duration')->destroy();
+			$st->getElement('rejected_duration')->destroy();
 		}
-
+		
 		$st->addCondition('status','<>','Draft');
 		if($status)
 			$st->addCondition('status',explode(",",$status));
@@ -88,8 +95,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		
 		// unset($st->actions['Assigned'][5]);
 		// unset($st->actions['Pending'][6]);
-
-		$crud = $this->add('xepan\hr\CRUD',['grid_class'=>'xepan\base\Grid'],null,['view/supportticket/grid']);
+		$crud = $this->add('xepan\hr\CRUD',['grid_class'=>'xepan\base\Grid','grid_options'=>['fixed_header'=>false]],null,['view/supportticket/grid']);
 		$form = $crud->form;
 		// form layout
 		$form->add('xepan\base\Controller_FLC')
@@ -104,7 +110,6 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 					'subject~Ticket Subject'=>'Ticket/ Complain Detail~c5~12',
 					'message~Ticket Message'=>'c6~12'
 				]);
-
 
 		$c = $this->add('xepan\base\Model_Contact');
 		if($crud->isEditing()){
@@ -134,12 +139,12 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 			if($_GET['filter_to_date']){
 				$st->addCondition('created_at','<',$this->app->nextDate($_GET['filter_to_date']));
 			}
-
 			if($cid = $_GET['filter_customer_id']){				
 				$st->addCondition('contact_id',$cid);
 			}
 		}
 
+		
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar','assign_to_employee']);
 		if($crud->isEditing()){
 			$contact_field = $form->getElement('contact_id');
