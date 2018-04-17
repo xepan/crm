@@ -3,16 +3,23 @@
 namespace xepan\crm;
 
 class View_SupportTicketStatus extends \View{
+	public $from_date;
+	public $to_date;
+
 	function init(){
 		parent::init();
 
 		$this->view = $this->add('View')->addClass('main-box main-box-body padding-10');
-		$this->view->add('View')->setElement('h1')->set('Support Ticket Status')->addClass('text-center');
+		$this->view->add('View')->setElement('h1')->setHtml('Support Ticket Status <br/> <small>('.(date('d-M-Y',strtotime($this->from_date))).' to '.(date('d-M-Y',strtotime($this->to_date))).')</small>')->addClass('text-center');
 	}
 
 	function recursiveRender(){
+
 		$m = $this->add('xepan\crm\Model_SupportTicket');
-        $counts = $m->_dsql()->del('fields')->field('status')->field('count(*) counts')->group('Status')->get();
+		$m->addCondition('created_at','>',$this->from_date);
+		$m->addCondition('created_at','<',$this->app->nextDate($this->to_date));
+		
+        $counts = $m->_dsql()->del('fields')->field('status')->field('count(*) counts')->group('status')->get();
         $data_array = [];
 
         $total_ticket = 0;
@@ -33,7 +40,7 @@ class View_SupportTicketStatus extends \View{
         	$v = $col->addColumn(3)->addClass('xepan-hover-hand');
         	$view = $v->add('xepan\base\View_Widget_SingleInfo');
         	$view->setHeading($status);
-        	$view->setValue($data['counts']);
+        	$view->setValue($data['counts']?:"0");
         	$view->setIcon("");
         	$view->setClass($data['css_class']);
 			// digging

@@ -41,6 +41,7 @@ class View_SupportTicketTAT extends \View{
         $duration_variable = strtolower($this->tat_of_status)."_duration";
 
         $model = $this->add('xepan\crm\Model_SupportTicketData');
+        $model->addCondition('status','Closed');
         $model->addCondition('closed_at','>',$this->from_date);
         $model->addCondition('closed_at','<',$this->app->nextDate($this->to_date));
 
