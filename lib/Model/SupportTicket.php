@@ -23,7 +23,7 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	function init(){
 		parent::init();
 		$this->addCondition('type','SupportTicket');
-		
+		$this->getElement('created_at')->type('datetime');
 		$st_j=$this->join('support_ticket.document_id');
 
 		$st_j->hasOne('xepan\base\Contact','contact_id','unique_name')->display(['form'=>'xepan\base\Basic']);
