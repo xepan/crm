@@ -12,7 +12,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$duration = $this->app->stickyGET('duration');
 
 		$filter_ticket_id = $this->app->stickyGET('filter_ticket_id');
-		$filter_from_date = $this->app->stickyGET('filter_from_date')?:$this->app->now;
+		$filter_from_date = $this->app->stickyGET('filter_from_date')?:$this->app->today;
 		$filter_to_date = $this->app->stickyGET('filter_to_date')?:$this->app->now;
 		$filter_customer_id = $this->app->stickyGET('filter_customer_id');
 		// apply from date and to date condition on field like closed_at, 
