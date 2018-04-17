@@ -6,10 +6,12 @@ class View_SupportTicketTAT extends \View{
   public $tat_array = [];
 
   public $tat_of_status = "Closed";
+  public $from_date;
+  public $to_date;
 
 	function init(){
 		parent::init();
-
+        
 		$this->view = $this->add('View')->addClass('main-box main-box-body padding-10');
 		$this->view->add('View')->setElement('h1')->set('Closed Support Ticket TAT')->addClass('text-center');
 	}
@@ -39,14 +41,15 @@ class View_SupportTicketTAT extends \View{
         $duration_variable = strtolower($this->tat_of_status)."_duration";
 
         $model = $this->add('xepan\crm\Model_SupportTicketData');
-        // if($min_minute >= 0){
-        //   $model->addCondition($duration_variable,'>=',$min_minute);
-        // }
-        // if($max_minute){
-        //   $model->addCondition($duration_variable,'<',$max_minute);
-        // }
+        if($min_minute >= 0){
+          $model->addCondition($duration_variable,'>=',$min_minute);
+        }
+        if($max_minute){
+          $model->addCondition($duration_variable,'<',$max_minute);
+        }
         $model->addCondition($duration_variable,'<>',null);
-        $this->view->add('Grid')->setModel($model,[$duration_variable,'created_at','closed_at']);
+        
+        // $this->view->add('Grid')->setModel($model,[$duration_variable,'created_at','closed_at']);
         $count = $model->count()->getOne();
         $total_ticket += $count;
 
