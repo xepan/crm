@@ -4,6 +4,7 @@ namespace xepan\crm;
 // class page_supportticket extends \xepan\base\Page{
 class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 	public $title="Support Ticket";
+
 	function init(){
 		parent::init();
 
@@ -15,6 +16,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$filter_from_date = $this->app->stickyGET('filter_from_date')?:$this->app->now;
 		$filter_to_date = $this->app->stickyGET('filter_to_date')?:$this->app->now;
 		$filter_customer_id = $this->app->stickyGET('filter_customer_id');
+		$apply_date_filter_on_field = $this->app->stickyGET('apply_date_filter_on_field')?:'created_at';
 
 		$filter_form = $this->add('Form');
 		$filter_form->add('xepan\base\Controller_FLC')
@@ -62,7 +64,6 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 	        $min_minute = $min_hour * 60;
 	        $max_minute = $max_hour * 60;
 
-	        
 	        $duration_variable = strtolower($status)."_duration";
 	        if($min_minute >= 0){
 				$st->addCondition($duration_variable,'>=',$min_minute);
@@ -82,7 +83,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$st->addCondition('status','<>','Draft');
 		if($status)
 			$st->addCondition('status',explode(",",$status));
-
+		
 		$st->addCondition(
 					$st->dsql()->orExpr()
 						->where('to_id',array_merge([0],$this->app->employee->getAllowSupportEmail()))
@@ -91,7 +92,6 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 				);
 		unset($st->status[0]);
 		// $st->add('xepan\crm\Controller_SideBarStatusFilter');
-		$st->setOrder(['last_comment desc','created_at desc']);
 		
 		// unset($st->actions['Assigned'][5]);
 		// unset($st->actions['Pending'][6]);
@@ -131,20 +131,20 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		if($_GET['filter_ticket_id']){
 			$st->addCondition('id',$_GET['filter_ticket_id']);
 		}else{
-
-			if($_GET['filter_from_date']){
-				$st->addCondition('created_at','>=',$_GET['filter_from_date']);
+			if($filter_from_date){
+				$st->addCondition($apply_date_filter_on_field,'>=',$filter_from_date);
 			}
 
-			if($_GET['filter_to_date']){
-				$st->addCondition('created_at','<',$this->app->nextDate($_GET['filter_to_date']));
+			if($filter_to_date){
+				$st->addCondition($apply_date_filter_on_field,'<',$this->app->nextDate($filter_to_date));
 			}
-			if($cid = $_GET['filter_customer_id']){				
+			if($cid = $_GET['filter_customer_id']){
 				$st->addCondition('contact_id',$cid);
 			}
 		}
 
-		
+		$st->setOrder(['last_comment desc','created_at desc']);
+	
 		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar','assign_to_employee']);
 		if($crud->isEditing()){
 			$contact_field = $form->getElement('contact_id');
