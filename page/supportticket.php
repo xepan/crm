@@ -12,8 +12,8 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$duration = $this->app->stickyGET('duration');
 
 		$filter_ticket_id = $this->app->stickyGET('filter_ticket_id');
-		$filter_from_date = $this->app->stickyGET('filter_from_date')?:$this->app->today;
-		$filter_to_date = $this->app->stickyGET('filter_to_date')?:$this->app->now;
+		$filter_from_date = $this->app->stickyGET('filter_from_date');
+		$filter_to_date = $this->app->stickyGET('filter_to_date');
 		$filter_customer_id = $this->app->stickyGET('filter_customer_id');
 		// apply from date and to date condition on field like closed_at, 
 		$apply_date_filter_on_field = $this->app->stickyGET('apply_date_filter_on_field')?:'created_at';
@@ -46,8 +46,18 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 		$customer_field->setModel($cm);
 		$customer_field->setEmptyText('Please Select Customer');
 
-		$from_date = $filter_form->addField('DateTimePicker','from_date')->set($filter_from_date);
-		$to_date = $filter_form->addField('DateTimePicker','to_date')->set($filter_to_date);
+		$from_date = $filter_form->addField('DateTimePicker','from_date');
+		if(strtotime($filter_from_date) > 0){
+			$from_date->set($filter_from_date);
+		}else
+			$from_date->set($this->app->today);
+
+		$to_date = $filter_form->addField('DateTimePicker','to_date');
+		if(strtotime($filter_to_date) > 0){
+			$to_date->set($filter_to_date);
+		}else{
+			$to_date->set($this->app->now);
+		}
 		$filter_form->addSubmit('Filter')->addClass('btn btn-primary');
 			
 
