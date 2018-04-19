@@ -8,7 +8,8 @@ class Model_Ticket_Comments extends \xepan\base\Model_Table{
 	function init(){
 		parent::init();
 
-		$this->hasOne('xepan\base\Contact','created_by_id')->defaultValue($this->app->employee->id);
+		$this->hasOne('xepan\base\Contact','created_by_id')
+				->defaultValue($this->app->employee->id);
 		$this->hasOne('xepan\communication\Communication_Abstract_Email','communication_id');
 		$this->hasOne('xepan\crm\SupportTicket','ticket_id');
 
@@ -22,7 +23,7 @@ class Model_Ticket_Comments extends \xepan\base\Model_Table{
 			if(date('Y-m-d',strtotime($m['created_at']))==date('Y-m-d',strtotime($this->app->now))){
 				return date('h:i a',strtotime($m['created_at']));	
 			}
-			return date('M d',strtotime($m['created_at']));
+			return date('d M Y',strtotime($m['created_at']));
 		});
 
 		$this->addExpression('collapse_header')->set(function ($m,$q){
