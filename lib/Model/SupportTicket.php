@@ -152,16 +152,24 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 	}
 
 	function page_comment($page){
-		$comment=$page->add('xepan\crm\Model_Ticket_Comments');
+		$comment = $page->add('xepan\crm\Model_Ticket_Comments');
 		// $comment->addCondition('created_by_id',$this->app->employee->id);
 		$comment->addCondition('ticket_id',$this->id);
 		$comment->setOrder('created_at','desc');
 		$comment->getElement('description')->display(['form'=>'xepan\base\RichText']);
 
-		$comment_view = $page->add('xepan\hr\CRUD',null,null,['view/solution-comment-grid']);
-		$comment_view->setModel($comment,['title','description'],['title','description','created_by','callback_date','created_at']);
+		$comment_view = $page->add('xepan\hr\CRUD');
+		$comment_view->setModel($comment,['title','description'],['title','description','created_by','created_at']);
 		$comment_view->grid->addPaginator(10);
 
+		$comment_view->grid->addHook('formatRow',function($g){
+			$g->current_row_html['description'] = $g->model['description'];
+			$g->current_row_html['created_by'] = $g->model['created_by']."<br/>".$g->model['created_at'];
+		});
+
+		$comment_view->grid->removeAttachment();
+		$comment_view->grid->removeColumn('action');
+		$comment_view->grid->removeColumn('created_at');
 	}
 
 	function page_assign($page){
