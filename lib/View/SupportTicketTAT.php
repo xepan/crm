@@ -13,7 +13,7 @@ class View_SupportTicketTAT extends \View{
 		parent::init();
                 
 		$this->view = $this->add('View')->addClass('main-box main-box-body padding-10');
-		$this->view->add('View')->setElement('h1')->setHtml('Closed Support Ticket TAT <br/> <small>('.(date('d-M-Y',strtotime($this->from_date))).' to '.(date('d-M-Y',strtotime($this->to_date))).')</small>')->addClass('text-center');
+		$this->view->add('View')->setElement('h1')->setHtml('Closed Support Ticket TAT <br/> <small>('.(date('d-M-Y',strtotime($this->from_date))).' to '.(date('d-M-Y',strtotime($this->to_date))).')<br/><small>Closed tickets in given date range and their time taken</small></small>')->addClass('text-center');
 	}
 
 	function recursiveRender(){

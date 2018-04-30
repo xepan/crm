@@ -10,7 +10,7 @@ class View_SupportTicketStatus extends \View{
 		parent::init();
 
 		$this->view = $this->add('View')->addClass('main-box main-box-body padding-10');
-		$this->view->add('View')->setElement('h1')->setHtml('Support Ticket Status <br/> <small>('.(date('d-M-Y',strtotime($this->from_date))).' to '.(date('d-M-Y',strtotime($this->to_date))).')</small>')->addClass('text-center');
+		$this->view->add('View')->setElement('h1')->setHtml('Support Ticket Status <br/> <small>('.(date('d-M-Y',strtotime($this->from_date))).' to '.(date('d-M-Y',strtotime($this->to_date))).')<br/><small>Tickets created in given date range with their status</small></small>')->addClass('text-center');
 	}
 
 	function recursiveRender(){
