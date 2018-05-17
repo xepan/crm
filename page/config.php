@@ -5,8 +5,8 @@ class page_config extends \xepan\base\Page{
 	public $title="CRM Config";
 	function init(){
 		parent::init();
-		/*Auto Reply Email Content*/
 
+		/*Auto Reply Email Content*/
 		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
 		[
 			'fields'=>[

@@ -68,7 +68,7 @@ class Initiator extends \Controller_Addon {
          
          if($this->app->isEditing){
             
-            $this->app->exportFrontEndTool('xepan\crm\Tool_Support','Crm');
+            $this->app->exportFrontEndTool('xepan\crm\Tool_SupportTicket','CRM');
         }
 
         $cont = $this->add('xepan\crm\Controller_FilterEmails');
