@@ -10,67 +10,16 @@
                 </div>
             </div>
             <div id="show-hide-support-option" class="xepan-cms-tools-bar-panel row-fluid collapse">
-                <table class="table-condensed table-hover xepan-cms-tool-table">
-   
-              <tr >
-                  <td class="xepan-tool-option-title">Show Name</td>
-                  <td colspan="2" class="xepan-tool-option-value">
-                    <select  data-attr="show_name" data-defaultvalue="true">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                  </td>
-              </tr>
-              <tr >
-                  <td class="xepan-tool-option-title">Show Issue</td>
-                  <td colspan="2" class="xepan-tool-option-value">
-                    <select  data-attr="show_issue" data-defaultvalue="true">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                  </td>
-              </tr>
-              <tr >
-                  <td class="xepan-tool-option-title">Show Priority</td>
-                  <td colspan="2" class="xepan-tool-option-value">
-                    <select  data-attr="show_priority" data-defaultvalue="false">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                  </td>
-              </tr>
-                 <tr >
-                  <td class="xepan-tool-option-title">Show Status</td>
-                  <td colspan="2" class="xepan-tool-option-value">
-                    <select  data-attr="show_status" data-defaultvalue="false">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                  </td>
-              </tr>
-               <tr >
-                  <td class="xepan-tool-option-title">Show Comments</td>
-                  <td colspan="2" class="xepan-tool-option-value">
-                    <select  data-attr="show_comments" data-defaultvalue="false">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                  </td>
-              </tr>
-              <tr >
-                  <td class="xepan-tool-option-title">Show Date</td>
-                  <td colspan="2" class="xepan-tool-option-value">
-                    <select  data-attr="show_date" data-defaultvalue="false">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                  </td>
-              </tr>
-           
-           
-           
-            
-          </table>
+                <table class="table-condensed table-hover xepan-cms-tool-table">    <tr>
+                        <td class="xepan-tool-option-title">Show Complain Id</td>
+                        <td colspan="2" class="xepan-tool-option-value">
+                          <select id="{$_name}_email_dropdown" data-attr="complain_to_id" data-defaultvalue="0">
+
+                            
+                          </select>
+
+
+             </table>
             </div>
        
           </div>
@@ -83,7 +32,17 @@
     });
     
     $('#{$_name}').on('show',function(event){
-
+       $.ajax({
+      url: 'index.php?page=xepan_crm_getdata_getsupportemail',
+      type: 'GET',
+      data: { },
+      success: function ( data ){
+        $('#{$_name}_email_dropdown').html(data);
+        
+        $('#{$_name}_email_dropdown').chosen();
+        $('#{$_name}_email_dropdown').chosen({allow_single_deselect: true });
+      }
+    });
       $('#{$_name} [data-attr]').each(function(index,value){
         var default_value = $(this).attr('data-defaultvalue');
         if($(current_selected_component).attr($(this).data('attr')))

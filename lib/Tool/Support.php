@@ -24,17 +24,18 @@
 				$complain_field->setEmptyText("Please Select");
 				$complain_field->setModel($email_setting,['name']);
 			}
-			// $form->add('xepan\base\Controller_FLC')
-			// 	->showLables(true)
-			// 	->addContentSpot()
-			// 	->makePanelsCoppalsible(true)
-			// 	->layout([
-			// 		'your_name~Your Name'=>'c1~12',
-			// 		'issue~Issue'=>'c2~12',
-			// 		'comments~Comments'=>'c3~12',
-			// 		'priority~Priority'=>'c4~12',
-			// 		'FormButtons~&nbsp;'=>'c5~12'
-   //          ]);
+			 $form->add('xepan\base\Controller_FLC')
+			 	->showLables(true)
+			 	->addContentSpot()
+			 	->makePanelsCoppalsible(true)
+				->layout([
+					
+					'priority~Priority'=>'c2~12',
+					'subject~Subject'=>'c3~12',
+			 		'message~Message'=>'c4~12',
+			
+			 		'FormButtons~&nbsp;'=>'c5~12'
+         			 ]);
 			$form->setModel($model,['priority','subject','message']);
 			$form->addSubmit('Submit')->addClass('btn btn-danger');
 			
