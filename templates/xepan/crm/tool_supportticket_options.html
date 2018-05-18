@@ -1,4 +1,4 @@
-<div id="{$_name}" style="display:none;" for-xepan-component="xepan/crm/Tool_Support" class="xepan-tool-options"> 
+<div id="{$_name}" style="display:none;" for-xepan-component="xepan/crm/Tool_SupportTicket" class="xepan-tool-options"> 
   <div class="xepan-cms-group-panel clearfix">
       <div id="collapse-support" class="xepan-cms-tools-bar-panel row-fluid collapse in">
         <div style="padding-top:0px;padding-bottom:0px;" class="panel-body">
@@ -17,7 +17,32 @@
 
                             
                           </select>
-
+                        </td>
+                      </tr>
+                    <tr class="xepan-tool-option">
+                        <td class="xepan-tool-option-title">Show Ticket Form</td>
+                        <td class="xepan-tool-option-value">
+                           <select id="show_ticket-form" data-attr="show_ticket-form" data-defaultvalue="true">
+                              <option value="true">True</option>
+                              <option value="false">False</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="xepan-tool-option">
+                        <td class="xepan-tool-option-title">Show Ticket History</td>
+                        <td class="xepan-tool-option-value">
+                           <select id="show_ticket-history" data-attr="show_ticket-history" data-defaultvalue="true">
+                              <option value="true">True</option>
+                              <option value="false">False</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="xepan-commerce-itemlist-option-toggle xepan-tool-option">
+                       <td class="xepan-tool-option-title">Paginator</td>
+                       <td class="xepan-tool-option-value">
+                          <input id="paginator" data-attr="paginator"/>
+                        </td>
+                    </tr>
 
              </table>
             </div>
