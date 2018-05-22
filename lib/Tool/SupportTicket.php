@@ -37,7 +37,7 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 					'Rejected'=>['id','to_id','subject','message','priority','created_at','rejected_at']
 				];
 
-		$tabs = $this->add('Tabs');
+		$tabs = $this->add('Tabs',null,'ticket_history');
 		foreach ($staus_array as $status => $field_to_show) {
 			$tab = $tabs->addTab($status);
 
@@ -54,7 +54,10 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 			$grid->setModel($model,$field_to_show);
 			$grid->addQuickSearch(['id','subject','message']);
 			$grid->addPaginator($this->options['paginator']);
-		}		
+			}		
+		}
+	function defaultTemplate(){
+		return ['view/tool/crm/supportticket'];
 	}
 
 	function addTicketForm(){
@@ -64,7 +67,7 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 
 		$model->getElement('message')->display(array('form'=>'text'));
 
-		$form = $this->add('Form');
+		$form = $this->add('Form',null,'ticket_add_form');
 		if(!$this->options['complain_to_id']){
 			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 			$email_setting->addCondition('is_support_email',true);
