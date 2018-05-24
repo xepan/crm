@@ -1,8 +1,8 @@
 <?php
 namespace xepan\crm;
 
-// class page_supportticket extends \xepan\base\Page{
-class page_supportticket extends \xepan\crm\page_sidebarmystauts{
+// class page_supportticket extends \xepan\crm\page_sidebarmystauts{
+class page_supportticket extends \xepan\base\Page{
 	public $title="Support Ticket";
 
 	function init(){
@@ -32,6 +32,7 @@ class page_supportticket extends \xepan\crm\page_sidebarmystauts{
 				]);
 
 		$st_m  = $this->add('xepan\crm\Model_SupportTicket');
+		$st_m->add('xepan\base\Controller_TopBarStatusFilter');
 		// $st_m->addExpression('title_field')->set($st_m->dsql()->expr('CONCAT([0],"::",[1])',[$st_m->getElement('name'),$st_m->getElement('contact_name')]));
 		$st_m->addCondition('status',explode(",",$status));
 
