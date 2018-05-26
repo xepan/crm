@@ -6,6 +6,10 @@ class page_config extends \xepan\base\Page{
 	function init(){
 		parent::init();
 
+		$crud=$this->add('xepan\base\CRUD',null,'support_escalation');
+		$model=$this->add('xepan\crm\Model_SupportEscalation');
+		$crud->setModel($model);
+		
 		/*Auto Reply Email Content*/
 		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
 		[
