@@ -43,7 +43,7 @@ class Initiator extends \Controller_Addon {
 
                 $st_count= $st->count()->getOne();
 
-                $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $st_count ."</span>")->_selector('.navbar li.dropdown > a:contains(Support)');
+                $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $st_count ."</span>")->_selector('.navbar li.dropdown a:contains(Support)');
             }            
 
             $this->app->status_icon["xepan\crm\Model_SupportTicket"] = ['All'=>'fa fa-globe','Pending'=>"fa fa-clock-o xepan-effect-warinig",'Assigned'=>'fa fa-male text-primary','Closed'=>'fa fa-times-circle-o text-success','Rejected'=>'fa fa-times text-danger'];
