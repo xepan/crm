@@ -17,6 +17,7 @@ class Initiator extends \Controller_Addon {
             $m->addItem(['Customers','icon'=>'fa fa-male'],'xepan_commerce_customer');
             $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
             $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_crm_config');
+            $m->addItem(['oursupport','icon'=>'fa fa-file-text-o'],$this-> app->url('xepan_crm_oursupport'));
             $cont = $this->add('xepan\crm\Controller_FilterEmails');
 
             $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
@@ -64,6 +65,11 @@ class Initiator extends \Controller_Addon {
     function setup_frontend(){
         $this->routePages('xepan_crm');
         $this->addLocation(array('template'=>'templates'));
+         
+         if($this->app->isEditing){
+            
+            $this->app->exportFrontEndTool('xepan\crm\Tool_Support','Crm');
+        }
 
         $cont = $this->add('xepan\crm\Controller_FilterEmails');
         $this->app->addHook('emails_fetched',[$cont,'emails_fetched']);
