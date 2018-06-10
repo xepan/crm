@@ -3,11 +3,13 @@ namespace xepan\crm;
 
 class page_config extends \xepan\base\Page{
 	public $title="CRM Config";
+
+	public $config_model = null;
+
 	function init(){
 		parent::init();
-		/*Auto Reply Email Content*/
 
-		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
+		$this->config_model = $config_m = $this->add('xepan\base\Model_ConfigJsonModel',
 		[
 			'fields'=>[
 						'auto_reply_subject'=>'Line',
@@ -22,11 +24,17 @@ class page_config extends \xepan\base\Page{
 		]);
 		$config_m->add('xepan\hr\Controller_ACL');
 		$config_m->tryLoadAny();
+	}
+	
+	function page_autoReplyTicketCreate(){
+		/*Auto Reply Email Content*/
+
+		$config_m= $this->config_model;
 
 		// $auto_config = $this->app->epan->config;
 		// $auto_subject = $auto_config->getConfig('TICKET_GENERATED_EMAIL_SUBJECT');
 		// $auto_body = $auto_config->getConfig('TICKET_GENERATED_EMAIL_BODY');
-		$form=$this->add('Form',null,'auto-reply');
+		$form=$this->add('Form');
 		$form->setModel($config_m,['auto_reply_subject','auto_reply_body']);
 		$form->getElement('auto_reply_subject')->set($config_m['auto_reply_subject'])->setFieldHint('{$token}, {$title}')->setCaption('Subject');
 		$form->getElement('auto_reply_body')->set($config_m['auto_reply_body'])->setFieldHint('{$contact_name}, {$token}, {$sender_email_id}')->setCaption('Body');
@@ -39,13 +47,17 @@ class page_config extends \xepan\base\Page{
 			// $auto_config->setConfig('TICKET_GENERATED_EMAIL_BODY',$form['body'],'crm');
 			$form->js(null,$form->js()->reload())->univ()->successMessage('Update Information')->execute();
 		}
+	}
 
+	function page_rejectTicketEmail(){
 		/*Reject Mail Content*/
+
+		$config_m= $this->config_model;
 
 		// $reject_config = $this->app->epan->config;
 		// $reject_subject = $reject_config->getConfig('SUPPORT_EMAIL_DENIED_SUBJECT');
 		// $reject_body = $reject_config->getConfig('SUPPORT_EMAIL_DENIED_BODY');
-		$form=$this->add('Form',null,'reject-reply');
+		$form=$this->add('Form');
 		$form->setModel($config_m,['denied_email_subject','denied_email_body']);
 		$form->getElement('denied_email_subject')->set($config_m['denied_email_subject'])->setCaption('Subject');
 		$form->getElement('denied_email_body')->set($config_m['denied_email_body'])->setFieldHint('{$sender_email_id}')->setCaption('Body');
@@ -58,12 +70,17 @@ class page_config extends \xepan\base\Page{
 			// $reject_config->setConfig('SUPPORT_EMAIL_DENIED_BODY',$form['body'],'crm');
 			$form->js(null,$form->js()->reload())->univ()->successMessage('Update Information')->execute();
 		}
+	}
+
+	function page_ticketCloseContent(){
 		/*Closed / Complete  Ticket Mail Content*/
+
+		$config_m= $this->config_model;
 
 		// $close_config = $this->app->epan->config;
 		// $close_subject = $close_config->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_SUBJECT');
 		// $close_body = $close_config->getConfig('SUPPORT_EMAIL_CLOSED_TICKET_BODY');
-		$form=$this->add('Form',null,'close-reply');
+		$form=$this->add('Form');
 		$form->setModel($config_m,['closed_email_subject','closed_email_body']);
 		$form->getElement('closed_email_subject')->set($config_m['closed_email_subject'])->setFieldHint('{$token}, {$title}')->setCaption('Subject');
 		$form->getElement('closed_email_body')->set($config_m['closed_email_body'])->setFieldHint('{$sender_email_id} {$token} {$title}')->setCaption('Body');
@@ -77,7 +94,9 @@ class page_config extends \xepan\base\Page{
 			$form->js(null,$form->js()->reload())->univ()->successMessage('Update Information')->execute();
 		}
 
+	}
 
+	function page_allowNonCustomerTicket(){
 		/****New Customer Create Ticket Or Not***/
 
 		// $a_n_c_t = $tab->addTab('Allow New Customer Ticket');
@@ -93,7 +112,7 @@ class page_config extends \xepan\base\Page{
 		$config_m->add('xepan\hr\Controller_ACL');
 		$config_m->tryLoadAny();
 		
-		$f = $this->add('Form',null,'new_customer_section');
+		$f = $this->add('Form');
 		$f->setModel($config_m);
 		$f->getElement('new_customer')
 										->setValueList(
@@ -112,7 +131,7 @@ class page_config extends \xepan\base\Page{
 		}
 	}
 	
-	function defaultTemplate(){
-		return ['page/crm-config'];
-	}
+	// function defaultTemplate(){
+	// 	return ['page/crm-config'];
+	// }
 }
