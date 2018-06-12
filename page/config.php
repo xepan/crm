@@ -9,7 +9,9 @@ class page_config extends \xepan\base\Page{
 		$crud=$this->add('xepan\base\CRUD',null,'support_escalation');
 		$model=$this->add('xepan\crm\Model_SupportEscalation');
 		$crud->setModel($model);
-		
+		$form= $crud->form;
+		$form->addField('post_id');
+		$form->getElement('post_id')->setModel('xepan\hr\Model_Post');	
 		/*Auto Reply Email Content*/
 		$config_m = $this->add('xepan\base\Model_ConfigJsonModel',
 		[
@@ -35,7 +37,6 @@ class page_config extends \xepan\base\Page{
 		$form->getElement('auto_reply_subject')->set($config_m['auto_reply_subject'])->setFieldHint('{$token}, {$title}')->setCaption('Subject');
 		$form->getElement('auto_reply_body')->set($config_m['auto_reply_body'])->setFieldHint('{$contact_name}, {$token}, {$sender_email_id}')->setCaption('Body');
 		$form->addSubmit('Update')->addClass('btn btn-primary');
-
 		if($form->isSubmitted()){
 			$form->save();
 			// $auto_config->setConfig('TICKET_GENERATED_EMAIL_SUBJECT',$form['subject'],'crm');

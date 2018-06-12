@@ -30,7 +30,7 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 
 	function addTicketHistory(){
 
-		$staus_array = [
+		$status_array = [
 					'Pending'=>['id','to_id','subject','message','priority','created_at'],
 					'Assigned'=>['id','to_id','subject','message','priority','created_at','assigned_at'],
 					'Closed'=>['id','to_id','subject','message','priority','created_at','assigned_at','closed_at'],
@@ -38,7 +38,7 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 				];
 
 		$tabs = $this->add('Tabs',null,'ticket_history');
-		foreach ($staus_array as $status => $field_to_show) {
+		foreach ($status_array as $status => $field_to_show) {
 			$tab = $tabs->addTab($status);
 
 			$model = $tab->add('xepan\crm\Model_SupportTicket');
