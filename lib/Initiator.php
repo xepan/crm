@@ -11,8 +11,34 @@ class Initiator extends \Controller_Addon {
         $this->routePages('xepan_crm');
         $this->addLocation(array('template'=>'templates'));
 
+        if($this->app->inConfigurationMode)
+            $this->populateConfigurationMenus();
+        else
+            $this->populateApplicationMenus();
+
+        
+
+        $search_supportticket = $this->add('xepan\crm\Model_SupportTicket');
+        $this->app->addHook('quick_searched',[$search_supportticket,'quickSearch']);
+        $this->app->addHook('activity_report',[$search_supportticket,'activityReport']);
+        $this->app->addHook('widget_collection',[$this,'exportWidgets']);
+        $this->app->addHook('entity_collection',[$this,'exportEntities']);
+        $this->app->addHook('collect_shortcuts',[$this,'collect_shortcuts']);
+
+        return $this;  
+    }
+
+    function populateConfigurationMenus(){
+        $m = $this->app->top_menu->addMenu('Support');
+        $m->addItem(['Auto Reply Content on Ticket Creation','icon'=>'fa fa-cog'],$this->app->url('xepan_crm_config_autoReplyTicketCreate'));
+        $m->addItem(['Auto Reply Content on Ticket Denied','icon'=>'fa fa-cog'],$this->app->url('xepan_crm_config_rejectTicketEmail'));
+        $m->addItem(['Close Ticket Default Content','icon'=>'fa fa-cog'],$this->app->url('xepan_crm_config_ticketCloseContent'));
+        $m->addItem(['Allow Non Customer Tickets','icon'=>'fa fa-cog'],$this->app->url('xepan_crm_config_allowNonCustomerTicket'));
+    }
+
+    function populateApplicationMenus(){
         if($this->app->is_admin && !$this->app->isAjaxOutput() && !$this->app->getConfig('hidden_xepan_crm',false)){
-	        $m = $this->app->top_menu->addMenu('Support');
+            $m = $this->app->top_menu->addMenu('Support');
             // $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],$this->app->url('xepan_crm_dashboard'));
             $m->addItem(['Customers','icon'=>'fa fa-male'],'xepan_commerce_customer');
             $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
@@ -43,7 +69,7 @@ class Initiator extends \Controller_Addon {
 
                 $st_count= $st->count()->getOne();
 
-                $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $st_count ."</span>")->_selector('a:contains(Support)');
+                $this->app->js(true)->append("<span style='width:auto;top:7px;border-radius:0.5em;padding:1px 2px' class='count'>". $st_count ."</span>")->_selector('.navbar li.dropdown a:contains(Support)');
             }            
 
             $this->app->status_icon["xepan\crm\Model_SupportTicket"] = ['All'=>'fa fa-globe','Pending'=>"fa fa-clock-o xepan-effect-warinig",'Assigned'=>'fa fa-male text-primary','Closed'=>'fa fa-times-circle-o text-success','Rejected'=>'fa fa-times text-danger'];
@@ -51,15 +77,6 @@ class Initiator extends \Controller_Addon {
             // $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-edit'],'xepan_crm_solution&status=Draft');            
             $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_solution',['status'=>'Draft,Pending']));
         }
-
-        $search_supportticket = $this->add('xepan\crm\Model_SupportTicket');
-        $this->app->addHook('quick_searched',[$search_supportticket,'quickSearch']);
-        $this->app->addHook('activity_report',[$search_supportticket,'activityReport']);
-        $this->app->addHook('widget_collection',[$this,'exportWidgets']);
-        $this->app->addHook('entity_collection',[$this,'exportEntities']);
-        $this->app->addHook('collect_shortcuts',[$this,'collect_shortcuts']);
-
-        return $this;  
     }
 
     function setup_frontend(){
