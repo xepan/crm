@@ -129,4 +129,18 @@ class Initiator extends \Controller_Addon {
         
         // $this->app->epan=$this->app->new_epan;
     }
+
+    function documentActionData(){
+        $st_model = $this->add('xepan\crm\Model_SupportTicket');
+        $st_model_fields = $st_model->getActualFields();
+
+        return [
+                'SupportTicket'=>[
+                            'model_class'=>'xepan\crm\Model_SupportTicket',
+                            'status'=> array_combine($st_model->status, $st_model->status),
+                            'fields'=>array_combine($st_model_fields, $st_model_fields),
+                            'related_contact_field'=>'contact_id',
+                        ]
+            ];
+    }
 }

@@ -17,9 +17,10 @@ class Model_SupportTicket extends \xepan\hr\Model_Document{
 		'Assigned'=>['view','edit','delete','closed','reject','comment'],
 		'Closed'=>['view','edit','delete','open'],
 		'Rejected'=>['view','edit','delete']
-
-
 	];
+
+	public $document_type = "SupportTicket";
+
 	function init(){
 		parent::init();
 		$this->addCondition('type','SupportTicket');
