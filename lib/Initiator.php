@@ -38,11 +38,11 @@ class Initiator extends \Controller_Addon {
 
     function populateApplicationMenus(){
         if($this->app->is_admin && !$this->app->isAjaxOutput() && !$this->app->getConfig('hidden_xepan_crm',false)){
-            $m = $this->app->top_menu->addMenu('Support');
+            // $m = $this->app->top_menu->addMenu('Support');
             // $m->addItem(['Dashboard','icon'=>'fa fa-dashboard'],$this->app->url('xepan_crm_dashboard'));
-            $m->addItem(['Customers','icon'=>'fa fa-male'],'xepan_commerce_customer');
-            $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
-            $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_crm_config');
+            // $m->addItem(['Customers','icon'=>'fa fa-male'],'xepan_commerce_customer');
+            // $m->addItem(['SupportTicket','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_supportticket',['status'=>'Pending,Assigned']));
+            // $m->addItem(['Configuration','icon'=>'fa fa-cog fa-spin'],'xepan_crm_config');
             
             $cont = $this->add('xepan\crm\Controller_FilterEmails');
 
@@ -74,9 +74,60 @@ class Initiator extends \Controller_Addon {
 
             $this->app->status_icon["xepan\crm\Model_SupportTicket"] = ['All'=>'fa fa-globe','Pending'=>"fa fa-clock-o xepan-effect-warinig",'Assigned'=>'fa fa-male text-primary','Closed'=>'fa fa-times-circle-o text-success','Rejected'=>'fa fa-times text-danger'];
 
-            // $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-edit'],'xepan_crm_solution&status=Draft');            
+            // $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-edit'],'xepan_crm_solution&status=Draft');
             $this->app->user_menu->addItem(['My Issue','icon'=>'fa fa-file-text-o'],$this->app->url('xepan_crm_solution',['status'=>'Draft,Pending']));
         }
+    }
+
+
+    function getTopApplicationMenu(){
+        return [
+                'Support'=>[
+                    [
+                        'name'=>'Customers',
+                        'icon'=>'fa fa-male',
+                        'url'=>'xepan_commerce_customer'
+                    ],
+                    [   'name'=>'SupportTicket',
+                        'icon'=>'fa fa-file-text-o',
+                        'url'=>'xepan_crm_supportticket',
+                        'url_param'=>['status'=>'Pending,Assigned']
+                    ],
+                    [
+                        'name'=>'Configuration',
+                        'icon'=>'fa fa-cog fa-spin',
+                        'url'=>'xepan_crm_config'
+                    ],
+                    [   'name'=>'My Issue',
+                        'icon'=>'fa fa-file-text-o',
+                        'url'=>'xepan_crm_solution',
+                        'url_param'=>['status'=>'Draft,Pending']
+                    ]
+                ]
+            ];
+    }
+
+    function getConfigTopApplicationMenu(){
+        return [
+            'Support_Config'=>[
+                    [   'name'=>'Auto Reply Content on Ticket Creation',
+                        'icon'=>'fa fa-cog',
+                        'url'=>'xepan_crm_config_autoReplyTicketCreate'
+                    ],
+                    [   'name'=>'Auto Reply Content on Ticket Denied',
+                        'icon'=>'fa fa-cog',
+                        'url'=>'xepan_crm_config_rejectTicketEmail'
+                    ],
+                    [   'name'=>'Close Ticket Default Content',
+                        'icon'=>'fa fa-cog',
+                        'url'=>'xepan_crm_config_ticketCloseContent'
+                    ],
+                    [   'name'=>'Allow Non Customer Tickets',
+                        'icon'=>'fa fa-cog',
+                        'url'=>'xepan_crm_config_allowNonCustomerTicket'
+                    ]
+                ]
+            ];
     }
 
     function setup_frontend(){
