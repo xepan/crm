@@ -101,7 +101,8 @@ class Initiator extends \Controller_Addon {
                     [   'name'=>'My Issue',
                         'icon'=>'fa fa-file-text-o',
                         'url'=>'xepan_crm_solution',
-                        'url_param'=>['status'=>'Draft,Pending']
+                        'url_param'=>['status'=>'Draft,Pending'],
+                        'skip_default'=>true
                     ]
                 ]
             ];
