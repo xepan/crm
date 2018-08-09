@@ -156,7 +156,7 @@ class page_supportticket extends \xepan\base\Page{
 
 		$st->setOrder(['last_comment desc','created_at desc']);
 	
-		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar','assign_to_employee','assigned_at','closed_at','rejected_at','pending_at']);
+		$crud->setModel($st,['contact_id','subject','message','priority','image_avtar'],['id','contact','created_at','subject','last_comment','from_email','ticket_attachment','task_status','task_id','image_avtar','assign_to_employee','assigned_at','closed_at','rejected_at','pending_at','branch_id']);
 		if($crud->isEditing()){
 			$contact_field = $form->getElement('contact_id');
 
