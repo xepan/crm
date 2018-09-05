@@ -81,6 +81,7 @@ class Initiator extends \Controller_Addon {
 
 
     function getTopApplicationMenu(){
+        if($this->app->getConfig('hidden_xepan_crm',false)){return [];}
         return [
                 'Support'=>[
                     [
@@ -109,6 +110,8 @@ class Initiator extends \Controller_Addon {
     }
 
     function getConfigTopApplicationMenu(){
+        if($this->app->getConfig('hidden_xepan_crm',false)){return [];}
+
         return [
             'Support_Config'=>[
                     [   'name'=>'Auto Reply Content on Ticket Creation',
