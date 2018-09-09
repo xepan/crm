@@ -184,7 +184,7 @@ class page_supportticket extends \xepan\base\Page{
 				$new_ticket->tryLoadAny();
 				if($new_ticket->loaded()){
 
-					$contact = $this->add('xepan\base\Model_Contact')->load($form['contact_id']);
+					$contact = $this->add('xepan\base\Model_Contact')->tryLoad($form['contact_id']?:0);
 
 					if($form['email_to']){
 						$to_email_ids = explode(",",$form['email_to']);
