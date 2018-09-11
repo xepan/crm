@@ -36,11 +36,20 @@ class page_solution extends \xepan\base\Page{
 			$total += $cnt['counts'];
 		}
 		if($this->add_all){
-			$this->app->side_menu->addItem(['All','icon'=>$icon_array[$model_class]['All'],'badge'=>[$total,'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>null]),['status'])->setAttr(['title'=>'All']);
+			$this->app->page_top_right_button_set->addButton(["All ($total)",'icon'=>$icon_array[$model_class]['All']])
+				->addClass('btn btn-primary')
+				->js('click')->univ()->location($this->api->url(null,['status'=>null]))
+				;
+
+			// $this->app->side_menu->addItem(['All','icon'=>$icon_array[$model_class]['All'],'badge'=>[$total,'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>null]),['status'])->setAttr(['title'=>'All']);
 		}
 		foreach ($st->status as $s) {
+			$this->app->page_top_right_button_set->addButton([$s,'icon'=>$icon_array[$model_class][$s]])
+				->addClass('btn btn-primary')
+				->js('click')->univ()->location($this->api->url(null,['status'=>$s]))
+				;
 			// echo $s."</br>";
-			$this->app->side_menu->addItem([$s,'icon'=>$icon_array[$model_class][$s],'badge'=>[$counts_redefined[$s],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>$s]),['status'])->setAttr(['title'=>$s]);
+			// $this->app->side_menu->addItem([$s,'icon'=>$icon_array[$model_class][$s],'badge'=>[$counts_redefined[$s],'swatch'=>' label label-primary label-circle pull-right']],$this->api->url(null,['status'=>$s]),['status'])->setAttr(['title'=>$s]);
 		}
 		// $this->app->employee->getAllowSupportEmail();
 		// $comment_view = $this->add('View',null,'comment_view');
