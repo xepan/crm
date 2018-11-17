@@ -8,7 +8,8 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 			'complain_to_id'=>null,
 			'show_ticket_form'=>true,
 			'show_ticket_history'=>true,
-			'paginator'=>5
+			'paginator'=>5,
+			'default_priority'=>null
 		];
 	public $form;
 	public $pending_grid;
@@ -30,11 +31,13 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 
 	function addTicketHistory(){
 
+		$this->add('H3',null,'ticket_history')->set('Support Ticket History')->addClass('xepan-support-heading');
+
 		$status_array = [
-					'Pending'=>['id','to_id','subject','message','priority','created_at'],
-					'Assigned'=>['id','to_id','subject','message','priority','created_at','assigned_at'],
-					'Closed'=>['id','to_id','subject','message','priority','created_at','assigned_at','closed_at'],
-					'Rejected'=>['id','to_id','subject','message','priority','created_at','rejected_at']
+					'Pending'=>['id','complain_to','subject','message','priority','created_at'],
+					'Assigned'=>['id','complain_to','subject','message','priority','created_at','assigned_at'],
+					'Closed'=>['id','complain_to','subject','message','priority','created_at','assigned_at','closed_at'],
+					'Rejected'=>['id','complain_to','subject','message','priority','created_at','rejected_at']
 				];
 
 		$tabs = $this->add('Tabs',null,'ticket_history');
@@ -42,11 +45,21 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 			$tab = $tabs->addTab($status);
 
 			$model = $tab->add('xepan\crm\Model_SupportTicket');
+			$model->addExpression('complain_to')->set(function($m,$q){
+				$email_setting = $m->add('xepan\communication\Model_Communication_EmailSetting');
+				$email_setting->addCondition('id',$m->getElement('to_id'));
+
+				return $q->expr('IFNULL([0],"-")',[$email_setting->fieldQuery('name')]);
+			});
+			$model->getElement('id')->caption('Ticket No');
 			$model->addCondition('contact_id',$this->customer_model->id);
 			$model->addCondition('status',$status);
 			$model->setOrder('created_at','desc');
 			
 			$grid = $tab->add('xepan\base\Grid');
+			$grid->addHook('formatRow',function($g){
+				$g->current_row_html['message'] = $g->model['message'];
+			});
 			if($status == "Pending")
 				$this->pending_grid = $grid;
 
@@ -54,6 +67,8 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 			$grid->setModel($model,$field_to_show);
 			$grid->addQuickSearch(['id','subject','message']);
 			$grid->addPaginator($this->options['paginator']);
+			$grid->addFormatter('subject','Wrap');
+			$grid->addFormatter('message','Wrap');
 			}		
 		}
 	function defaultTemplate(){
@@ -68,29 +83,47 @@ class Tool_SupportTicket extends \xepan\cms\View_Tool{
 		$model->getElement('message')->display(array('form'=>'text'));
 
 		$form = $this->add('Form',null,'ticket_add_form');
+		$flc = [];
+		if(!$this->options['complain_to_id']){
+			$flc['complain_to'] = 'Create Support Ticket~c1~12';
+		}
+
+
+		$form_fields = ['priority','subject','message'];
+		if(in_array($this->options['default_priority'] , ['Low','Medium','High','Urgent'])){
+			$model->addCondition('priority',$this->options['default_priority']);
+			$form_fields = ['subject','message'];
+		}else{
+			$flc['priority'] = 'c2~12';
+		}
+		$flc['subject'] = 'c3~12';
+		$flc['message'] = 'c4~12';
+		$flc['FormButtons~&nbsp;'] = 'c5~12';
+		
+
+		$form->add('xepan\base\Controller_FLC')
+			->showLables(true)
+			->makePanelsCoppalsible(true)
+			->layout($flc);
+
 		if(!$this->options['complain_to_id']){
 			$email_setting = $this->add('xepan\communication\Model_Communication_EmailSetting');
 			$email_setting->addCondition('is_support_email',true);
 			$email_setting->addCondition('is_active',true);
-			$complain_field = $form->addField('xepan\base\DropDown','to_id','Complain To ')->validate('required');
+			$complain_field = $form->addField('xepan\base\DropDown','complain_to')->validate('required');
 			$complain_field->setEmptyText("Please Select");
 			$complain_field->setModel($email_setting,['name']);
 		}
-		// $form->add('xepan\base\Controller_FLC')
-		//  	->showLables(true)
-		//  	->addContentSpot()
-		//  	->makePanelsCoppalsible(true)
-		// 	->layout([		
 
-		// 		'priority~Priority'=>'c2~12',
-		// 		'subject~Subject'=>'c3~12',
-		//  		'message~Message'=>'c4~12',
-		//  		'FormButtons~&nbsp;'=>'c5~12'
-  //    		]);
-		$form->setModel($model,['priority','subject','message']);
+		$form->setModel($model,$form_fields);
 		$form->addSubmit('Submit')->addClass('btn btn-primary');
 		
 		if($form->isSubmitted()){
+			if(!$this->options['complain_to_id']){
+				$form->model['to_id'] = $form['to_id'];
+			}else
+				$form->model['to_id'] = $this->options['complain_to_id'];
+
 			$form->save();
 			$js = [$form->js()->reload()];
 			if($this->pending_grid)
