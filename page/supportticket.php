@@ -34,31 +34,35 @@ class page_supportticket extends \xepan\base\Page{
 		$st_m  = $this->add('xepan\crm\Model_SupportTicket');
 		$st_m->add('xepan\base\Controller_TopBarStatusFilter');
 		// $st_m->addExpression('title_field')->set($st_m->dsql()->expr('CONCAT([0],"::",[1])',[$st_m->getElement('name'),$st_m->getElement('contact_name')]));
-		$st_m->addCondition('status',explode(",",$status));
+		// $st_m->addCondition('status',explode(",",$status));
 
-		$ticket_field = $filter_form->addField('DropDown','ticket');
-		$model = $ticket_field->setModel($st_m);
-		$ticket_field->setEmptyText('Please Select Ticket');
+		$st_model  = $this->add('xepan\crm\Model_SupportTicket',['title_field'=>'id']);
+		$st_model->addCondition('status',explode(",",$status));
+		$ticket_field = $filter_form->addField('autocomplete\Basic','ticket');
+		$model = $ticket_field->setModel($st_model);
+		// $ticket_field->setEmptyText('Please Select Ticket');
 		
 
-		$customer_field = $filter_form->addField('DropDown','customer');
+		$customer_field = $filter_form->addField('autocomplete/Basic','customer');
 		$cm = $this->add('xepan\commerce\Model_Customer',['title_field'=>'unique_name'])
 					->addCondition('status','Active');
 		$customer_field->setModel($cm);
-		$customer_field->setEmptyText('Please Select Customer');
+		// $customer_field->setEmptyText('Please Select Customer');
 
 		$from_date = $filter_form->addField('DateTimePicker','from_date');
 		if(strtotime($filter_from_date) > 0){
 			$from_date->set($filter_from_date);
-		}else
+		}else{
 			$from_date->set($this->app->today);
+		}
 
 		$to_date = $filter_form->addField('DateTimePicker','to_date');
 		if(strtotime($filter_to_date) > 0){
 			$to_date->set($filter_to_date);
 		}else{
-			$to_date->set($this->app->now);
+			$to_date->set($this->app->today);
 		}
+
 		$filter_form->addSubmit('Filter')->addClass('btn btn-primary');
 			
 
@@ -142,13 +146,14 @@ class page_supportticket extends \xepan\base\Page{
 		if($_GET['filter_ticket_id']){
 			$st->addCondition('id',$_GET['filter_ticket_id']);
 		}else{
-			if($filter_from_date){
+			if(strtotime($filter_from_date)){
 				$st->addCondition($apply_date_filter_on_field,'>=',$filter_from_date);
 			}
 
-			if($filter_to_date){
+			if(strtotime($filter_to_date)){
 				$st->addCondition($apply_date_filter_on_field,'<',$this->app->nextDate($filter_to_date));
 			}
+			
 			if($cid = $_GET['filter_customer_id']){
 				$st->addCondition('contact_id',$cid);
 			}
